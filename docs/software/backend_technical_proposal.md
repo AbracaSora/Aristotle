@@ -15,7 +15,7 @@
 | 文字资料录入、手动关联确认、删除后的查询隔离 | PDF 抽取、可靠匹配、分段索引、备份删除机制 |
 | 候选字段校验、审核发布、停用与操作审计 | 真实 LLM 调用、预算和超时、队列、质量评测 |
 
-原型的 `/demo` 为后端验收工作台，不替代既有 Vue 学习端。Vue 源码及其 localStorage 演示暂未改动，两者的数据没有自动迁移或同步。
+原型的 `/demo` 为后端验收工作台，不替代 Vue 学习端。Vue 已完成第一轮 API 对接，详见 [联调记录](frontend_backend_integration.md)；旧 localStorage 演示数据不自动导入服务端。
 
 ## 2. 技术选择
 
@@ -34,7 +34,7 @@
 
 ```mermaid
 flowchart LR
-    Vue[Vue 学习端：待联调] -. HTTP / Bearer .-> API
+    Vue[Vue 学习端] -->|HTTP / Bearer| API
     Demo[后端工作台 /demo] --> API[FastAPI：身份、输入与资源权限]
     API --> Learn[任务与内容业务事务]
     Learn --> Core[aristotle_core：纯诊断与选题规则]

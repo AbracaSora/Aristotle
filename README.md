@@ -2,7 +2,7 @@
 
 面向计算机 408 备考大学生的自适应学习 Agent，帮助学生明确「哪些知识还没掌握，下一步应该学什么、练习什么认知活动」。
 
-本项目是[智能软件工程实践课程](https://github.com/bettermorn/IntelligentSWEPractice)的小组实践作品。目前已有需求分析稿、Vue 学习端演示和独立后端 API 原型，尚未完成前后端联调、完整功能验收或学生试用。以下首版功能仍为产品规划，实际原型范围见各模块说明。
+本项目是[智能软件工程实践课程](https://github.com/bettermorn/IntelligentSWEPractice)的小组实践作品。目前已有需求分析稿、后端 API 原型，以及已接入 API 的 Vue 学习端，登录、规则学习、作答与文字资料流程已完成初步联调；尚未完成完整需求验收或学生试用。以下首版功能仍为产品规划，实际原型范围见各模块说明。
 
 ## 产品定位
 
@@ -21,6 +21,7 @@
 | [后端 API 约定](docs/software/backend_api.md) | 前端联调接口、错误与幂等约定 |
 | [规则基线](docs/algorithm/baseline.md) | 证据窗口、先修约束与选题逻辑 |
 | [后端原型验证](docs/software/backend_validation.md) | 本地检查证据与未验证范围 |
+| [前后端联调记录](docs/software/frontend_backend_integration.md) | 对接范围、启动方式、自动化与浏览器验证 |
 
 两份需求规范对应 [issue #5](https://github.com/AbracaSora/Aristotle/issues/5)，并纳入 [issue #6](https://github.com/AbracaSora/Aristotle/issues/6) 的认知标签建议。目前为待课程评审的需求分析稿，指标是设计目标，尚无功能或学习效果验证结果。
 
@@ -89,6 +90,6 @@
 
 团队拟按前端体验、后端服务、学习引擎、测试与集成划分工作，具体负责人待在项目管理文档中确认。协作约定为使用 Issue 跟踪任务，通过分支和 Pull Request 提交变更，经评审后合并；功能变更同步更新相关文档和测试。
 
-学习端启动见 [前端说明](code/frontend/README.md)。后端启动、演示账号与 API 工作台见 [后端说明](code/backend/README.md)。两者目前独立运行，前端仍使用本地演示数据。
+学习端启动见 [前端说明](code/frontend/README.md)。后端启动、演示账号与 API 工作台见 [后端说明](code/backend/README.md)。开发时分别启动后端和 Vite，前端通过代理调用 API，判分与业务数据由服务端处理。
 
 后端原型覆盖账号隔离、规则诊断和选题、持久化作答、文字资料及人工审核流程；真实 LLM/PDF 尚未接入，演示题不代表正式审核题库。开发中使用脱敏或获授权的样例资料，个人讲义、数据库、账号密钥及模型 API 凭据不提交到仓库。

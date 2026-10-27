@@ -34,6 +34,7 @@ from .schemas import (
     CandidateInput,
     ErrorView,
     GraphInput,
+    HistoryView,
     LearningStateView,
     Login,
     LoginView,
@@ -420,7 +421,7 @@ def create_app(database_url: str | None = None):
             return {**attempt_view(row, q), "replayed": True}
         return {**attempt_view(row, q), "replayed": False}
 
-    @app.get("/api/v1/history", tags=["学习"])
+    @app.get("/api/v1/history", response_model=HistoryView, tags=["学习"])
     def history(
         limit: int = Query(50, ge=1, le=200),
         offset: int = Query(0, ge=0),
@@ -435,7 +436,19 @@ def create_app(database_url: str | None = None):
             .offset(offset)
             .limit(limit)
         ).all()
-        return {"items": [attempt_view(a, q) for a, q in rows], "limit": limit, "offset": offset}
+        total = db.scalar(select(func.count()).select_from(Attempt).where(Attempt.user_id == user.id))
+        correct_total = db.scalar(
+            select(func.count())
+            .select_from(Attempt)
+            .where(Attempt.user_id == user.id, Attempt.correct.is_(True))
+        )
+        return {
+            "items": [attempt_view(a, q) for a, q in rows],
+            "limit": limit,
+            "offset": offset,
+            "total": total,
+            "correct_total": correct_total,
+        }
 
     @app.get("/api/v1/materials", tags=["个人资料"])
     def materials(user=Depends(student), db=Depends(get_db)):

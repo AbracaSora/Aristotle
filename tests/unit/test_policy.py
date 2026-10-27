@@ -70,6 +70,14 @@ def test_window_boundary_and_future_records():
     assert state["status"] == "insufficient"
 
 
+def test_repeated_answer_updates_last_attempt_time_without_changing_first_evidence():
+    rows = [evidence("same", False, at=NOW - 20), evidence("same", True, at=NOW - 1, row_id="retry")]
+    state = diagnose(NODES, rows, NOW)[0]
+    assert state["evidence_count"] == 1
+    assert state["correct_rate"] == 0
+    assert state["cognitive"][0]["last_at"] == NOW - 1
+
+
 def test_mastery_requires_eighty_percent():
     rows = [evidence(str(i), correct=i != 0) for i in range(5)]
     assert diagnose(NODES, rows, NOW)[0]["status"] == "provisional"

@@ -163,6 +163,17 @@ def test_repeated_practice_keeps_history_without_inflating_evidence(client, logi
     assert client.get("/api/v1/learning-state", headers=headers).json()["states"][0]["evidence_count"] == 3
 
 
+def test_history_totals_are_per_user_and_independent_of_pagination(client, login):
+    headers = login()
+    for _ in range(2):
+        answer_task(client, headers, new_task(client, headers, knowledge_id="linear"))
+    page = client.get("/api/v1/history?limit=1&offset=1", headers=headers).json()
+    assert len(page["items"]) == 1
+    assert page["total"] == 6 and page["correct_total"] == 6
+    other = client.get("/api/v1/history", headers=login("student2")).json()
+    assert other["total"] == 0 and other["correct_total"] == 0
+
+
 def test_pending_review_cannot_be_assigned_and_published_content_is_immutable(client, login):
     editor, student = login("editor"), login()
     assert client.post("/api/v1/admin/questions", headers=editor, json=draft_body()).status_code == 201

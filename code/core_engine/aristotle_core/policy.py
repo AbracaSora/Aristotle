@@ -41,10 +41,14 @@ def diagnose(nodes: list[dict], attempts: list[dict], now: float) -> list[dict]:
     """
     by_id = {n["id"]: n for n in nodes}
     grouped = defaultdict(list)
+    latest_attempts = {}
     seen = set()
     for a in sorted(attempts, key=lambda a: (a["at"], a["id"])):
         if not now - WINDOW_SECONDS <= a["at"] <= now:
             continue
+        if a["knowledge_id"] in by_id:
+            key = (a["knowledge_id"], a["level"])
+            latest_attempts[key] = max(a["at"], latest_attempts.get(key, a["at"]))
         if a["question_id"] in seen or a["knowledge_id"] not in by_id:
             continue
         seen.add(a["question_id"])
@@ -68,7 +72,7 @@ def diagnose(nodes: list[dict], attempts: list[dict], now: float) -> list[dict]:
                     "count": len(rows),
                     "correct_rate": sum(a["correct"] for a in rows) / len(rows) if rows else None,
                     "evidence_status": "sufficient" if len(rows) >= 3 else "insufficient",
-                    "last_at": max((a["at"] for a in rows), default=None),
+                    "last_at": latest_attempts.get((key, level)),
                 }
             )
         states[key] = {

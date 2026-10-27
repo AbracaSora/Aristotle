@@ -207,3 +207,11 @@ class TaskView(BaseModel):
     attempts: list[AttemptView]
     evidence_snapshot: list[KnowledgeStateView]
     notice: str
+
+
+class HistoryView(BaseModel):
+    items: list[AttemptView]
+    total: int
+    correct_total: int
+    limit: int
+    offset: int

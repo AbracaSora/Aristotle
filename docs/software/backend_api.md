@@ -1,6 +1,6 @@
 # 后端 API 联调约定 v0.1
 
-状态：后端原型已实现，字段和交互仍待前端组评审。基础路径 `/api/v1`，内容为 JSON，认证为 `Authorization: Bearer <access_token>`。时间字段使用 UTC Unix 秒，前端 `new Date(created_at * 1000)` 转成本地时间显示。
+状态：后端原型已实现，Vue 学习端已接入，整体需求与正式发布仍待评审验收。基础路径 `/api/v1`，内容为 JSON，认证为 `Authorization: Bearer <access_token>`。时间字段使用 UTC Unix 秒，前端 `new Date(created_at * 1000)` 转成本地时间显示。
 
 运行时 `/openapi.json` 是机器契约，`/docs` 可交互调用。公开题目响应模型不含答案和解析；只有维护者题目接口，以及学生自己的已提交作答反馈可以包含这些字段。
 
@@ -16,7 +16,7 @@
 | POST /tasks | 学生 | 请求诊断/练习任务；保存选题与证据快照，201 |
 | GET /tasks/{task_id} | 所属学生 | 固定任务、公开题目和本人已提交反馈 |
 | POST /tasks/{task_id}/attempts | 所属学生 | 程序判分、原子保存和幂等重放 |
-| GET /history?limit=50&offset=0 | 学生 | 本人历史，包含停用题目标记；limit 最大 200 |
+| GET /history?limit=50&offset=0 | 学生 | 本人历史、累计作答 total 与累计正确 correct_total；包含停用题目标记；limit 最大 200 |
 | GET /materials | 学生 | 本人未删除资料 |
 | POST /materials | 学生 | 新文字资料，初始待确认，201 |
 | PATCH /materials/{id} | 所属学生 | 修改知识点关联及确认状态 |
@@ -131,4 +131,4 @@
 
 SQLite 竞争、服务故障等非业务错误不应被前端当作成功；本原型尚未实现统一追踪 ID、故障告警及所有 5xx 的 JSON 错误模型。
 
-现有 Vue 的浏览器记录只有题目 ID、对错、时间，无法直接作为可信服务端作答导入。联调时通过上述接口创建新任务与作答；保留旧本地记录的展示策略需另行评审。
+Vue 现在通过上述接口创建新任务与作答；业务数据不再写入 localStorage。旧浏览器记录只有题目 ID、对错、时间，无法作为可信服务端作答导入，本次不自动读取、上传或删除它们。登录令牌与当前任务 ID 仅保留在当前标签页 sessionStorage。
