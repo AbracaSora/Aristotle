@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Aristotle · 后端原型工作台</title>
+    <style>
+      :root {
+        font-family:
+          system-ui,
+          -apple-system,
+          "PingFang SC",
+          sans-serif;
+        color: #203b34;
+        background: #f4f8f6;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      header {
+        background: #163e32;
+        color: #fff;
+        padding: 28px max(24px, calc((100vw - 1180px) / 2));
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+      }
+      header h1 {
+        font-size: 25px;
+        margin: 5px 0;
+      }
+      header p {
+        color: #c0d6cd;
+        font-size: 13px;
+        margin: 8px 0;
+      }
+      .eyebrow {
+        font-size: 10px;
+        letter-spacing: 2px;
+        color: #bed8cb;
+      }
+      .pill {
+        font-size: 12px;
+        padding: 7px 11px;
+        border: 1px solid #7eab96;
+        border-radius: 30px;
+        white-space: nowrap;
+      }
+      main {
+        max-width: 1228px;
+        margin: auto;
+        padding: 24px;
+      }
+      .notice {
+        background: #fff7df;
+        border: 1px solid #ead9a5;
+        padding: 12px 16px;
+        border-radius: 10px;
+        font-size: 13px;
+        line-height: 1.8;
+        margin-bottom: 20px;
+      }
+      .card {
+        background: white;
+        border: 1px solid #dce8e0;
+        border-radius: 14px;
+        padding: 22px;
+        margin-bottom: 20px;
+      }
+      h2 {
+        font-size: 18px;
+        margin: 0 0 15px;
+      }
+      h3 {
+        font-size: 14px;
+        margin: 0 0 9px;
+      }
+      p {
+        font-size: 13px;
+        line-height: 1.8;
+      }
+      .muted {
+        color: #657e73;
+        font-size: 12px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1.05fr 1.7fr;
+        gap: 20px;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .row.between {
+        justify-content: space-between;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      input,
+      select,
+      textarea {
+        border: 1px solid #b7cdbf;
+        border-radius: 7px;
+        padding: 9px;
+        color: #203b34;
+        background: #fff;
+        max-width: 100%;
+      }
+      textarea {
+        width: 100%;
+        font:
+          12px/1.7 ui-monospace,
+          monospace;
+      }
+      label {
+        font-size: 12px;
+        display: block;
+        margin: 10px 0;
+      }
+      label input:not([type="radio"]):not([type="checkbox"]),
+      label select {
+        display: block;
+        margin-top: 7px;
+        width: 100%;
+      }
+      button {
+        border: 1px solid #176746;
+        background: #176746;
+        color: white;
+        padding: 9px 14px;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+      button.secondary {
+        background: white;
+        color: #176746;
+      }
+      button:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      textarea:focus-visible,
+      a:focus-visible {
+        outline: 3px solid #d7a946;
+        outline-offset: 3px;
+      }
+      a {
+        color: #176746;
+      }
+      .state {
+        padding: 14px 0;
+        border-top: 1px solid #e8eee9;
+      }
+      .state:first-child {
+        border-top: 0;
+      }
+      .badge {
+        font-size: 11px;
+        background: #eef5ef;
+        padding: 4px 7px;
+        border-radius: 5px;
+      }
+      .state small {
+        display: block;
+        color: #657e73;
+        margin-top: 8px;
+        font-size: 11px;
+        line-height: 1.7;
+      }
+      .question {
+        border-top: 1px solid #e3ece7;
+        padding: 18px 0;
+      }
+      .question label {
+        padding: 8px;
+        background: #f6f9f7;
+        border-radius: 5px;
+        display: flex;
+        gap: 9px;
+        align-items: flex-start;
+      }
+      .feedback {
+        background: #edf6ef;
+        border-left: 3px solid #34784f;
+        padding: 12px;
+        margin-top: 12px;
+        font-size: 12px;
+        line-height: 1.8;
+      }
+      .feedback.wrong {
+        background: #fff3e7;
+        border-color: #bc7833;
+      }
+      .empty {
+        color: #73877b;
+        padding: 30px 0;
+        font-size: 13px;
+      }
+      pre {
+        white-space: pre-wrap;
+        word-break: break-word;
+        font:
+          11px/1.6 ui-monospace,
+          monospace;
+        max-height: 300px;
+        overflow: auto;
+        color: #456154;
+      }
+      #message {
+        margin-bottom: 18px;
+        padding: 12px 16px;
+        border: 1px solid #d6e3da;
+        background: white;
+        border-radius: 9px;
+        font-size: 13px;
+      }
+      #message.error {
+        border-color: #dfb1a0;
+        color: #933c25;
+      }
+      .history {
+        font-size: 12px;
+        padding: 10px 0;
+        border-top: 1px solid #e6eee8;
+      }
+      .material {
+        padding: 12px 0;
+        border-top: 1px solid #e6eee8;
+      }
+      .material pre {
+        max-height: 90px;
+      }
+      .hidden {
+        display: none !important;
+      }
+      .full {
+        width: 100%;
+      }
+      .mini {
+        font-size: 11px;
+      }
+      details summary {
+        cursor: pointer;
+        font-size: 13px;
+        margin-bottom: 12px;
+      }
+      .links {
+        display: flex;
+        gap: 15px;
+        font-size: 12px;
+      }
+      footer {
+        color: #688074;
+        font-size: 11px;
+        padding: 0 24px 30px;
+        max-width: 1228px;
+        margin: auto;
+      }
+      @media (max-width: 760px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        header {
+          display: block;
+        }
+        .pill {
+          display: inline-block;
+          margin-top: 14px;
+        }
+        main {
+          padding: 16px;
+        }
+        .card {
+          padding: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <span class="eyebrow">ARISTOTLE 408 / BACKEND LAB</span>
+        <h1>后端原型工作台</h1>
+        <p>从作答证据，到下一次学习任务。</p>
+      </div>
+      <span class="pill">FastAPI · SQLite · 规则基线 v0.1</span>
+    </header>
+    <main>
+      <div class="notice">
+        本地课程原型。12
+        道自编题及其审核记录均为演示种子，尚非正式审核题库。真实 LLM、PDF
+        抽取和前端联调尚未接入。
+      </div>
+      <section class="card">
+        <div class="row between">
+          <h2>01 / 选择演示身份</h2>
+          <div class="links">
+            <a href="/docs" target="_blank" rel="noopener"
+              >Swagger 接口文档 ↗</a
+            ><a href="/openapi.json" target="_blank" rel="noopener"
+              >OpenAPI JSON ↗</a
+            >
+          </div>
+        </div>
+        <form id="loginForm" class="row">
+          <label
+            >账号<select id="username">
+              <option value="student1">student1 · 学生一</option>
+              <option value="student2">student2 · 学生二</option>
+              <option value="editor">editor · 内容维护者</option>
+            </select></label
+          ><label
+            >密码<input
+              id="password"
+              type="password"
+              value="demo-password"
+              autocomplete="current-password" /></label
+          ><button type="submit">登录 / 切换身份</button
+          ><button type="button" class="secondary hidden" id="logout">
+            退出</button
+          ><span class="muted" id="identity">尚未登录</span>
+        </form>
+        <p class="muted">
+          使用已初始化的演示账号。切换学生会读取该账号的服务端记录；会话令牌只保留在本页面内存中。
+        </p>
+      </section>
+      <div id="message" role="status" aria-live="polite">
+        先登录学生账号体验完整学习流程，或登录维护者体验题目发布流程。
+      </div>
+      <div id="studentPanel" class="hidden">
+        <div class="grid">
+          <div>
+            <section class="card">
+              <div class="row between">
+                <h2>02 / 知识状态</h2>
+                <button class="secondary" id="refresh">刷新</button>
+              </div>
+              <p class="muted">
+                最近 14 天，每题仅计首次有效作答；至少 3 道不同题、正确率 ≥ 80%
+                且先修满足，才标记初步掌握。
+              </p>
+              <div id="states"></div>
+            </section>
+            <section class="card">
+              <h2>个人文字讲义</h2>
+              <form id="materialForm">
+                <label
+                  >标题<input
+                    id="materialTitle"
+                    required
+                    maxlength="80"
+                    placeholder="例如：线性结构笔记" /></label
+                ><label
+                  >正文<textarea
+                    id="materialText"
+                    rows="3"
+                    required
+                    maxlength="20000"
+                  ></textarea></label
+                ><label
+                  >关联知识点<select id="materialKnowledge"></select></label
+                ><button>保存为待确认</button>
+              </form>
+              <div id="materials"></div>
+            </section>
+          </div>
+          <div>
+            <section class="card">
+              <div class="row between">
+                <h2>03 / 下一次学习任务</h2>
+                <button id="recommend">请求推荐任务</button>
+              </div>
+              <p class="muted">
+                先修不足时先补基础；未审核题目不参与选题。答题后将保存到服务器，再更新诊断与推荐。
+              </p>
+              <div id="task" class="empty">尚未请求任务。</div>
+            </section>
+            <section class="card">
+              <h2>04 / 最近作答记录</h2>
+              <div id="history" class="empty">暂无记录。</div>
+            </section>
+          </div>
+        </div>
+      </div>
+      <section id="editorPanel" class="card hidden">
+        <h2>内容维护 / 草稿 → 候选标注 → 审核发布</h2>
+        <p class="muted">
+          候选标签为手动录入，不代表 LLM
+          输出。批准前必须确认答案、解析和最终标签。知识图发布、停用与审计接口见
+          Swagger。
+        </p>
+        <div class="grid">
+          <div>
+            <form id="draftForm">
+              <label
+                >新题目 JSON<textarea id="draft" rows="14"></textarea></label
+              ><button>1. 保存不可变题目版本</button>
+            </form>
+            <p id="draftKey" class="muted">尚未创建题目。</p>
+            <div id="candidateForm" class="hidden">
+              <label
+                >候选认知标签<select id="candidateLevel">
+                  <option>remember</option>
+                  <option>understand</option>
+                  <option>apply</option>
+                  <option>analyze</option>
+                </select></label
+              ><label
+                >分类理由<textarea id="rationale" rows="3">
+识别线性结构基本关系，属于事实提取与识别。</textarea
+                ></label
+              ><button id="addCandidate">2. 录入候选（仍不发布）</button>
+            </div>
+          </div>
+          <div>
+            <div id="reviewForm" class="hidden">
+              <h3>人工审核确认</h3>
+              <label
+                ><input type="checkbox" id="verified" />
+                我已核验答案、解析和认知标签</label
+              ><label
+                >审核意见<input
+                  id="reviewReason"
+                  value="已核验内容和标签；课程原型演示"
+              /></label>
+              <div class="row">
+                <button id="approve">3. 批准并发布</button
+                ><button class="secondary" id="reject">驳回</button>
+              </div>
+            </div>
+            <h3 style="margin-top: 22px">题目版本与发布状态</h3>
+            <div id="questionList"></div>
+          </div>
+        </div>
+      </section>
+      <section class="card">
+        <details>
+          <summary>最近一次 API 响应</summary>
+          <pre id="trace">等待操作。</pre>
+        </details>
+      </section>
+    </main>
+    <footer>
+      规则摘要用于说明作答证据，不代表学生总体认知等级，也不表示已验证学习收益。所有示例数据仅保存在本地服务。
+    </footer>
+    <script>
+      const $ = (id) => document.getElementById(id);
+      let token = "",
+        user = null,
+        task = null,
+        draft = null,
+        candidateId = null;
+      const statusNames = {
+        insufficient: "证据不足",
+        needs_review: "待巩固",
+        provisional: "初步掌握",
+      };
+      const levelNames = {
+        remember: "记忆",
+        understand: "理解",
+        apply: "应用",
+        analyze: "分析",
+      };
+      const esc = (value) =>
+        String(value ?? "").replace(
+          /[&<>"']/g,
+          (ch) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[ch],
+        );
+      function message(text, error = false) {
+        $("message").textContent = text;
+        $("message").classList.toggle("error", error);
+      }
+      function trace(path, data) {
+        $("trace").textContent = JSON.stringify(
+          { path, response: data },
+          null,
+          2,
+        );
+      }
+      async function api(path, method = "GET", body) {
+        const response = await fetch("/api/v1" + path, {
+          method,
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: "Bearer " + token } : {}),
+          },
+          ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+        });
+        const data = response.status === 204 ? null : await response.json();
+        trace(
+          path,
+          data?.access_token
+            ? {
+                user: data.user,
+                expires_at: data.expires_at,
+                access_token: "[会话令牌不展示]",
+              }
+            : data,
+        );
+        if (!response.ok)
+          throw Error(
+            data?.error?.message +
+              (data?.error?.fields
+                ? "：" + data.error.fields.map((x) => x.message).join("；")
+                : ""),
+          );
+        return data;
+      }
+      async function safe(action) {
+        try {
+          await action();
+        } catch (error) {
+          message(error.message, true);
+        }
+      }
+      function resetView() {
+        task = null;
+        draft = null;
+        candidateId = null;
+        $("candidateForm").classList.add("hidden");
+        $("reviewForm").classList.add("hidden");
+        $("studentPanel").classList.add("hidden");
+        $("editorPanel").classList.add("hidden");
+        $("task").textContent = "尚未请求任务。";
+        $("states").replaceChildren();
+        $("history").replaceChildren();
+        $("materials").replaceChildren();
+        $("questionList").replaceChildren();
+        $("trace").textContent = "身份已切换。";
+      }
+      $("loginForm").onsubmit = (event) => {
+        event.preventDefault();
+        safe(async () => {
+          if (token) {
+            try {
+              await api("/auth/logout", "POST");
+            } catch {
+              /* Expired sessions must not prevent a new login. */
+            }
+          }
+          token = "";
+          resetView();
+          user = null;
+          $("identity").textContent = "尚未登录";
+          $("logout").classList.add("hidden");
+          const data = await api("/auth/login", "POST", {
+            username: $("username").value,
+            password: $("password").value,
+          });
+          token = data.access_token;
+          user = data.user;
+          $("identity").textContent =
+            user.username +
+            " / " +
+            (user.role === "student" ? "学生" : "内容维护者");
+          $("logout").classList.remove("hidden");
+          if (user.role === "student") {
+            $("studentPanel").classList.remove("hidden");
+            await refresh();
+          } else {
+            $("editorPanel").classList.remove("hidden");
+            await loadQuestions();
+          }
+          message("已登录 " + user.username + "。当前数据由后端按账号隔离。");
+        });
+      };
+      $("logout").onclick = () =>
+        safe(async () => {
+          await api("/auth/logout", "POST");
+          token = "";
+          user = null;
+          resetView();
+          $("identity").textContent = "尚未登录";
+          $("logout").classList.add("hidden");
+          message("已退出，服务端会话已撤销。");
+        });
+      async function refresh() {
+        const state = await api("/learning-state");
+        $("states").innerHTML = state.states
+          .map(
+            (s) =>
+              `<div class="state"><div class="row between"><strong>${esc(s.name)}</strong><span class="badge">${esc(statusNames[s.status])}</span></div><small>${s.evidence_count} 道不同题 · 正确率 ${s.correct_rate === null ? "—" : Math.round(s.correct_rate * 100) + "%"}${s.unmet_prerequisites.length ? " · 先修未满足" : ""}<br>${
+                s.cognitive
+                  .filter((c) => c.count)
+                  .map((c) => esc(levelNames[c.level]) + ": " + c.count + " 道")
+                  .join(" / ") || "尚无认知维度证据"
+              }</small></div>`,
+          )
+          .join("");
+        $("materialKnowledge").innerHTML = state.states
+          .map(
+            (s) =>
+              `<option value="${esc(s.knowledge_id)}">${esc(s.name)}</option>`,
+          )
+          .join("");
+        const history = await api("/history");
+        $("history").innerHTML = history.items.length
+          ? history.items
+              .map(
+                (a) =>
+                  `<div class="history">${esc(a.question_key)} · ${a.correct ? "回答正确" : "需要巩固"} · ${esc(levelNames[a.level])} <span class="muted">${esc(new Date(a.created_at * 1000).toLocaleString())}</span></div>`,
+              )
+              .join("")
+          : '<p class="empty">暂无作答记录。</p>';
+        const materials = await api("/materials");
+        $("materials").replaceChildren();
+        for (const m of materials.items) {
+          const row = document.createElement("div");
+          row.className = "material";
+          row.innerHTML = `<h3>${esc(m.title)}</h3><pre>${esc(m.text)}</pre><p class="muted">${m.confirmed ? "已确认关联" : "待确认关联"} · ${esc(m.knowledge_id)}</p>`;
+          const confirm = document.createElement("button");
+          confirm.className = "secondary";
+          confirm.textContent = m.confirmed ? "取消关联" : "确认关联";
+          confirm.onclick = () =>
+            safe(async () => {
+              await api("/materials/" + m.id, "PATCH", {
+                knowledge_id: m.knowledge_id,
+                confirmed: !m.confirmed,
+              });
+              await refresh();
+              message("资料关联已更新。");
+            });
+          const remove = document.createElement("button");
+          remove.className = "secondary";
+          remove.style.marginLeft = "8px";
+          remove.textContent = "删除本地样例";
+          remove.onclick = () =>
+            safe(async () => {
+              await api("/materials/" + m.id, "DELETE");
+              await refresh();
+              message("原文已清除；历史任务将显示来源不可用。");
+            });
+          row.append(confirm, remove);
+          $("materials").append(row);
+        }
+      }
+      $("refresh").onclick = () => safe(refresh);
+      $("recommend").onclick = () =>
+        safe(async () => {
+          task = await api("/tasks", "POST", { mode: "practice" });
+          renderTask();
+          message(
+            "已生成任务 " + task.id + "，策略 " + task.policy_version + "。",
+          );
+        });
+      function renderTask() {
+        const area = $("task");
+        area.className = "";
+        area.innerHTML = `<h3>${esc(levelNames[task.target_level])} · ${esc(task.knowledge_id)}</h3><p>${esc(task.reason)}</p>${task.warnings.map((w) => `<p class="notice">${esc(w)}</p>`).join("")}`;
+        if (task.status === "content_unavailable") {
+          area.insertAdjacentHTML(
+            "beforeend",
+            '<p class="empty">当前目标没有已发布题目或已确认资料，请维护者补充内容。</p>',
+          );
+          return;
+        }
+        for (const m of task.materials)
+          if (!m.unavailable)
+            area.insertAdjacentHTML(
+              "beforeend",
+              `<div class="feedback"><strong>${esc(m.title)}</strong><p>${esc(m.text)}</p></div>`,
+            );
+        for (const q of task.questions) {
+          const submitted = task.attempts.find((a) => a.question_key === q.key);
+          const section = document.createElement("section");
+          section.className = "question";
+          section.innerHTML = `<h3>${esc(q.prompt)}</h3><p class="muted">${esc(levelNames[q.level])} · ${esc(q.key)} · ${esc(q.dataset)}</p>`;
+          const form = document.createElement("form");
+          q.options.forEach((option, i) => {
+            const label = document.createElement("label");
+            const radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = "answer";
+            radio.value = option;
+            radio.required = true;
+            radio.disabled = !!submitted;
+            radio.checked = submitted?.selected === option;
+            label.append(radio, document.createTextNode(option));
+            form.append(label);
+          });
+          const button = document.createElement("button");
+          button.textContent = submitted ? "已保存作答" : "提交并保存";
+          button.disabled = !!submitted;
+          form.append(button);
+          const submissionId = crypto.randomUUID();
+          form.onsubmit = (event) => {
+            event.preventDefault();
+            safe(async () => {
+              button.disabled = true;
+              try {
+                const selected = new FormData(form).get("answer");
+                await api("/tasks/" + task.id + "/attempts", "POST", {
+                  question_key: q.key,
+                  selected,
+                  submission_id: submissionId,
+                });
+                task = await api("/tasks/" + task.id);
+                renderTask();
+                await refresh();
+                message("作答已保存，学习状态已重新计算。");
+              } finally {
+                button.disabled = false;
+              }
+            });
+          };
+          section.append(form);
+          if (submitted)
+            section.insertAdjacentHTML(
+              "beforeend",
+              `<div class="feedback ${submitted.correct ? "" : "wrong"}">${submitted.correct ? "回答正确" : "正确答案：" + esc(submitted.answer)}<br>${esc(submitted.explanation)}</div>`,
+            );
+          area.append(section);
+        }
+      }
+      $("materialForm").onsubmit = (event) => {
+        event.preventDefault();
+        safe(async () => {
+          await api("/materials", "POST", {
+            title: $("materialTitle").value,
+            text: $("materialText").value,
+            knowledge_id: $("materialKnowledge").value,
+          });
+          $("materialTitle").value = "";
+          $("materialText").value = "";
+          await refresh();
+          message("讲义已保存，确认关联后才会进入资料推荐。");
+        });
+      };
+      $("draft").value = JSON.stringify(
+        {
+          question_id: "team_example_" + crypto.randomUUID().slice(0, 8),
+          version: 1,
+          knowledge_id: "linear",
+          prompt: "线性结构中元素的基本关系是？",
+          options: ["一对一", "一对多", "多对多"],
+          answer: "一对一",
+          explanation: "线性结构中的元素按次序构成一对一关系。",
+          source: "团队自编原型样例",
+        },
+        null,
+        2,
+      );
+      async function loadQuestions() {
+        const data = await api("/admin/questions");
+        $("questionList").innerHTML = data.items
+          .map(
+            (q) =>
+              `<div class="history"><strong>${esc(q.key)}</strong> · ${esc(q.status)} · ${esc(q.level || "未标注")}</div>`,
+          )
+          .join("");
+      }
+      $("draftForm").onsubmit = (event) => {
+        event.preventDefault();
+        safe(async () => {
+          draft = await api(
+            "/admin/questions",
+            "POST",
+            JSON.parse($("draft").value),
+          );
+          candidateId = null;
+          $("draftKey").textContent = "当前版本：" + draft.key;
+          $("candidateForm").classList.remove("hidden");
+          $("reviewForm").classList.add("hidden");
+          await loadQuestions();
+          message("草稿已保存，尚不能进入学生任务。");
+        });
+      };
+      $("addCandidate").onclick = () =>
+        safe(async () => {
+          const result = await api(
+            "/admin/questions/" + draft.key + "/candidates",
+            "POST",
+            {
+              question_id: draft.question_id,
+              question_version: draft.version,
+              primary_level: $("candidateLevel").value,
+              secondary_levels: [],
+              rationale: $("rationale").value,
+              confidence: 0.5,
+            },
+          );
+          candidateId = result.id;
+          $("reviewForm").classList.remove("hidden");
+          $("verified").checked = false;
+          await loadQuestions();
+          message("候选已录入，状态为待审核；没有调用外部模型。");
+        });
+      async function review(decision) {
+        if (decision === "approve" && !$("verified").checked)
+          throw Error("请先核验答案、解析与标签，再勾选审核确认。");
+        await api("/admin/candidates/" + candidateId + "/review", "POST", {
+          decision,
+          reason: $("reviewReason").value,
+          content_verified: $("verified").checked,
+          final_level: $("candidateLevel").value,
+        });
+        $("reviewForm").classList.add("hidden");
+        $("candidateForm").classList.toggle("hidden", decision === "approve");
+        await loadQuestions();
+        message(
+          decision === "approve"
+            ? "题目版本已审核发布。"
+            : "候选已驳回，可重新录入候选。",
+        );
+      }
+      $("approve").onclick = () => safe(() => review("approve"));
+      $("reject").onclick = () => safe(() => review("reject"));
+    </script>
+  </body>
+</html>

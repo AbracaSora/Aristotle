@@ -1,0 +1,20 @@
+name: Backend checks
+on:
+  push:
+    paths: ['code/backend/**', 'code/core_engine/**', 'tests/**', 'pyproject.toml', 'uv.lock', '.github/workflows/backend.yml']
+  pull_request:
+    paths: ['code/backend/**', 'code/core_engine/**', 'tests/**', 'pyproject.toml', 'uv.lock', '.github/workflows/backend.yml']
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.11.6'
+      - run: uv sync --locked --python 3.12
+      - run: uv run ruff check code/backend code/core_engine tests
+      - run: uv run ruff format --check code/backend code/core_engine tests
+      - run: uv run pytest -q

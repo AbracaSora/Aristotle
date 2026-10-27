@@ -2,7 +2,7 @@
 
 面向计算机 408 备考大学生的自适应学习 Agent，帮助学生明确「哪些知识还没掌握，下一步应该学什么、练习什么认知活动」。
 
-本项目是[智能软件工程实践课程](https://github.com/bettermorn/IntelligentSWEPractice)的小组实践作品。目前处于需求分析与方案设计阶段，仓库已建立文档和代码目录，以下功能均为开发规划。
+本项目是[智能软件工程实践课程](https://github.com/bettermorn/IntelligentSWEPractice)的小组实践作品。目前已有需求分析稿、Vue 学习端演示和独立后端 API 原型，尚未完成前后端联调、完整功能验收或学生试用。以下首版功能仍为产品规划，实际原型范围见各模块说明。
 
 ## 产品定位
 
@@ -17,6 +17,10 @@
 | [问题定义与产品描述](docs/requirements/problem_definition.md) | 目标用户、痛点、方案、评估方式与交付计划 |
 | [功能需求规范](docs/requirements/functional_spec.md) | 系统角色、功能分解、LLM 认知标签规则、用例验收与领域模型 |
 | [非功能需求规范](docs/requirements/nonfunctional_spec.md) | URPS、安全隐私、标签质量与可测量的验收目标 |
+| [后端技术方案](docs/software/backend_technical_proposal.md) | 技术选择、架构、数据模型、事务与原型边界，待团队评审 |
+| [后端 API 约定](docs/software/backend_api.md) | 前端联调接口、错误与幂等约定 |
+| [规则基线](docs/algorithm/baseline.md) | 证据窗口、先修约束与选题逻辑 |
+| [后端原型验证](docs/software/backend_validation.md) | 本地检查证据与未验证范围 |
 
 两份需求规范对应 [issue #5](https://github.com/AbracaSora/Aristotle/issues/5)，并纳入 [issue #6](https://github.com/AbracaSora/Aristotle/issues/6) 的认知标签建议。目前为待课程评审的需求分析稿，指标是设计目标，尚无功能或学习效果验证结果。
 
@@ -83,6 +87,8 @@
 
 ## 团队协作与开发说明
 
-团队按前端体验、后端服务、学习引擎、测试与集成划分工作，具体负责人在项目管理文档中维护。使用 Issue 跟踪任务，通过分支和 Pull Request 提交变更，经评审后合并；功能变更同步更新相关文档和测试。
+团队拟按前端体验、后端服务、学习引擎、测试与集成划分工作，具体负责人待在项目管理文档中确认。协作约定为使用 Issue 跟踪任务，通过分支和 Pull Request 提交变更，经评审后合并；功能变更同步更新相关文档和测试。
 
-技术选型、安装与运行步骤将在首个可运行版本完成后补充。当前仓库尚无可启动的应用。开发中使用脱敏或获授权的样例资料，个人讲义、账号密钥及模型 API 凭据不提交到仓库。
+学习端启动见 [前端说明](code/frontend/README.md)。后端启动、演示账号与 API 工作台见 [后端说明](code/backend/README.md)。两者目前独立运行，前端仍使用本地演示数据。
+
+后端原型覆盖账号隔离、规则诊断和选题、持久化作答、文字资料及人工审核流程；真实 LLM/PDF 尚未接入，演示题不代表正式审核题库。开发中使用脱敏或获授权的样例资料，个人讲义、数据库、账号密钥及模型 API 凭据不提交到仓库。
