@@ -1,0 +1,119 @@
+{
+  "recorded_on": "2026-10-28",
+  "source_commit": "25afe85",
+  "scenario": "栈：理解诊断 → 应用任务 → 连续困难 → 资料复习 → 新题复测",
+  "implementation": "实际 Vue 页面 + 持久化后端；预设人工演示作答；没有外部模型调用",
+  "capture": "浏览器约 5 fps 逐帧采集，片段剪辑、节奏调整并加入独立文字解读；未重绘或替换界面结果",
+  "source_frames": 246,
+  "duration_seconds": 66.089,
+  "size": [
+    960,
+    720
+  ],
+  "chapters": [
+    {
+      "chapter": "01-start",
+      "start": 0.0,
+      "end": 4.644,
+      "phase": 1,
+      "title": "围绕一个知识点学习"
+    },
+    {
+      "chapter": "01-prerequisite",
+      "start": 4.644,
+      "end": 7.532,
+      "phase": 1,
+      "title": "从已有基础出发"
+    },
+    {
+      "chapter": "02-understanding",
+      "start": 7.532,
+      "end": 13.753,
+      "phase": 1,
+      "title": "先检验概念理解"
+    },
+    {
+      "chapter": "03-evidence",
+      "start": 13.753,
+      "end": 17.942,
+      "phase": 1,
+      "title": "答对一题还不够"
+    },
+    {
+      "chapter": "04-understanding-evidence",
+      "start": 17.942,
+      "end": 24.234,
+      "phase": 1,
+      "title": "汇集不同题目的证据"
+    },
+    {
+      "chapter": "05-application-plan",
+      "start": 24.234,
+      "end": 29.14,
+      "phase": 2,
+      "title": "下一步，练应用"
+    },
+    {
+      "chapter": "06-application-attempts",
+      "start": 29.14,
+      "end": 39.122,
+      "phase": 3,
+      "title": "用反馈发现困难"
+    },
+    {
+      "chapter": "07-adaptive-review",
+      "start": 39.122,
+      "end": 47.252,
+      "phase": 4,
+      "title": "困难之后，回看理解"
+    },
+    {
+      "chapter": "08-reading-is-not-evidence",
+      "start": 47.252,
+      "end": 51.667,
+      "phase": 4,
+      "title": "阅读完成，不增加证据"
+    },
+    {
+      "chapter": "09-independent-retest",
+      "start": 51.667,
+      "end": 60.564,
+      "phase": 5,
+      "title": "用另一组题复测"
+    },
+    {
+      "chapter": "10-updated-evidence-final",
+      "start": 60.564,
+      "end": 66.089,
+      "phase": 5,
+      "title": "更新表现，保留边界"
+    }
+  ],
+  "verification": {
+    "prerequisite_prepared": true,
+    "single_understanding_answer_status": "insufficient",
+    "understanding_correct": 3,
+    "practice_application_correct": 0,
+    "practice_application_total": 3,
+    "review_evidence_before": 6,
+    "review_evidence_after": 6,
+    "retest_uses_distinct_question_ids": true,
+    "retest_application_correct": 3,
+    "retest_application_total": 3,
+    "learning_effect_claim": false
+  },
+  "assets": {
+    "stack-learning-flow.mp4": {
+      "bytes": 1423306,
+      "sha256": "ba95aca66af425539588d4a34b389e6f9b4fdb56dc62057760575ca200ec9f79"
+    },
+    "stack-learning-flow.gif": {
+      "bytes": 4501738,
+      "sha256": "27d56590ee6800857212f9792b505fd0deb4f2ad5f9e94ab91d4771b2febc909"
+    },
+    "stack-learning-flow-poster.jpg": {
+      "bytes": 79939,
+      "sha256": "f39d6097547c231f91dda527422f820ca6638cd56e4239fd5476ab543b823cdc"
+    }
+  }
+}
