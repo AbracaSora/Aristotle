@@ -386,6 +386,26 @@ export function useLearning() {
       busy.value = false;
     }
   }
+  async function call<T>(
+    path: string,
+    method = "GET",
+    body?: unknown,
+  ): Promise<T> {
+    const context = capture();
+    try {
+      const value = await context.api.request<T>(path, method, body);
+      if (!current(context)) throw new Error("会话已切换，请重新操作。");
+      return value;
+    } catch (reason) {
+      report(reason, context);
+      throw reason;
+    }
+  }
+  function selectTask(next: Task | null) {
+    task.value = next;
+    pendingSubmission.value = null;
+    if (user.value) writeStorage(taskKey(user.value.id), next?.id || null);
+  }
   const hasPendingTask = computed(
     () =>
       !!task.value?.questions.some(
@@ -393,6 +413,8 @@ export function useLearning() {
       ),
   );
   return {
+    call,
+    selectTask,
     user,
     graph,
     state,

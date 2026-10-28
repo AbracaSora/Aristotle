@@ -8,7 +8,7 @@ Vue 3 + TypeScript + Vite，沿用 Naive UI、Lucide 图标和绿色界面。学
 
 ```bash
 uv sync --locked --python 3.12
-uv run python -m aristotle_backend.seed --demo
+uv run python -m aristotle_backend.seed --demo --design-flow
 uv run uvicorn aristotle_backend.app:create_app --factory --host 127.0.0.1 --port 8018
 ```
 
@@ -48,4 +48,8 @@ npm run build
 
 ## 已知边界
 
-当前只有数据结构演示图，题库含 12 道模拟审核种子。PDF、真实 LLM 标注、章节范围选择、正式诊断效度、完整任务跳过/回退和学生报错仍未完成。本次对接不表示全部 P0 或非功能验收通过。
+当前为局部数据结构演示内容，真实 PDF/LLM 仍未接入；正式诊断效度、内容质量、学习收益及非功能需求尚未验收。范围、跳过/更换、资料回退/复测和学生报错已补齐，详见下述更新。
+
+## 设计对齐原型（2026-10-28）
+
+新增范围与分段诊断、任务生命周期、资料复习与独立复测、导入片段确认、mock 标注任务与人工审核、纠错和系统管理。使用 `--design-flow` 显式增量初始化。管理员 admin 使用演示初始化密码。实现及 mock/501 边界、端到端运行步骤见 [原设计对齐流程](../../docs/software/design_aligned_workflow.md)。

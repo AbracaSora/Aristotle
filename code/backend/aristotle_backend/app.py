@@ -23,11 +23,14 @@ from .db import (
     Material,
     Question,
     Review,
+    SystemSetting,
     Task,
+    TaskProgress,
     TaskQuestion,
     User,
     open_database,
 )
+from .flow_routes import chunks_view, install_flow_routes, purge_material_derivatives
 from .schemas import (
     AttemptInput,
     AttemptView,
@@ -48,6 +51,14 @@ from .schemas import (
     UserView,
 )
 from .security import hash_password, token_hash, verify_password
+from .workflow import (
+    assert_task_actionable,
+    create_recommendation,
+    flow_view,
+    round_evidence,
+    scoped_nodes,
+    selected_scope,
+)
 
 DEFAULT_DB = "sqlite:///" + str(Path(__file__).resolve().parents[3] / ".local" / "aristotle.db")
 bearer = HTTPBearer(auto_error=False)
@@ -70,7 +81,9 @@ def current_user(
     session = db.get(LoginSession, token_hash(credentials.credentials))
     if not session or session.expires_at <= request.app.state.clock():
         fail(401, "会话无效或已过期，请重新登录")
-    return db.get(User, session.user_id)
+    user = db.get(User, session.user_id)
+    request.state.auth_user_id = user.id
+    return user
 
 
 def maintainer(user=Depends(current_user)):
@@ -124,8 +137,8 @@ def history_rows(db, user_id):
 
 def learning_state(db, user, now):
     graph = active_graph(db)
-    attempts = history_rows(db, user.id)
-    return graph, attempts, diagnose(graph.nodes, attempts, now)
+    attempts = round_evidence(db, user, history_rows(db, user.id))
+    return graph, attempts, diagnose(scoped_nodes(db, user, graph.nodes), attempts, now)
 
 
 def question_view(q):
@@ -143,7 +156,8 @@ def question_view(q):
     }
 
 
-def attempt_view(a, q):
+def attempt_view(a, q, db=None):
+    retirement = db.get(SystemSetting, "retired:" + q.key) if db else None
     return {
         "id": a.id,
         "task_id": a.task_id,
@@ -157,10 +171,11 @@ def attempt_view(a, q):
         "level": q.level,
         "question_version": q.version,
         "content_status": q.status,
+        "retirement_reason": retirement.data["reason"] if retirement else None,
     }
 
 
-def material_view(m):
+def material_view(m, db=None):
     return {
         "id": m.id,
         "title": m.title,
@@ -168,6 +183,7 @@ def material_view(m):
         "knowledge_id": m.knowledge_id,
         "confirmed": m.confirmed,
         "source_location": "粘贴文本第 1 段",
+        "chunks": chunks_view(db, m) if db else [],
     }
 
 
@@ -203,9 +219,10 @@ def task_view(db, task):
         **task.decision,
         "questions": [question_view(q) for q in questions],
         "materials": materials,
-        "attempts": [attempt_view(a, by_key[a.question_key]) for a in attempts],
+        "attempts": [attempt_view(a, by_key[a.question_key], db) for a in attempts],
         "evidence_snapshot": task.evidence_snapshot,
         "notice": "课程后端原型；demo-seed 为模拟审核的演示题，非正式审核题库。",
+        **flow_view(db, task),
     }
 
 
@@ -235,7 +252,20 @@ def create_app(database_url: str | None = None):
     )
 
     @app.exception_handler(HTTPException)
-    async def http_error(_, exc):
+    async def http_error(request, exc):
+        actor_id = getattr(request.state, "auth_user_id", None)
+        if exc.status_code == 403 and actor_id:
+            with request.app.state.sessions() as db:
+                db.add(
+                    Audit(
+                        id=str(uuid4()),
+                        actor_id=actor_id,
+                        action="access_denied",
+                        target=request.method + " " + request.url.path,
+                        at=request.app.state.clock(),
+                    )
+                )
+                db.commit()
         return JSONResponse(status_code=exc.status_code, content={"error": {"message": exc.detail}})
 
     @app.exception_handler(RequestValidationError)
@@ -301,7 +331,7 @@ def create_app(database_url: str | None = None):
     @app.get("/api/v1/knowledge", tags=["学习"])
     def knowledge(user=Depends(current_user), db=Depends(get_db)):
         graph = active_graph(db)
-        return {"version": graph.version, "nodes": graph.nodes}
+        return {"version": graph.version, "nodes": scoped_nodes(db, user, graph.nodes)}
 
     @app.get("/api/v1/learning-state", response_model=LearningStateView, tags=["学习"])
     def state(request: Request, user=Depends(student), db=Depends(get_db)):
@@ -318,6 +348,14 @@ def create_app(database_url: str | None = None):
     def create_task(body: TaskInput, request: Request, user=Depends(student), db=Depends(get_db)):
         now = request.app.state.clock()
         graph, attempts, states = learning_state(db, user, now)
+        if selected_scope(db, user):
+            if body.mode == "diagnostic":
+                fail(409, "请选择诊断流程接口创建独立诊断轮次")
+            task = create_recommendation(
+                db, user, graph, attempts, states, now, body.knowledge_id, body.target_level
+            )
+            db.commit()
+            return task_view(db, task)
         published = db.scalars(select(Question).where(Question.status == "published")).all()
         # A revision is not a new independent question: assign only latest published version.
         latest = {}
@@ -370,7 +408,7 @@ def create_app(database_url: str | None = None):
 
     @app.post("/api/v1/tasks/{task_id}/attempts", response_model=AttemptView, tags=["学习"])
     def submit(task_id: str, body: AttemptInput, request: Request, user=Depends(student), db=Depends(get_db)):
-        owned(db, Task, task_id, user)
+        task = owned(db, Task, task_id, user)
         q = db.get(Question, body.question_key)
         if not q or not db.get(TaskQuestion, (task_id, body.question_key)):
             fail(404, "题目不属于该任务")
@@ -395,7 +433,8 @@ def create_app(database_url: str | None = None):
 
         existing = existing_result()
         if existing:
-            return {**attempt_view(existing, q), "replayed": True}
+            return {**attempt_view(existing, q, db), "replayed": True}
+        assert_task_actionable(db, task)
         if q.status != "published":
             fail(409, "题目已停用，不接受新作答；请重新请求任务")
         if body.selected not in q.options:
@@ -410,7 +449,10 @@ def create_app(database_url: str | None = None):
             correct=body.selected == q.answer,
             created_at=request.app.state.clock(),
         )
+        progress = db.get(TaskProgress, task.id)
         db.add(row)
+        if progress:
+            progress.status = "active"
         try:
             db.commit()
         except IntegrityError:
@@ -418,8 +460,8 @@ def create_app(database_url: str | None = None):
             row = existing_result()
             if not row:
                 fail(409, "作答保存冲突，请重试")
-            return {**attempt_view(row, q), "replayed": True}
-        return {**attempt_view(row, q), "replayed": False}
+            return {**attempt_view(row, q, db), "replayed": True}
+        return {**attempt_view(row, q, db), "replayed": False}
 
     @app.get("/api/v1/history", response_model=HistoryView, tags=["学习"])
     def history(
@@ -443,7 +485,7 @@ def create_app(database_url: str | None = None):
             .where(Attempt.user_id == user.id, Attempt.correct.is_(True))
         )
         return {
-            "items": [attempt_view(a, q) for a, q in rows],
+            "items": [attempt_view(a, q, db) for a, q in rows],
             "limit": limit,
             "offset": offset,
             "total": total,
@@ -455,7 +497,7 @@ def create_app(database_url: str | None = None):
         rows = db.scalars(
             select(Material).where(Material.user_id == user.id, Material.deleted.is_(False))
         ).all()
-        return {"items": [material_view(m) for m in rows]}
+        return {"items": [material_view(m, db) for m in rows]}
 
     @app.post("/api/v1/materials", status_code=201, tags=["个人资料"])
     def add_material(body: MaterialInput, user=Depends(student), db=Depends(get_db)):
@@ -464,7 +506,7 @@ def create_app(database_url: str | None = None):
         row = Material(id=str(uuid4()), user_id=user.id, **body.model_dump(), confirmed=False, deleted=False)
         db.add(row)
         db.commit()
-        return material_view(row)
+        return material_view(row, db)
 
     @app.patch("/api/v1/materials/{material_id}", tags=["个人资料"])
     def update_material(material_id: str, body: MaterialUpdate, user=Depends(student), db=Depends(get_db)):
@@ -474,12 +516,18 @@ def create_app(database_url: str | None = None):
         if body.knowledge_id not in {n["id"] for n in active_graph(db).nodes}:
             fail(422, "知识点不存在")
         row.knowledge_id, row.confirmed = body.knowledge_id, body.confirmed
+        from .db import SourceChunk
+
+        for chunk in db.scalars(select(SourceChunk).where(SourceChunk.material_id == row.id)):
+            chunk.knowledge_id = body.knowledge_id
+            chunk.status = "confirmed" if body.confirmed else "pending"
         db.commit()
-        return material_view(row)
+        return material_view(row, db)
 
     @app.delete("/api/v1/materials/{material_id}", status_code=204, tags=["个人资料"])
     def delete_material(material_id: str, user=Depends(student), db=Depends(get_db)):
         row = owned(db, Material, material_id, user)
+        purge_material_derivatives(db, row)
         row.deleted, row.confirmed, row.title, row.text = True, False, "来源已删除", ""
         db.commit()
         return Response(status_code=204)
@@ -575,6 +623,8 @@ def create_app(database_url: str | None = None):
                     "rule_version": a.rule_version,
                     "created_at": a.created_at,
                     "decision": r.decision if r else "pending",
+                    "needs_attention": a.payload.get("confidence", 0) < 0.8
+                    or bool(a.payload.get("ambiguity_note", "").strip()),
                     "review": {
                         "reviewer_id": r.reviewer_id,
                         "reason": r.reason,
@@ -635,12 +685,26 @@ def create_app(database_url: str | None = None):
         if not q:
             fail(404, "题目不存在")
         q.status = "retired"
+        existing_reason = db.get(SystemSetting, "retired:" + q.key)
+        if not existing_reason:
+            db.add(
+                SystemSetting(
+                    key="retired:" + q.key,
+                    data={
+                        "reason": "维护者停用此版本；旧版接口未补充详细说明",
+                        "actor": user.id,
+                        "at": request.app.state.clock(),
+                    },
+                )
+            )
         audit(db, user, "retire_question", q.key, request.app.state.clock())
         db.commit()
         return {"question_key": q.key, "status": q.status}
 
     @app.get("/api/v1/admin/audit", tags=["内容维护"])
-    def audit_log(limit: int = Query(100, ge=1, le=200), user=Depends(maintainer), db=Depends(get_db)):
+    def audit_log(limit: int = Query(100, ge=1, le=200), user=Depends(current_user), db=Depends(get_db)):
+        if user.role not in ("maintainer", "admin"):
+            fail(403, "此操作需要维护或管理权限")
         rows = db.scalars(select(Audit).order_by(Audit.at.desc()).limit(limit)).all()
         return {
             "items": [
@@ -649,5 +713,13 @@ def create_app(database_url: str | None = None):
             ]
         }
 
+    install_flow_routes(
+        app,
+        get_db,
+        current_user,
+        student,
+        maintainer,
+        (learning_state, active_graph, task_view, owned, audit),
+    )
     app.state.dummy_hash = hash_password("unused-" + secrets.token_urlsafe(16))
     return app

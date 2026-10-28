@@ -17,6 +17,8 @@ const emit = defineEmits<{
   submit: [key: string, answer: string];
   history: [];
   nextTask: [];
+  complete: [];
+  rebuild: [];
 }>();
 const index = ref(0),
   selected = ref<string | null>(null),
@@ -75,7 +77,13 @@ function next() {
   <NModal
     :show="show"
     preset="card"
-    title="学习任务 · 短关卡"
+    :title="
+      task?.activity === 'diagnostic'
+        ? '诊断 · 收集认知证据'
+        : task?.activity === 'material_review'
+          ? '资料复习 · 准备复测'
+          : '学习任务 · 短关卡'
+    "
     class="dialog"
     :mask-closable="false"
     :closable="!submitting"
@@ -93,52 +101,103 @@ function next() {
         class="notice"
         >{{ warning }}</NAlert
       >
-      <template v-if="!task.questions.length">
-        <NAlert
-          :type="task.status === 'material_review' ? 'info' : 'warning'"
-          class="notice"
-          >{{
-            task.status === "material_review"
-              ? "该目标暂时没有可用题目，先复习已确认资料。"
-              : "该目标暂无已发布题目或已确认资料，请联系内容维护者补充。"
-          }}</NAlert
+      <p v-if="task.goal">
+        <strong
+          >{{ task.goal.title }} · {{ levelLabels[task.target_level] }}</strong
         >
-        <p class="muted">{{ task.reason }}</p>
-        <article
-          v-for="material in task.materials"
-          :key="material.id"
-          class="task-material"
-        >
-          <template v-if="'unavailable' in material"
-            ><p class="muted">{{ material.reason }}</p></template
-          ><template v-else
-            ><h3>{{ material.title }}</h3>
-            <p class="material-text">{{ material.text }}</p>
-            <span class="muted">{{ material.source_location }}</span></template
+        — {{ task.goal.description }}
+      </p>
+      <details
+        v-if="task.resources?.length && task.questions.length"
+        class="history-details"
+      >
+        <summary>回看任务资料（可选）</summary>
+        <article v-for="r in task.resources" :key="r.id" class="task-material">
+          <p v-if="r.unavailable">{{ r.reason }}</p>
+          <template v-else
+            ><h3>{{ r.title }}</h3>
+            <p class="material-text">{{ r.text }}</p>
+            <p class="muted">
+              {{ r.location }} · {{ r.implementation }}
+            </p></template
           >
         </article>
-      </template>
-      <template v-else-if="finished">
+      </details>
+      <template v-if="task.lifecycle === 'completed' && task.feedback">
         <div class="completion">
           <Check :size="38" />
-          <h2>完成了一小步。</h2>
-          <p>
-            本轮答对 {{ score }} /
-            {{ task.questions.length }} 道题，作答已保存在服务端。
+          <h2>
+            {{
+              task.activity === "diagnostic"
+                ? "本段诊断已完成"
+                : task.activity === "material_review"
+                  ? "复习已记录"
+                  : "本次学习已完成"
+            }}
+          </h2>
+          <p>{{ task.feedback.message }}</p>
+          <p v-if="task.feedback.answered">
+            本段答对 {{ task.feedback.correct }} /
+            {{ task.feedback.answered }} 题。
           </p>
-          <p>继续获取下一任务，系统会结合最新证据和先修关系安排练习。</p>
+          <p v-if="task.feedback.state">
+            {{ task.feedback.state.name }} ·
+            {{ task.feedback.state.evidence_count }} 道不同题目证据
+          </p>
           <div class="actions completion-actions">
-            <NButton type="primary" :loading="loading" @click="emit('nextTask')"
-              >获取下一任务</NButton
+            <NButton
+              type="primary"
+              :loading="loading"
+              @click="emit('nextTask')"
+              >{{
+                task.feedback.next_action === "diagnostic_next"
+                  ? "继续下一段诊断"
+                  : task.feedback.next_action === "retest"
+                    ? "开始复测"
+                    : "查看下一步安排"
+              }}</NButton
             ><NButton
-              secondary
               @click="
                 emit('update:show', false);
                 emit('history');
               "
-              >查看学习记录</NButton
+              >学习记录</NButton
             >
           </div>
+        </div>
+      </template>
+      <template v-else-if="!task.questions.length">
+        <NAlert type="info" class="notice">{{ task.reason }}</NAlert>
+        <article v-for="r in task.resources" :key="r.id" class="task-material">
+          <p v-if="r.unavailable">{{ r.reason }}</p>
+          <template v-else
+            ><h3>{{ r.title }}</h3>
+            <p class="material-text">{{ r.text }}</p>
+            <p class="muted">
+              {{ r.location }} · {{ r.implementation }}
+            </p></template
+          >
+        </article>
+        <p class="muted">阅读不会增加掌握分数；完成后需要通过作答检验。</p>
+        <NButton
+          v-if="task.status === 'material_review'"
+          type="primary"
+          :loading="loading"
+          @click="emit('complete')"
+          >已完成复习，查看反馈</NButton
+        >
+      </template>
+      <template v-else-if="finished">
+        <div class="completion">
+          <Check :size="38" />
+          <h2>作答已保存</h2>
+          <p>
+            答对 {{ score }} /
+            {{ task.questions.length }} 题。完成本段后查看证据反馈与下一步安排。
+          </p>
+          <NButton type="primary" :loading="loading" @click="emit('complete')"
+            >完成本段并查看反馈</NButton
+          >
         </div>
       </template>
       <template v-else-if="question">
@@ -153,8 +212,10 @@ function next() {
           v-if="question.status !== 'published' && !feedback"
           type="warning"
           class="notice"
-          >此版本已停用，请获取新任务。<NButton text @click="emit('nextTask')"
-            >重新推荐</NButton
+          >此版本已停用，请重建诊断或更换任务，原作答保留。<NButton
+            text
+            @click="emit('rebuild')"
+            >重建 / 更换任务</NButton
           ></NAlert
         >
         <NRadioGroup

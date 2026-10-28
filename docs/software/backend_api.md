@@ -1,6 +1,8 @@
-# 后端 API 联调约定 v0.1
+# 后端 API 联调约定 v0.1（基础接口）
 
 状态：后端原型已实现，Vue 学习端已接入，整体需求与正式发布仍待评审验收。基础路径 `/api/v1`，内容为 JSON，认证为 `Authorization: Bearer <access_token>`。时间字段使用 UTC Unix 秒，前端 `new Date(created_at * 1000)` 转成本地时间显示。
+
+2026-10-28 新增范围、诊断轮次、任务动作、资料 job、mock 标注、纠错和系统管理，见 [原设计对齐流程与新增 API](design_aligned_workflow.md)。本页保留基础接口约定；新学习端使用 `/diagnostics` 和 `/recommendations` 代替旧的通用 `/tasks` 创建入口。
 
 运行时 `/openapi.json` 是机器契约，`/docs` 可交互调用。公开题目响应模型不含答案和解析；只有维护者题目接口，以及学生自己的已提交作答反馈可以包含这些字段。
 

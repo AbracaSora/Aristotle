@@ -1,14 +1,9 @@
 export type Level =
-  | "remember"
-  | "understand"
-  | "apply"
-  | "analyze"
-  | "evaluate"
-  | "create";
+  "remember" | "understand" | "apply" | "analyze" | "evaluate" | "create";
 export interface User {
   id: string;
   username: string;
-  role: "student" | "maintainer";
+  role: "student" | "maintainer" | "admin";
 }
 export interface LoginResult {
   access_token: string;
@@ -72,6 +67,7 @@ export interface Attempt {
   question_version: number;
   content_status: string;
   replayed?: boolean;
+  retirement_reason?: string | null;
 }
 export interface HistoryPage {
   items: Attempt[];
@@ -87,14 +83,113 @@ export interface Material {
   knowledge_id: string;
   confirmed: boolean;
   source_location: string;
+  chunks?: SourceChunk[];
 }
 export interface UnavailableMaterial {
   id: string;
   unavailable: true;
   reason: string;
 }
+export interface SourceChunk {
+  id: string;
+  text: string;
+  knowledge_id: string;
+  status: "pending" | "confirmed" | "rejected";
+  location: string;
+  implementation: string;
+}
+export interface Resource {
+  id: string;
+  type: string;
+  title?: string;
+  text?: string;
+  location?: string;
+  implementation?: string;
+  unavailable?: boolean;
+  reason?: string;
+}
+export interface Goal {
+  knowledge_id: string;
+  title: string;
+  level: Level;
+  description: string;
+}
+export interface TaskFeedback {
+  answered: number;
+  correct: number;
+  message: string;
+  state: KnowledgeState | null;
+  next_action: string;
+  knowledge_id: string;
+  target_level: Level;
+}
+export interface Scope {
+  id: string;
+  title: string;
+  knowledge_ids: string[];
+  published: boolean;
+  description: string;
+}
+export interface Diagnostic {
+  id: string;
+  scope_id: string;
+  status: string;
+  completed_segments: number;
+  notice: string;
+  segments: {
+    task_id: string;
+    knowledge_id: string;
+    level: Level;
+    question_count: number;
+    answered: number;
+    status: string;
+  }[];
+}
+export interface LearningContext {
+  selected_scope: Scope | null;
+  diagnostic: Diagnostic | null;
+  current_task: Task | null;
+  last_feedback: TaskFeedback | null;
+  stage: string;
+}
+export interface Job {
+  can_run?: boolean;
+  id: string;
+  kind: string;
+  status: string;
+  implementation: string;
+  notice: string;
+  result: Record<string, any>;
+}
+export interface ContentReport {
+  id: string;
+  question_key: string;
+  category: string;
+  message: string;
+  status: string;
+  resolution: string;
+}
+export interface TimelineItem {
+  id: string;
+  scope_id: string;
+  status: string;
+  goal: Goal;
+  activity: string;
+  created_at: number;
+  feedback: TaskFeedback | null;
+}
 export interface Task {
   id: string;
+  lifecycle?: string;
+  activity?: string;
+  scope_id?: string;
+  round_id?: string;
+  goal?: Goal;
+  plan?: { kind: string; title: string; required: boolean }[];
+  evidence_facts?: string[];
+  resources?: Resource[];
+  feedback?: TaskFeedback | null;
+  resume_level?: Level;
   mode: "diagnostic" | "practice";
   graph_version: string;
   created_at: number;

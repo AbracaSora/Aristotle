@@ -134,6 +134,89 @@ class Audit(Base):
     at: Mapped[float] = mapped_column(Float)
 
 
+class LearningScope(Base):
+    __tablename__ = "learning_scopes"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    title: Mapped[str] = mapped_column(String)
+    knowledge_ids: Mapped[list] = mapped_column(JSON)
+    published: Mapped[bool] = mapped_column(Boolean)
+    description: Mapped[str] = mapped_column(Text)
+
+
+class LearnerProfile(Base):
+    __tablename__ = "learner_profiles"
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    scope_id: Mapped[str] = mapped_column(ForeignKey("learning_scopes.id"))
+
+
+class DiagnosticRound(Base):
+    __tablename__ = "diagnostic_rounds"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    scope_id: Mapped[str] = mapped_column(ForeignKey("learning_scopes.id"))
+    status: Mapped[str] = mapped_column(String)
+    blueprint: Mapped[list] = mapped_column(JSON)
+    created_at: Mapped[float] = mapped_column(Float)
+
+
+class TaskProgress(Base):
+    __tablename__ = "task_progress"
+    task_id: Mapped[str] = mapped_column(ForeignKey("tasks.id"), primary_key=True)
+    scope_id: Mapped[str] = mapped_column(ForeignKey("learning_scopes.id"))
+    round_id: Mapped[str | None] = mapped_column(ForeignKey("diagnostic_rounds.id"), nullable=True)
+    status: Mapped[str] = mapped_column(String)
+    data: Mapped[dict] = mapped_column(JSON)
+
+
+class LearningResource(Base):
+    __tablename__ = "learning_resources"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    knowledge_id: Mapped[str] = mapped_column(String)
+    title: Mapped[str] = mapped_column(String)
+    text: Mapped[str] = mapped_column(Text)
+    source: Mapped[str] = mapped_column(String)
+
+
+class SourceChunk(Base):
+    __tablename__ = "source_chunks"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    material_id: Mapped[str] = mapped_column(ForeignKey("materials.id"), index=True)
+    text: Mapped[str] = mapped_column(Text)
+    knowledge_id: Mapped[str] = mapped_column(String)
+    status: Mapped[str] = mapped_column(String)
+    location: Mapped[str] = mapped_column(String)
+    implementation: Mapped[str] = mapped_column(String)
+
+
+class ServiceJob(Base):
+    __tablename__ = "service_jobs"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    kind: Mapped[str] = mapped_column(String)
+    status: Mapped[str] = mapped_column(String)
+    params: Mapped[dict] = mapped_column(JSON)
+    result: Mapped[dict] = mapped_column(JSON)
+    created_at: Mapped[float] = mapped_column(Float)
+
+
+class ContentReport(Base):
+    __tablename__ = "content_reports"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"))
+    question_key: Mapped[str] = mapped_column(ForeignKey("questions.key"))
+    category: Mapped[str] = mapped_column(String)
+    message: Mapped[str] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(String)
+    resolution: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[float] = mapped_column(Float)
+
+
+class SystemSetting(Base):
+    __tablename__ = "system_settings"
+    key: Mapped[str] = mapped_column(String, primary_key=True)
+    data: Mapped[dict] = mapped_column(JSON)
+
+
 def open_database(url: str):
     if url.startswith("sqlite:///") and not url.endswith(":memory:"):
         Path(url.removeprefix("sqlite:///")).parent.mkdir(parents=True, exist_ok=True)

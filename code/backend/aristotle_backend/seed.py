@@ -206,9 +206,16 @@ def seed_demo(sessions, password="demo-password"):
 def main():
     parser = argparse.ArgumentParser(description="创建本地演示账号与模拟审核题库；仅对空库执行")
     parser.add_argument("--demo", action="store_true", required=True)
-    parser.parse_args()
+    parser.add_argument(
+        "--design-flow", action="store_true", help="增量添加设计对齐流程的范围、资料、题目和管理员 mock 夹具"
+    )
+    args = parser.parse_args()
     engine, sessions = open_database(os.getenv("ARISTOTLE_DATABASE_URL", DEFAULT_DB))
     created = seed_demo(sessions, os.getenv("ARISTOTLE_DEMO_PASSWORD", "demo-password"))
+    if args.design_flow:
+        from .design_seed import seed_design_flow
+
+        seed_design_flow(sessions)
     engine.dispose()
     print(
         "已创建 student1 / student2 / editor 演示账号和 12 道演示题。"

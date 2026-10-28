@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, defineAsyncComponent, onMounted, ref, watch } from "vue";
 import {
   NConfigProvider,
   NButton,
   NTag,
-  NProgress,
   NAlert,
   NEmpty,
   NPopconfirm,
   NSelect,
+  NInput,
   zhCN,
 } from "naive-ui";
 import {
@@ -17,11 +17,7 @@ import {
   Network,
   Library,
   History,
-  ArrowRight,
-  ArrowUpRight,
   Check,
-  Sparkles,
-  Clock3,
   BookOpen,
   LogOut,
   RefreshCw,
@@ -30,7 +26,13 @@ import LoginPanel from "./components/LoginPanel.vue";
 import QuizDialog from "./components/QuizDialog.vue";
 import MaterialDialog from "./components/MaterialDialog.vue";
 import { useLearning } from "./useLearning";
-import { levelLabels, levelDescriptions, stateLabels } from "./types";
+import { useWorkflow } from "./useWorkflow";
+import WorkflowWorkspace from "./components/WorkflowWorkspace.vue";
+import MaterialImportPanel from "./components/MaterialImportPanel.vue";
+const ManagementConsole = defineAsyncComponent(
+  () => import("./components/ManagementConsole.vue"),
+);
+import { levelLabels, stateLabels } from "./types";
 import type { Material } from "./types";
 const theme = {
   common: {
@@ -48,6 +50,11 @@ const nav = [
   { name: "学习记录", icon: History },
 ];
 const learning = useLearning();
+const workflow = useWorkflow(learning);
+const { scopes, context, timeline, reports, loading: flowLoading } = workflow;
+const reportKey = ref(""),
+  reportCategory = ref("answer"),
+  reportText = ref("");
 const {
   user,
   graph,
@@ -60,18 +67,10 @@ const {
   submitting,
   mutating,
   pendingSubmission,
-  hasPendingTask,
 } = learning;
 const page = ref("学习概览"),
   quizOpen = ref(false),
   materialOpen = ref(false);
-const focus = computed(
-  () =>
-    state.value?.states.find(
-      (s) => s.knowledge_id === task.value?.knowledge_id,
-    ) || state.value?.states[0],
-);
-const targetLevel = computed(() => task.value?.target_level);
 const knowledgeOptions = computed(() =>
   (graph.value?.nodes || []).map((node) => ({
     label: node.name,
@@ -81,13 +80,60 @@ const knowledgeOptions = computed(() =>
 function knowledgeName(id: string) {
   return graph.value?.nodes.find((node) => node.id === id)?.name || id;
 }
-async function start(force = false, knowledgeId?: string) {
-  if (submitting.value || busy.value) return;
-  if (!force && !knowledgeId && hasPendingTask.value) {
-    quizOpen.value = true;
+async function start(_force = false, knowledgeId?: string) {
+  if (submitting.value || busy.value || flowLoading.value) return;
+  if (!context.value?.selected_scope) {
+    page.value = "学习概览";
+    error.value = "请先选择学习范围。";
     return;
   }
-  if (await learning.requestTask(knowledgeId)) quizOpen.value = true;
+  if (
+    !context.value.diagnostic ||
+    context.value.diagnostic.status === "active"
+  ) {
+    page.value = "学习概览";
+    if (!context.value.diagnostic) await workflow.begin();
+    const segment = context.value.diagnostic?.segments.find(
+      (s) => s.status !== "completed",
+    );
+    if (segment) await openTask(segment.task_id);
+    return;
+  }
+  await workflow.recommend(knowledgeId);
+  page.value = "学习概览";
+}
+async function openTask(id: string) {
+  if (await workflow.open(id)) quizOpen.value = true;
+}
+async function nextStep() {
+  quizOpen.value = false;
+  if (await workflow.next()) quizOpen.value = true;
+}
+async function refreshAll() {
+  await learning.refresh();
+  await workflow.run(async () => {
+    await workflow.reload();
+    if (
+      task.value?.scope_id === context.value?.selected_scope?.id &&
+      task.value
+    )
+      learning.task.value = await learning.call(`/tasks/${task.value.id}`);
+  });
+}
+async function chooseScope(id: string) {
+  if (await workflow.choose(id)) quizOpen.value = false;
+}
+async function reportContent() {
+  await workflow.run(async () => {
+    await learning.call("/content-reports", "POST", {
+      question_key: reportKey.value,
+      category: reportCategory.value,
+      message: reportText.value,
+    });
+    reportKey.value = "";
+    reportText.value = "";
+    await workflow.reload();
+  });
 }
 async function add(title: string, text: string, knowledgeId: string) {
   if (await learning.addMaterial(title, text, knowledgeId))
@@ -129,7 +175,14 @@ const date = new Intl.DateTimeFormat("zh-CN", {
         <p class="nav-label">我的学习空间</p>
         <nav aria-label="主导航">
           <button
-            v-for="item in nav"
+            v-for="item in user.role === 'student'
+              ? nav
+              : [
+                  {
+                    name: user.role === 'admin' ? '系统管理' : '内容工作台',
+                    icon: Layers,
+                  },
+                ]"
             :key="item.name"
             :class="['nav-link', { active: page === item.name }]"
             @click="page = item.name"
@@ -147,7 +200,11 @@ const date = new Intl.DateTimeFormat("zh-CN", {
           <div>
             <strong>{{ user.username }}</strong
             ><small>{{
-              user.role === "student" ? "学习进度已连接" : "内容维护者"
+              user.role === "student"
+                ? "学习进度已连接"
+                : user.role === "admin"
+                  ? "系统管理员"
+                  : "内容维护者"
             }}</small>
           </div>
           <NButton
@@ -164,7 +221,9 @@ const date = new Intl.DateTimeFormat("zh-CN", {
         <header class="topbar">
           <span>学习空间 <span class="separator">/</span> {{ page }}</span>
           <div class="actions">
-            <span>● &nbsp; 数据结构 · 演示范围</span
+            <span
+              >● &nbsp;
+              {{ context?.selected_scope?.title || "尚未选择范围" }}</span
             ><NButton
               text
               size="small"
@@ -178,25 +237,12 @@ const date = new Intl.DateTimeFormat("zh-CN", {
           <NAlert v-if="error" type="warning" class="notice" role="alert">{{
             error
           }}</NAlert>
-          <template v-if="user.role === 'maintainer'"
-            ><section class="panel">
-              <h1>内容维护者空间</h1>
-              <p class="subtitle">
-                此账号用于管理公共题目。学习页面需要学生账号，私人资料与作答保持账号隔离。
-              </p>
-              <div class="actions" style="margin-top: 24px">
-                <NButton
-                  tag="a"
-                  href="/backend-demo"
-                  target="_blank"
-                  type="primary"
-                  >打开内容管理工作台</NButton
-                ><NButton :disabled="busy" @click="learning.logout"
-                  >切换学生账号</NButton
-                >
-              </div>
-            </section></template
-          >
+          <template v-if="user.role !== 'student'"
+            ><ManagementConsole
+              :key="user.id"
+              :user="user"
+              :call="learning.call"
+          /></template>
           <template v-else>
             <div class="heading">
               <div>
@@ -206,9 +252,9 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                 <h1>
                   {{ page === "学习概览" ? "让每一步学习，都有方向。" : page }}
                 </h1>
-                <p class="subtitle">发现知识缺口，完成一小关，再向前一步。</p>
+                <p class="subtitle">诊断起点，安排学习，再通过复测检验。</p>
               </div>
-              <NButton secondary :loading="busy" @click="learning.refresh"
+              <NButton secondary :loading="busy" @click="refreshAll"
                 ><template #icon><RefreshCw :size="15" /></template
                 >刷新学习状态</NButton
               >
@@ -219,83 +265,19 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                 : "尚未取得学习数据，请确认服务可用后刷新。"
             }}</NAlert>
             <template v-if="page === '学习概览'">
-              <div class="overview">
-                <section class="hero">
-                  <div class="hero-copy">
-                    <span class="pill"
-                      ><Sparkles :size="14" />
-                      {{ hasPendingTask ? "继续上次学习" : "找到下一步" }}</span
-                    >
-                    <h2>
-                      {{ hasPendingTask ? "继续这一小关，" : "从你的起点，"
-                      }}<br />{{
-                        hasPendingTask ? "再积累一点证据。" : "找到下一步学习。"
-                      }}
-                    </h2>
-                    <p>
-                      {{
-                        hasPendingTask && task
-                          ? task.reason
-                          : "根据当前知识状态、先修关系与认知维度证据，为你安排下一次学习任务。"
-                      }}
-                    </p>
-                    <div class="actions">
-                      <NButton
-                        type="primary"
-                        size="large"
-                        :disabled="!state"
-                        :loading="busy"
-                        @click="start()"
-                        >{{ hasPendingTask ? "继续短关卡" : "获取学习任务"
-                        }}<template #icon
-                          ><ArrowRight :size="17" /></template></NButton
-                      ><span>{{
-                        task ? knowledgeName(task.knowledge_id) : "无需上传资料"
-                      }}</span>
-                    </div>
-                  </div>
-                  <div class="art" aria-hidden="true">
-                    <div class="orbit"></div>
-                    <span class="art-label">INPUT → UNDERSTAND</span>
-                    <div class="slab one">03 <span>应用</span></div>
-                    <div class="slab two">02 <span>理解</span></div>
-                    <div class="slab three">01 <span>记忆</span></div>
-                    <span class="star">✳</span
-                    ><span class="art-caption">BUILD YOUR KNOWLEDGE</span>
-                  </div>
-                </section>
-                <section class="panel progress-panel">
-                  <h3>{{ focus?.name || "学习证据" }}</h3>
-                  <NProgress
-                    type="circle"
-                    :percentage="
-                      Math.min(
-                        Math.round(((focus?.evidence_count || 0) / 3) * 100),
-                        100,
-                      )
-                    "
-                    :stroke-width="7"
-                    color="#49ba94"
-                    rail-color="#e6f6ee"
-                    ><div class="ring">
-                      <strong>{{ focus?.evidence_count || 0 }}</strong
-                      ><span>近期不同题目</span>
-                    </div></NProgress
-                  >
-                  <p>
-                    {{ focus ? stateLabels[focus.status] : "等待学习数据" }}
-                  </p>
-                  <span class="muted"
-                    >至少 3 题是最低证据条件，题量不等于掌握度</span
-                  >
-                  <div class="progress-footer">
-                    <span>任务认知活动</span
-                    ><NTag type="success" size="small" :bordered="false">{{
-                      targetLevel ? levelLabels[targetLevel] : "等待推荐"
-                    }}</NTag>
-                  </div>
-                </section>
-              </div>
+              <WorkflowWorkspace
+                :scopes="scopes"
+                :context="context"
+                :timeline="timeline"
+                :loading="flowLoading || busy"
+                @choose="chooseScope"
+                @diagnose="workflow.begin()"
+                @recommend="workflow.recommend()"
+                @open="openTask"
+                @action="(action, id) => workflow.act(action, id)"
+                @next="nextStep"
+                @materials="page = '我的资料'"
+              />
               <div class="stats">
                 <div>
                   <BookOpen :size="21" /><span
@@ -320,101 +302,27 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                   >
                 </div>
               </div>
-              <div class="lower">
-                <section>
-                  <div class="section-heading">
-                    <div>
-                      <span class="eyebrow">NEXT STEPS</span>
-                      <h2>接下来，学一点什么？</h2>
-                    </div>
-                    <NButton text @click="page = '知识地图'"
-                      >知识地图<template #icon
-                        ><ArrowUpRight :size="16" /></template
-                    ></NButton>
-                  </div>
-                  <article class="task">
-                    <span class="task-icon"><Layers :size="24" /></span>
-                    <div>
-                      <div class="tags">
-                        <NTag size="small" type="success" :bordered="false">{{
-                          targetLevel ? levelLabels[targetLevel] : "规则推荐"
-                        }}</NTag
-                        ><span>公共演示题 · 无需上传资料</span>
-                      </div>
-                      <h3>
-                        {{
-                          task
-                            ? knowledgeName(task.knowledge_id)
-                            : "获取下一次学习任务"
-                        }}
-                      </h3>
-                      <p>
-                        {{
-                          targetLevel
-                            ? levelDescriptions[targetLevel]
-                            : "从已发布内容中，选择当前适合学习的任务。"
-                        }}
-                      </p>
-                      <span class="task-meta"
-                        ><Clock3 :size="13" />{{
-                          task
-                            ? task.questions.length + " 道客观题"
-                            : "短关卡 · 明确认知目标"
-                        }}</span
-                      >
-                    </div>
-                    <NButton
-                      circle
-                      aria-label="开始学习任务"
-                      :loading="busy"
-                      :disabled="!state"
-                      @click="start()"
-                      ><template #icon><ArrowRight :size="18" /></template
-                    ></NButton>
-                  </article>
-                  <article class="material-callout">
-                    <BookOpen :size="24" />
-                    <div>
-                      <h3>让自己的讲义也参与学习</h3>
-                      <p>粘贴一段笔记，确认对应的知识点。</p>
-                    </div>
-                    <NButton secondary @click="page = '我的资料'"
-                      >整理资料</NButton
-                    >
-                  </article>
-                </section>
-                <section class="panel cognitive">
-                  <span class="eyebrow">LEARN WITH INTENTION</span>
-                  <h3>不只知道答案，<br />也知道在练什么。</h3>
-                  <div
-                    v-for="(level, i) in [
-                      'remember',
-                      'understand',
-                      'apply',
-                      'analyze',
-                    ] as const"
-                    :key="level"
-                    :class="[
-                      'cognitive-row',
-                      { highlighted: targetLevel === level },
-                    ]"
+              <section class="panel">
+                <h3>用知识地图查看证据，用自己的讲义辅助学习</h3>
+                <p class="muted">
+                  记忆、理解、应用、分析分别呈现；“证据不足”与“待巩固”有不同含义。阅读和重复答对同一道题不会直接成为新的掌握证据。
+                </p>
+                <div class="actions">
+                  <NButton secondary @click="page = '知识地图'"
+                    >查看知识地图</NButton
+                  ><NButton secondary @click="page = '我的资料'"
+                    >整理资料</NButton
+                  ><NButton text @click="page = '学习记录'"
+                    >查看学习记录与纠错</NButton
                   >
-                    <span>0{{ i + 1 }}</span
-                    >{{ levelLabels[level] }}：{{ levelDescriptions[level] }}
-                  </div>
-                  <p>
-                    标签描述题目要求的认知活动，<br />不代表你的总体能力等级。
-                  </p>
-                </section>
-              </div>
+                </div>
+              </section>
             </template>
             <template v-else-if="page === '知识地图'">
               <NAlert type="info" class="notice"
                 >状态来自最近
-                {{
-                  state?.window_days || 14
-                }}
-                天的有效作答。先修满足且证据充分后，才能标记初步掌握；当前使用规则基线。</NAlert
+                {{ state?.window_days || 14 }}
+                天的有效作答；独立复测涉及的维度从本轮重新收集证据。先修满足且证据充分后，才能标记初步掌握；当前使用规则基线。</NAlert
               >
               <div class="cards">
                 <article
@@ -486,10 +394,13 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                   >添加文字讲义</NButton
                 >
               </div>
-              <NAlert class="notice" type="info"
-                >当前支持粘贴文字并手动确认关联，内容不会发送给外部模型。PDF
-                抽取与自动关联尚未实现。</NAlert
-              >
+              <MaterialImportPanel
+                :call="learning.call"
+                :nodes="graph?.nodes || []"
+                :materials="materials"
+                :disabled="!context?.selected_scope"
+                @refresh="refreshAll"
+              />
               <NEmpty
                 v-if="!materials.length"
                 description="还没有资料，添加一段笔记开始整理"
@@ -502,19 +413,24 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                   }}</NTag>
                   <h3 class="material-title">{{ m.title }}</h3>
                   <p class="material-text">{{ m.text }}</p>
-                  <label class="field"
-                    >关联知识点<NSelect
-                      :value="m.knowledge_id"
-                      :options="knowledgeOptions"
-                      :disabled="mutating"
-                      @update:value="(id) => updateAssociation(m, String(id))"
-                  /></label>
-                  <p class="muted">
-                    来源：{{ m.source_location
-                    }}<br />改变知识点后需要重新确认关联。
-                  </p>
+                  <template v-if="!m.chunks?.length"
+                    ><label class="field"
+                      >关联知识点<NSelect
+                        :value="m.knowledge_id"
+                        :options="knowledgeOptions"
+                        :disabled="mutating"
+                        @update:value="
+                          (id) => updateAssociation(m, String(id))
+                        "
+                    /></label>
+                    <p class="muted">
+                      来源：{{ m.source_location
+                      }}<br />改变知识点后需要重新确认关联。
+                    </p>
+                  </template>
                   <div class="actions">
                     <NButton
+                      v-if="!m.chunks?.length"
                       size="small"
                       :disabled="mutating"
                       @click="
@@ -522,7 +438,12 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                       "
                       >{{ m.confirmed ? "取消关联" : "确认关联" }}</NButton
                     ><NPopconfirm
-                      @positive-click="learning.removeMaterial(m.id)"
+                      @positive-click="
+                        async () => {
+                          await learning.removeMaterial(m.id);
+                          await refreshAll();
+                        }
+                      "
                       ><template #trigger
                         ><NButton
                           quaternary
@@ -539,10 +460,42 @@ const date = new Intl.DateTimeFormat("zh-CN", {
             </template>
             <template v-else>
               <NAlert type="info" class="notice"
-                >同题重复练习保留历史；最近窗口内只取首次有效作答计入诊断。以下已显示
+                >历史作答完整保留；当前诊断按最近 14
+                天及独立诊断边界取有效记录，同一稳定题目在窗口内只取首次作答。以下已显示
                 {{ history.items.length }} /
                 {{ history.total }} 条记录。</NAlert
               >
+              <section v-if="reportKey" class="panel">
+                <h3>报告题目问题 · {{ reportKey }}</h3>
+                <NSelect
+                  v-model:value="reportCategory"
+                  :options="[
+                    { label: '答案问题', value: 'answer' },
+                    { label: '解析问题', value: 'explanation' },
+                    { label: '认知标签问题', value: 'label' },
+                  ]"
+                /><NInput
+                  v-model:value="reportText"
+                  type="textarea"
+                  placeholder="说明你发现的问题"
+                  aria-label="问题说明"
+                />
+                <div class="actions">
+                  <NButton
+                    type="primary"
+                    :disabled="!reportText.trim() || flowLoading"
+                    @click="reportContent"
+                    >提交报告</NButton
+                  ><NButton @click="reportKey = ''">取消</NButton>
+                </div>
+              </section>
+              <details v-if="reports.length" class="panel">
+                <summary>我的问题报告 · {{ reports.length }} 项</summary>
+                <p v-for="r in reports" :key="r.id">
+                  {{ r.question_key }} · {{ r.status }} · {{ r.message
+                  }}<br />处理结论：{{ r.resolution || "等待维护者复核" }}
+                </p>
+              </details>
               <NEmpty
                 v-if="!history.items.length"
                 description="完成第一道题后，记录会出现在这里"
@@ -568,6 +521,15 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                           : ""
                       }}
                     </p>
+                    <p v-if="a.retirement_reason">
+                      停用原因：{{ a.retirement_reason }}
+                    </p>
+                    <NButton
+                      text
+                      size="tiny"
+                      @click="reportKey = a.question_key"
+                      >报告答案 / 解析 / 标签问题</NButton
+                    >
                     <details class="history-details">
                       <summary>查看本次作答</summary>
                       <p>
@@ -614,12 +576,19 @@ const date = new Intl.DateTimeFormat("zh-CN", {
       v-model:show="quizOpen"
       :task="task"
       :submitting="submitting"
-      :loading="busy"
+      :loading="busy || flowLoading"
       :error="error"
       :pending="pendingSubmission"
       @submit="learning.submit"
       @history="page = '学习记录'"
-      @next-task="start(true)"
+      @next-task="nextStep"
+      @complete="workflow.act('complete')"
+      @rebuild="
+        async () => {
+          quizOpen = false;
+          if (await workflow.rebuild()) quizOpen = true;
+        }
+      "
     />
     <MaterialDialog
       v-model:show="materialOpen"

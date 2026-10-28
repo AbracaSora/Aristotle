@@ -10,7 +10,7 @@ Python 3.12 + FastAPI + Pydantic 2 + SQLAlchemy 2.0 + SQLite。依赖在仓库�
 
 ```bash
 uv sync --locked --python 3.12
-uv run python -m aristotle_backend.seed --demo
+uv run python -m aristotle_backend.seed --demo --design-flow
 uv run uvicorn aristotle_backend.app:create_app --factory --host 127.0.0.1 --port 8018
 ```
 
@@ -60,3 +60,7 @@ uv run pytest -q
 当前面向单进程、本地演示；尚无登录限流、正式账号开通、HTTPS 部署或完整数据库迁移。首版建表使用 `create_all`，不能用于演进已有数据库结构。进入对外试用前需补 Alembic 迁移、PostgreSQL 验证、限流、密钥和备份管理、恢复演练及完整 AC/NFR 验收。
 
 SQLite 在线备份可使用其 backup 命令；应另行制定备份权限、保留期和删除记录重放方案。本原型只保证资料从业务查询和当前在线字段中移除，尚未验证 SQLite 空闲页、WAL 或历史备份的安全擦除。
+
+## 设计对齐原型（2026-10-28）
+
+新增范围与分段诊断、任务生命周期、资料复习与独立复测、导入片段确认、mock 标注任务与人工审核、纠错和系统管理。使用 `--design-flow` 显式增量初始化。管理员 admin 使用演示初始化密码。实现及 mock/501 边界、端到端运行步骤见 [原设计对齐流程](../../docs/software/design_aligned_workflow.md)。

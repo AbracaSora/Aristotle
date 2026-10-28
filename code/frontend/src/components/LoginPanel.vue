@@ -17,7 +17,9 @@ const username = ref("student1"),
       </div>
       <span class="eyebrow">ONE STEP AT A TIME</span>
       <h1>让每一步学习，<br />都有方向。</h1>
-      <p>从已有的知识出发，通过作答了解薄弱点，再找到下一步练习。</p>
+      <p>
+        从已有的知识出发，先诊断起点，再安排资料学习与练习，最后通过复测检验。
+      </p>
       <p class="muted">
         当前为数据结构学习原型。演示题库尚未完成正式审核，诊断采用可解释规则基线。
       </p>
@@ -78,6 +80,13 @@ const username = ref("student1"),
             :disabled="loading"
             @click="username = 'editor'"
             >内容维护者</NButton
+          >
+          <NButton
+            size="small"
+            quaternary
+            :disabled="loading"
+            @click="username = 'admin'"
+            >系统管理员</NButton
           >
         </div>
       </div>

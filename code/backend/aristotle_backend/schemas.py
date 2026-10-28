@@ -110,7 +110,7 @@ class MaterialUpdate(Input):
 class UserView(BaseModel):
     id: str
     username: str
-    role: Literal["student", "maintainer"]
+    role: Literal["student", "maintainer", "admin"]
 
 
 class ErrorField(BaseModel):
@@ -187,6 +187,7 @@ class AttemptView(BaseModel):
     question_version: int
     content_status: str
     replayed: bool = False
+    retirement_reason: str | None = None
 
 
 class TaskView(BaseModel):
@@ -207,6 +208,17 @@ class TaskView(BaseModel):
     attempts: list[AttemptView]
     evidence_snapshot: list[KnowledgeStateView]
     notice: str
+    lifecycle: str = "legacy"
+    activity: str = "practice"
+    scope_id: str | None = None
+    round_id: str | None = None
+    goal: dict | None = None
+    plan: list[dict] = Field(default_factory=list)
+    evidence_facts: list[str] = Field(default_factory=list)
+    resources: list[dict] = Field(default_factory=list)
+    feedback: dict | None = None
+    resume_level: str | None = None
+    implementation: dict = Field(default_factory=dict)
 
 
 class HistoryView(BaseModel):
