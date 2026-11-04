@@ -44,6 +44,41 @@ npm run build
 
 `npm test` 先检查测试环境类型，再运行 Vitest；测试覆盖丢失响应重试、原答案保护、保存与统计失败的区分、账号切换隔离、刷新恢复、会话失效和资料更新失败。`npm run build` 检查 Vue TypeScript 并构建 dist。
 
+Vitest 只发现 `src/__tests__` 中的 `.test.ts` / `.spec.ts`，并显式排除 `tests/e2e`。Playwright 独立运行：
+
+```bash
+npx playwright install chromium
+npm run test:e2e
+```
+
+默认从 PATH 使用 `uv run --locked python`，为本轮测试新建临时数据库、初始化演示数据，在 `127.0.0.1:8021` 启动后端、`127.0.0.1:5180` 启动前端，结束后清理临时数据库。不会修改日常开发数据库。若没有 uv，会尝试 PATH 中的 `python3` / `python`；该 Python 需先在仓库根目录执行 `python -m pip install -e .` 安装后端依赖。
+
+| 环境变量 | 用途 |
+| --- | --- |
+| `ARISTOTLE_E2E_PYTHON` | 指定已安装后端的 Python 可执行文件，例如 `/path/to/Aristotle/.venv/bin/python`（建议使用绝对路径）；设置后不使用 uv |
+| `ARISTOTLE_E2E_BASE_URL` | 前端来源地址，默认 `http://127.0.0.1:5180` |
+| `ARISTOTLE_E2E_BACKEND_URL` | 后端来源地址，默认 `http://127.0.0.1:8021`；自动启动时同时用作代理目标和绑定地址 |
+| `ARISTOTLE_E2E_REUSE_SERVER` | `1` 复用已有服务；`0` 禁止复用；默认仅在非 CI 环境复用 |
+| `ARISTOTLE_E2E_SKIP_WEBSERVER` | `1` 完全关闭自动启动，直接连接外部前端 |
+
+例如更换端口：
+
+```bash
+ARISTOTLE_E2E_BASE_URL=http://127.0.0.1:5185 \
+ARISTOTLE_E2E_BACKEND_URL=http://127.0.0.1:8025 npm run test:e2e
+```
+
+若环境禁止绑定端口，可预先在允许的环境启动服务，再运行：
+
+```bash
+ARISTOTLE_E2E_SKIP_WEBSERVER=1 \
+ARISTOTLE_E2E_BASE_URL=http://127.0.0.1:5185 npm run test:e2e
+```
+
+复用的前后端必须匹配，前端需自行将 `/api` 代理到该后端。外部服务使用专门的测试数据库，并先完成 `--demo --design-flow` 初始化；学生 `student1` 应为尚未选择范围的干净账号。测试会保存演示作答和任务。若自定义种子密码，测试进程也需设置相同的 `ARISTOTLE_DEMO_PASSWORD`。
+
+浏览器回归覆盖管理角色登录、刷新、品牌导航和账号切换，以及学生导入禁用、诊断期间的知识点任务限制、完整分段作答和指定知识点请求。后端要求先完成初始诊断，并禁止在诊断进行中生成学习任务；知识地图会明确提示并禁用任务按钮，不会隐式打开其他知识点的诊断。
+
 测试依赖的 Node 类型配置与浏览器代码配置分开，CI 使用 Node 22。浏览器实测及后端验证见 [联调记录](../../docs/software/frontend_backend_integration.md)。
 
 ## 已知边界

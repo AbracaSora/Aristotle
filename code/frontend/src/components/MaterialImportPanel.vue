@@ -32,6 +32,7 @@ async function run(operation: () => Promise<void>) {
   }
 }
 async function create() {
+  if (props.disabled) return;
   await run(async () => {
     job.value = await props.call<Job>("/material-imports", "POST", {
       source_type: source.value,
@@ -39,6 +40,12 @@ async function create() {
       text: text.value,
       scenario: source.value === "text" ? "normal" : scenario.value,
     });
+  });
+}
+async function previewPdf() {
+  if (props.disabled) return;
+  await run(async () => {
+    await props.call("/material-imports/pdf", "POST");
   });
 }
 async function execute() {
@@ -117,14 +124,7 @@ async function chunk(
         "
         @click="create"
         >建立导入任务</NButton
-      ><NButton
-        text
-        :disabled="busy"
-        @click="
-          run(async () => {
-            await call('/material-imports/pdf', 'POST');
-          })
-        "
+      ><NButton text :disabled="disabled || busy" @click="previewPdf"
         >真实 PDF：查看接口占位</NButton
       >
     </div>

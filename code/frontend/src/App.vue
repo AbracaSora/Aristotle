@@ -71,6 +71,19 @@ const {
 const page = ref("学习概览"),
   quizOpen = ref(false),
   materialOpen = ref(false);
+const homePage = computed(() =>
+  user.value?.role === "admin"
+    ? "系统管理"
+    : user.value?.role === "maintainer"
+      ? "内容工作台"
+      : "学习概览",
+);
+const taskRestriction = computed(() => {
+  if (!context.value?.selected_scope) return "请先选择学习范围";
+  if (!context.value.diagnostic) return "请先完成初始诊断";
+  if (context.value.diagnostic.status === "active") return "请先完成当前诊断";
+  return "";
+});
 const knowledgeOptions = computed(() =>
   (graph.value?.nodes || []).map((node) => ({
     label: node.name,
@@ -80,27 +93,13 @@ const knowledgeOptions = computed(() =>
 function knowledgeName(id: string) {
   return graph.value?.nodes.find((node) => node.id === id)?.name || id;
 }
-async function start(_force = false, knowledgeId?: string) {
+async function start(knowledgeId: string) {
   if (submitting.value || busy.value || flowLoading.value) return;
-  if (!context.value?.selected_scope) {
-    page.value = "学习概览";
-    error.value = "请先选择学习范围。";
+  if (taskRestriction.value) {
+    error.value = taskRestriction.value + "。";
     return;
   }
-  if (
-    !context.value.diagnostic ||
-    context.value.diagnostic.status === "active"
-  ) {
-    page.value = "学习概览";
-    if (!context.value.diagnostic) await workflow.begin();
-    const segment = context.value.diagnostic?.segments.find(
-      (s) => s.status !== "completed",
-    );
-    if (segment) await openTask(segment.task_id);
-    return;
-  }
-  await workflow.recommend(knowledgeId);
-  page.value = "学习概览";
+  if (await workflow.recommend(knowledgeId)) page.value = "学习概览";
 }
 async function openTask(id: string) {
   if (await workflow.open(id)) quizOpen.value = true;
@@ -143,11 +142,11 @@ function updateAssociation(material: Material, id: string) {
   return learning.updateMaterial(material, id, false);
 }
 watch(
-  () => user.value?.id,
+  () => [user.value?.id, user.value?.role],
   () => {
     quizOpen.value = false;
     materialOpen.value = false;
-    page.value = "学习概览";
+    page.value = homePage.value;
   },
 );
 onMounted(learning.restore);
@@ -168,7 +167,7 @@ const date = new Intl.DateTimeFormat("zh-CN", {
     </template>
     <div v-else class="shell">
       <aside class="sidebar">
-        <a href="#" class="brand" @click.prevent="page = '学习概览'"
+        <a href="#" class="brand" @click.prevent="page = homePage"
           ><span class="brand-icon"><Layers :size="23" /></span
           ><span>Aristotle<small>408 · LEARNING STUDIO</small></span></a
         >
@@ -319,6 +318,11 @@ const date = new Intl.DateTimeFormat("zh-CN", {
               </section>
             </template>
             <template v-else-if="page === '知识地图'">
+              <NAlert v-if="taskRestriction" type="info" class="notice">
+                {{
+                  taskRestriction
+                }}，再获取指定知识点的学习任务。可从学习概览继续诊断。
+              </NAlert>
               <NAlert type="info" class="notice"
                 >状态来自最近
                 {{ state?.window_days || 14 }}
@@ -376,9 +380,15 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                     </p>
                     <NButton
                       secondary
-                      :disabled="busy || !!item.unmet_prerequisites.length"
-                      @click="start(true, node.id)"
-                      >获取此知识点任务</NButton
+                      :disabled="
+                        busy ||
+                        submitting ||
+                        flowLoading ||
+                        !!taskRestriction ||
+                        !!item.unmet_prerequisites.length
+                      "
+                      @click="start(node.id)"
+                      >{{ taskRestriction || "获取此知识点任务" }}</NButton
                     ></template
                   >
                 </article>

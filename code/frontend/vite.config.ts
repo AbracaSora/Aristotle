@@ -14,7 +14,11 @@ export default defineConfig(({ mode }) => {
   };
   return {
     plugins: [vue()],
-    server: { port: 5173, host: "localhost", proxy },
+    server: {
+      port: Number(env.ARISTOTLE_E2E_FRONTEND_PORT || 5173),
+      host: env.ARISTOTLE_E2E_FRONTEND_HOST || "localhost",
+      proxy,
+    },
     preview: { proxy },
   };
 });
