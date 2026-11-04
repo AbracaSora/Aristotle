@@ -23,6 +23,26 @@ const current = computed(() => props.context?.current_task);
 const segment = computed(() =>
   props.context?.diagnostic?.segments.find((s) => s.status !== "completed"),
 );
+const encouragement = computed(() => {
+  const context = props.context;
+  if (!context?.selected_scope) return "先选择一个学习范围，今天只完成一个小步骤。";
+  if (context.diagnostic?.status === "active") {
+    const completed = context.diagnostic.completed_segments;
+    return completed
+      ? `已经完成 ${completed} 段诊断，继续收集下一组证据。`
+      : "先完成这一小段诊断，系统会据此安排下一步。";
+  }
+  if (current.value?.lifecycle === "recommended") {
+    return "这项安排只需要几分钟，完成后就能看到更具体的反馈。";
+  }
+  if (current.value?.lifecycle === "active") {
+    return "按自己的节奏完成当前任务；遇到困难可以查看资料或更换安排。";
+  }
+  if (context.last_feedback?.state?.status === "provisional") {
+    return `你已经为${context.last_feedback.state.name}积累了多题证据，可以继续尝试新的认知活动。`;
+  }
+  return "准备好后生成下一项学习安排，系统会说明推荐依据。";
+});
 const labels: Record<string, string> = {
   recommended: "等待接受",
   accepted: "已接受",
@@ -41,6 +61,7 @@ const labels: Record<string, string> = {
       </div>
       <NTag type="success">规则编排 · 演示内容</NTag>
     </div>
+    <NAlert type="success" class="motivation" role="status">{{ encouragement }}</NAlert>
     <ol class="journey">
       <li :class="{ current: !context?.selected_scope }">01 选择范围</li>
       <li :class="{ current: context?.stage === 'diagnosis' }">02 初始诊断</li>
@@ -141,6 +162,16 @@ const labels: Record<string, string> = {
               {{ fact }}
             </li>
           </ul>
+          <details class="provenance">
+            <summary>查看推荐依据与来源</summary>
+            <p>策略版本：{{ current.policy_version }}</p>
+            <p>
+              编排：{{ current.implementation?.orchestration || "规则基线" }} ·
+              内容：{{ current.implementation?.content || "演示内容" }} ·
+              模型：{{ current.implementation?.llm || "未调用模型" }}
+            </p>
+            <p class="muted">推荐理由和上方证据事实来自当前账号的学习记录；题目与资料会显示各自的版本或来源位置。</p>
+          </details>
           <ol class="task-plan">
             <li v-for="step in current.plan" :key="step.kind">
               {{ step.title }}{{ step.required ? "" : "（可选）" }}

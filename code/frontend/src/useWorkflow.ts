@@ -38,7 +38,9 @@ export function useWorkflow(learning: ReturnType<typeof useLearning>) {
     const ticket = generation;
     try {
       return await operation();
-    } catch {
+    } catch (reason) {
+      if (typeof learning.reportError === "function") learning.reportError(reason);
+      else learning.error.value = reason instanceof Error ? reason.message : "操作失败，请重试。";
       return null;
     } finally {
       if (ticket === generation) loading.value = false;

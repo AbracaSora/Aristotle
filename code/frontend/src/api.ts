@@ -14,6 +14,8 @@ export function createApiClient(
   return {
     async request<T>(path: string, method = "GET", body?: unknown): Promise<T> {
       let response: Response;
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
       try {
         response = await fetch(base + path, {
           method,
@@ -24,9 +26,15 @@ export function createApiClient(
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
           ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+          signal: controller.signal,
         });
-      } catch {
+      } catch (reason) {
+        if (reason instanceof DOMException && reason.name === "AbortError") {
+          throw new ApiError(408, "学习服务响应超时，请稍后重试。");
+        }
         throw new ApiError(0, "无法连接学习服务，请检查连接后重试。");
+      } finally {
+        clearTimeout(timeout);
       }
       if (response.status === 204) return undefined as T;
       let data: any;

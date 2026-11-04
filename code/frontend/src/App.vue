@@ -71,6 +71,13 @@ const {
 const page = ref("学习概览"),
   quizOpen = ref(false),
   materialOpen = ref(false);
+function homePage() {
+  return user.value?.role === "admin"
+    ? "系统管理"
+    : user.value?.role === "maintainer"
+      ? "内容工作台"
+      : "学习概览";
+}
 const knowledgeOptions = computed(() =>
   (graph.value?.nodes || []).map((node) => ({
     label: node.name,
@@ -80,10 +87,10 @@ const knowledgeOptions = computed(() =>
 function knowledgeName(id: string) {
   return graph.value?.nodes.find((node) => node.id === id)?.name || id;
 }
-async function start(_force = false, knowledgeId?: string) {
+async function start(knowledgeId?: string) {
   if (submitting.value || busy.value || flowLoading.value) return;
   if (!context.value?.selected_scope) {
-    page.value = "学习概览";
+    page.value = homePage();
     error.value = "请先选择学习范围。";
     return;
   }
@@ -92,7 +99,7 @@ async function start(_force = false, knowledgeId?: string) {
     context.value.diagnostic.status === "active"
   ) {
     page.value = "学习概览";
-    if (!context.value.diagnostic) await workflow.begin();
+    if (!context.value.diagnostic) await workflow.begin(knowledgeId);
     const segment = context.value.diagnostic?.segments.find(
       (s) => s.status !== "completed",
     );
@@ -147,7 +154,7 @@ watch(
   () => {
     quizOpen.value = false;
     materialOpen.value = false;
-    page.value = "学习概览";
+    page.value = homePage();
   },
 );
 onMounted(learning.restore);
@@ -168,7 +175,7 @@ const date = new Intl.DateTimeFormat("zh-CN", {
     </template>
     <div v-else class="shell">
       <aside class="sidebar">
-        <a href="#" class="brand" @click.prevent="page = '学习概览'"
+        <a href="#" class="brand" @click.prevent="page = homePage()"
           ><span class="brand-icon"><Layers :size="23" /></span
           ><span>Aristotle<small>408 · LEARNING STUDIO</small></span></a
         >
@@ -233,7 +240,7 @@ const date = new Intl.DateTimeFormat("zh-CN", {
             >
           </div>
         </header>
-        <main>
+        <main :aria-busy="busy || flowLoading ? 'true' : 'false'">
           <NAlert v-if="error" type="warning" class="notice" role="alert">{{
             error
           }}</NAlert>
@@ -377,7 +384,7 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                     <NButton
                       secondary
                       :disabled="busy || !!item.unmet_prerequisites.length"
-                      @click="start(true, node.id)"
+                      @click="start(node.id)"
                       >获取此知识点任务</NButton
                     ></template
                   >
@@ -394,6 +401,9 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                   >添加文字讲义</NButton
                 >
               </div>
+              <NAlert type="info" class="notice">
+                资料只用于当前账号的学习任务。删除资料会停止后续引用，但不会删除已经产生的历史作答记录。
+              </NAlert>
               <MaterialImportPanel
                 :call="learning.call"
                 :nodes="graph?.nodes || []"

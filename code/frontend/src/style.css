@@ -19,6 +19,10 @@
 .evidence-list { margin: 18px 0; font-size: 11px; color: #637e71; }
 .evidence-list > div { display: flex; justify-content: space-between; gap: 10px; margin: 9px 0; }
 .field .n-select { margin-top: 8px; }
+.motivation { margin-bottom: 18px; }
+.provenance { margin: 14px 0; padding: 12px 14px; border: 1px solid hsl(160 22% 88%); border-radius: 9px; background: hsl(160 45% 98%); font-size: 11px; color: hsl(160 15% 38%); }
+.provenance summary { cursor: pointer; font-weight: 600; }
+.provenance p { margin: 8px 0 0; line-height: 1.7; }
 .history-details { margin-top: 9px; font-size: 11px; color: #607b6e; }
 .history-details summary { cursor: pointer; }
 .history-details p { line-height: 1.9; margin: 8px 0 0; }

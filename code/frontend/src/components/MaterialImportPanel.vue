@@ -14,6 +14,7 @@ const title = ref("我的学习讲义"),
   source = ref("text"),
   scenario = ref("normal"),
   job = ref<Job | null>(null),
+  error = ref(""),
   busy = ref(false),
   jobs = ref<Job[]>([]);
 async function loadJobs() {
@@ -23,10 +24,12 @@ onMounted(() => run(loadJobs));
 async function run(operation: () => Promise<void>) {
   if (busy.value) return;
   busy.value = true;
+  error.value = "";
   try {
     await operation();
-    await loadJobs();
-  } catch {
+    if (operation !== loadJobs) await loadJobs();
+  } catch (reason) {
+    error.value = reason instanceof Error ? reason.message : "操作失败，请重试。";
   } finally {
     busy.value = false;
   }
@@ -75,6 +78,7 @@ async function chunk(
       >文字按段落保留原文；知识关联使用 mock 候选，确认后才参与任务。PDF
       使用固定样例模拟流程，真实文件解析接口尚未实现。</NAlert
     >
+    <NAlert v-if="error" type="warning" class="notice" role="alert">{{ error }}</NAlert>
     <div class="scope-bar">
       <NSelect
         aria-label="资料类型"

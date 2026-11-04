@@ -206,6 +206,11 @@ export interface Task {
   attempts: Attempt[];
   evidence_snapshot: KnowledgeState[];
   notice: string;
+  implementation?: {
+    orchestration?: string;
+    content?: string;
+    llm?: string;
+  };
 }
 export interface PendingSubmission {
   taskId: string;

@@ -83,6 +83,9 @@ export function useLearning() {
       error.value =
         reason instanceof Error ? reason.message : "操作失败，请重试。";
   }
+  function reportError(reason: unknown) {
+    report(reason);
+  }
   async function hydrate(restoreTask = false, context = capture()) {
     if (context.user?.role !== "student") return;
     const [nextGraph, nextState, nextHistory, nextMaterials] =
@@ -437,5 +440,6 @@ export function useLearning() {
     updateMaterial,
     removeMaterial,
     loadMore,
+    reportError,
   };
 }
