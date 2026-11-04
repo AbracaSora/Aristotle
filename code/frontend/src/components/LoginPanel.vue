@@ -12,8 +12,9 @@ const username = ref("student1"),
   <main class="login-layout">
     <section class="login-intro">
       <div class="brand">
-        <span class="brand-icon"><Layers :size="23" /></span
-        ><span>Aristotle<small>408 · LEARNING STUDIO</small></span>
+        <span class="brand-icon">
+          <Layers :size="23" />
+        </span><span>Aristotle<small>408 · LEARNING STUDIO</small></span>
       </div>
       <span class="eyebrow">ONE STEP AT A TIME</span>
       <h1>让每一步学习，<br />都有方向。</h1>
@@ -31,63 +32,26 @@ const username = ref("student1"),
         使用分配的账号登录，作答、资料和进度将保存在学习服务中。
       </p>
       <form @submit.prevent="emit('login', username.trim(), password)">
-        <label class="field"
-          >账号<NInput
-            v-model:value="username"
-            name="username"
-            autocomplete="username"
-            :disabled="loading"
-            placeholder="请输入账号"
-        /></label>
-        <label class="field"
-          >密码<NInput
-            v-model:value="password"
-            name="password"
-            type="password"
-            autocomplete="current-password"
-            show-password-on="click"
-            :disabled="loading"
-            placeholder="请输入密码"
-        /></label>
-        <NButton
-          attr-type="submit"
-          type="primary"
-          size="large"
-          block
-          :loading="loading"
-          :disabled="!username.trim() || !password"
-          >进入学习空间<template #icon><ArrowRight :size="17" /></template
-        ></NButton>
+        <label class="field">账号
+          <NInput v-model:value="username" name="username" autocomplete="username" :disabled="loading"
+            placeholder="请输入账号" />
+        </label>
+        <label class="field">密码
+          <NInput v-model:value="password" name="password" type="password" autocomplete="current-password"
+            show-password-on="click" :disabled="loading" placeholder="请输入密码" />
+        </label>
+        <NButton attr-type="submit" type="primary" size="large" block :loading="loading"
+          :disabled="!username.trim() || !password">进入学习空间<template #icon>
+            <ArrowRight :size="17" />
+          </template></NButton>
       </form>
       <div class="login-demo">
         <p class="muted">本地演示账号 · 密码 demo-password</p>
         <div class="actions">
-          <NButton
-            size="small"
-            secondary
-            :disabled="loading"
-            @click="username = 'student1'"
-            >学生一</NButton
-          ><NButton
-            size="small"
-            secondary
-            :disabled="loading"
-            @click="username = 'student2'"
-            >学生二</NButton
-          ><NButton
-            size="small"
-            quaternary
-            :disabled="loading"
-            @click="username = 'editor'"
-            >内容维护者</NButton
-          >
-          <NButton
-            size="small"
-            quaternary
-            :disabled="loading"
-            @click="username = 'admin'"
-            >系统管理员</NButton
-          >
+          <NButton size="small" secondary :disabled="loading" @click="username = 'student1'">学生一</NButton>
+          <NButton size="small" secondary :disabled="loading" @click="username = 'student2'">学生二</NButton>
+          <NButton size="small" quaternary :disabled="loading" @click="username = 'editor'">内容维护者</NButton>
+          <NButton size="small" quaternary :disabled="loading" @click="username = 'admin'">系统管理员</NButton>
         </div>
       </div>
     </section>

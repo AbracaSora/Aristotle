@@ -78,55 +78,28 @@ async function chunk(
   <section class="panel import-panel">
     <span class="eyebrow">FROM MATERIAL TO LEARNING</span>
     <h2>导入 → 预览 → 确认知识关联</h2>
-    <NAlert type="info" class="notice"
-      >文字按段落保留原文；知识关联使用 mock 候选，确认后才参与任务。PDF
-      使用固定样例模拟流程，真实文件解析接口尚未实现。</NAlert
-    >
+    <NAlert type="info" class="notice">文字按段落保留原文；知识关联使用 mock 候选，确认后才参与任务。PDF
+      使用固定样例模拟流程，真实文件解析接口尚未实现。</NAlert>
     <div class="scope-bar">
-      <NSelect
-        aria-label="资料类型"
-        v-model:value="source"
-        :options="[
-          { label: '文字讲义', value: 'text' },
-          { label: 'PDF 样例（mock）', value: 'pdf_mock' },
-        ]"
-      /><NInput
-        aria-label="讲义标题"
-        v-model:value="title"
-        placeholder="讲义标题"
-      />
+      <NSelect aria-label="资料类型" v-model:value="source" :options="[
+        { label: '文字讲义', value: 'text' },
+        { label: 'PDF 样例（mock）', value: 'pdf_mock' },
+      ]" />
+      <NInput aria-label="讲义标题" v-model:value="title" placeholder="讲义标题" />
     </div>
-    <NInput
-      v-if="source === 'text'"
-      v-model:value="text"
-      type="textarea"
-      :rows="4"
-      placeholder="粘贴正文，空行分段"
-      aria-label="讲义正文"
-    /><NSelect
-      v-else
-      aria-label="PDF 模拟情形"
-      v-model:value="scenario"
-      :options="[
-        { label: '正常样例（固定两页）', value: 'normal' },
-        { label: '扫描件无文本', value: 'scanned' },
-        { label: '加密文件', value: 'encrypted' },
-        { label: '超出大小/页数', value: 'oversize' },
-        { label: '处理超时', value: 'timeout' },
-      ]"
-    />
+    <NInput v-if="source === 'text'" v-model:value="text" type="textarea" :rows="4" placeholder="粘贴正文，空行分段"
+      aria-label="讲义正文" />
+    <NSelect v-else aria-label="PDF 模拟情形" v-model:value="scenario" :options="[
+      { label: '正常样例（固定两页）', value: 'normal' },
+      { label: '扫描件无文本', value: 'scanned' },
+      { label: '加密文件', value: 'encrypted' },
+      { label: '超出大小/页数', value: 'oversize' },
+      { label: '处理超时', value: 'timeout' },
+    ]" />
     <div class="actions">
-      <NButton
-        type="primary"
-        :loading="busy"
-        :disabled="
-          disabled || !title.trim() || (source === 'text' && !text.trim())
-        "
-        @click="create"
-        >建立导入任务</NButton
-      ><NButton text :disabled="disabled || busy" @click="previewPdf"
-        >真实 PDF：查看接口占位</NButton
-      >
+      <NButton type="primary" :loading="busy" :disabled="disabled || !title.trim() || (source === 'text' && !text.trim())
+        " @click="create">建立导入任务</NButton>
+      <NButton text :disabled="disabled || busy" @click="previewPdf">真实 PDF：查看接口占位</NButton>
     </div>
     <div v-if="job" class="flow-focus">
       <NTag>{{ job.status }}</NTag>
@@ -138,14 +111,8 @@ async function chunk(
         }}
       </p>
       <p class="muted">{{ job.notice }}</p>
-      <NButton v-if="job.status === 'queued'" :loading="busy" @click="execute"
-        >运行导入任务</NButton
-      ><NButton
-        v-if="job.status === 'failed' && job.result.retryable"
-        :loading="busy"
-        @click="retry"
-        >重试（新任务）</NButton
-      >
+      <NButton v-if="job.status === 'queued'" :loading="busy" @click="execute">运行导入任务</NButton>
+      <NButton v-if="job.status === 'failed' && job.result.retryable" :loading="busy" @click="retry">重试（新任务）</NButton>
     </div>
     <details v-if="jobs.length" class="history-details">
       <summary>导入记录 · 最近 {{ jobs.length }} 项（刷新后可继续）</summary>
@@ -155,11 +122,7 @@ async function chunk(
       </p>
     </details>
   </section>
-  <section
-    v-for="m in materials.filter((m) => m.chunks?.length)"
-    :key="m.id"
-    class="panel chunk-panel"
-  >
+  <section v-for="m in materials.filter((m) => m.chunks?.length)" :key="m.id" class="panel chunk-panel">
     <h3>{{ m.title }} · 片段确认</h3>
     <article v-for="c in m.chunks" :key="c.id" class="source-chunk">
       <NTag :type="c.status === 'confirmed' ? 'success' : 'warning'">{{
@@ -168,31 +131,16 @@ async function chunk(
           : c.status === "rejected"
             ? "已排除"
             : "待确认"
-      }}</NTag
-      ><span class="muted"> {{ c.location }} · {{ c.implementation }}</span>
+      }}</NTag><span class="muted"> {{ c.location }} · {{ c.implementation }}</span>
       <p class="material-text">{{ c.text }}</p>
-      <NSelect
-        :aria-label="'关联知识点 ' + c.location"
-        :value="c.knowledge_id"
-        :options="nodes.map((n) => ({ label: n.name, value: n.id }))"
-        :disabled="busy"
-        @update:value="(id) => chunk(m, c, 'pending', id)"
-      />
+      <NSelect :aria-label="'关联知识点 ' + c.location" :value="c.knowledge_id"
+        :options="nodes.map((n) => ({ label: n.name, value: n.id }))" :disabled="busy"
+        @update:value="(id) => chunk(m, c, 'pending', id)" />
       <div class="actions">
-        <NButton
-          size="small"
-          :disabled="busy"
-          @click="
-            chunk(m, c, c.status === 'confirmed' ? 'pending' : 'confirmed')
-          "
-          >{{ c.status === "confirmed" ? "取消确认" : "确认关联" }}</NButton
-        ><NButton
-          text
-          size="small"
-          :disabled="busy"
-          @click="chunk(m, c, 'rejected')"
-          >排除此片段</NButton
-        >
+        <NButton size="small" :disabled="busy" @click="
+          chunk(m, c, c.status === 'confirmed' ? 'pending' : 'confirmed')
+          ">{{ c.status === "confirmed" ? "取消确认" : "确认关联" }}</NButton>
+        <NButton text size="small" :disabled="busy" @click="chunk(m, c, 'rejected')">排除此片段</NButton>
       </div>
     </article>
   </section>
