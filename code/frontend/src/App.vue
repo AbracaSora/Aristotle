@@ -9,16 +9,14 @@ import {
   NPopconfirm,
   NSelect,
   NInput,
+  NCheckbox,
   zhCN,
 } from "naive-ui";
 import {
   Layers,
-  LayoutDashboard,
   Network,
   Library,
   History,
-  Check,
-  BookOpen,
   LogOut,
   RefreshCw,
 } from "lucide-vue-next";
@@ -29,10 +27,11 @@ import { useLearning } from "./useLearning";
 import { useWorkflow } from "./useWorkflow";
 import WorkflowWorkspace from "./components/WorkflowWorkspace.vue";
 import MaterialImportPanel from "./components/MaterialImportPanel.vue";
+import KnowledgeMapWorkspace from "./components/KnowledgeMapWorkspace.vue";
 const ManagementConsole = defineAsyncComponent(
   () => import("./components/ManagementConsole.vue"),
 );
-import { levelLabels, stateLabels } from "./types";
+import { levelLabels } from "./types";
 import type { Material } from "./types";
 const theme = {
   common: {
@@ -44,8 +43,7 @@ const theme = {
   },
 };
 const nav = [
-  { name: "学习概览", icon: LayoutDashboard },
-  { name: "知识地图", icon: Network },
+  { name: "学习地图", icon: Network },
   { name: "我的资料", icon: Library },
   { name: "学习记录", icon: History },
 ];
@@ -68,7 +66,7 @@ const {
   mutating,
   pendingSubmission,
 } = learning;
-const page = ref("学习概览"),
+const page = ref("学习地图"),
   quizOpen = ref(false),
   materialOpen = ref(false);
 function homePage() {
@@ -76,7 +74,7 @@ function homePage() {
     ? "系统管理"
     : user.value?.role === "maintainer"
       ? "内容工作台"
-      : "学习概览";
+      : "学习地图";
 }
 const knowledgeOptions = computed(() =>
   (graph.value?.nodes || []).map((node) => ({
@@ -98,7 +96,7 @@ async function start(knowledgeId?: string) {
     !context.value.diagnostic ||
     context.value.diagnostic.status === "active"
   ) {
-    page.value = "学习概览";
+    page.value = "学习地图";
     if (!context.value.diagnostic) await workflow.begin(knowledgeId);
     const segment = context.value.diagnostic?.segments.find(
       (s) => s.status !== "completed",
@@ -107,7 +105,7 @@ async function start(knowledgeId?: string) {
     return;
   }
   await workflow.recommend(knowledgeId);
-  page.value = "学习概览";
+  page.value = "学习地图";
 }
 async function openTask(id: string) {
   if (await workflow.open(id)) quizOpen.value = true;
@@ -145,6 +143,12 @@ async function reportContent() {
 async function add(title: string, text: string, knowledgeId: string) {
   if (await learning.addMaterial(title, text, knowledgeId))
     materialOpen.value = false;
+}
+async function externalConsent(material: Material, allowed: boolean) {
+  await workflow.run(async () => {
+    await learning.call(`/materials/${material.id}/external-consent`, "PATCH", { allowed });
+    await learning.refresh();
+  });
 }
 function updateAssociation(material: Material, id: string) {
   return learning.updateMaterial(material, id, false);
@@ -251,13 +255,13 @@ const date = new Intl.DateTimeFormat("zh-CN", {
               :call="learning.call"
           /></template>
           <template v-else>
-            <div class="heading">
+            <div v-if="page !== '学习地图'" class="heading">
               <div>
                 <p class="eyebrow">
                   {{ date }} <span> / YOUR LEARNING JOURNEY</span>
                 </p>
                 <h1>
-                  {{ page === "学习概览" ? "让每一步学习，都有方向。" : page }}
+                  {{ page === "学习地图" ? "让每一步学习，都有方向。" : page }}
                 </h1>
                 <p class="subtitle">诊断起点，安排学习，再通过复测检验。</p>
               </div>
@@ -271,125 +275,14 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                 ? "正在读取学习数据…"
                 : "尚未取得学习数据，请确认服务可用后刷新。"
             }}</NAlert>
-            <template v-if="page === '学习概览'">
-              <WorkflowWorkspace
-                :scopes="scopes"
-                :context="context"
-                :timeline="timeline"
-                :loading="flowLoading || busy"
-                @choose="chooseScope"
-                @diagnose="workflow.begin()"
-                @recommend="workflow.recommend()"
-                @open="openTask"
-                @action="(action, id) => workflow.act(action, id)"
-                @next="nextStep"
-                @materials="page = '我的资料'"
-              />
-              <div class="stats">
-                <div>
-                  <BookOpen :size="21" /><span
-                    >累计作答<strong
-                      >{{ history.total }} <small>次</small></strong
-                    ></span
-                  >
-                </div>
-                <div>
-                  <Check :size="21" /><span
-                    >正确作答<strong
-                      >{{ history.correct_total }} <small>次</small></strong
-                    ></span
-                  >
-                </div>
-                <div>
-                  <Library :size="21" /><span
-                    >已确认资料<strong
-                      >{{ materials.filter((m) => m.confirmed).length }}
-                      <small>份</small></strong
-                    ></span
-                  >
-                </div>
-              </div>
-              <section class="panel">
-                <h3>用知识地图查看证据，用自己的讲义辅助学习</h3>
-                <p class="muted">
-                  记忆、理解、应用、分析分别呈现；“证据不足”与“待巩固”有不同含义。阅读和重复答对同一道题不会直接成为新的掌握证据。
-                </p>
-                <div class="actions">
-                  <NButton secondary @click="page = '知识地图'"
-                    >查看知识地图</NButton
-                  ><NButton secondary @click="page = '我的资料'"
-                    >整理资料</NButton
-                  ><NButton text @click="page = '学习记录'"
-                    >查看学习记录与纠错</NButton
-                  >
-                </div>
-              </section>
-            </template>
-            <template v-else-if="page === '知识地图'">
-              <NAlert type="info" class="notice"
-                >状态来自最近
-                {{ state?.window_days || 14 }}
-                天的有效作答；独立复测涉及的维度从本轮重新收集证据。先修满足且证据充分后，才能标记初步掌握；当前使用规则基线。</NAlert
-              >
-              <div class="cards">
-                <article
-                  v-for="(node, i) in graph?.nodes || []"
-                  :key="node.id"
-                  class="panel"
-                >
-                  <span class="eyebrow">KNOWLEDGE 0{{ i + 1 }}</span>
-                  <h2>{{ node.name }}</h2>
-                  <template
-                    v-for="item in state?.states.filter(
-                      (s) => s.knowledge_id === node.id,
-                    ) || []"
-                    :key="item.knowledge_id"
-                    ><NTag
-                      :type="
-                        item.status === 'provisional' ? 'success' : 'warning'
-                      "
-                      :bordered="false"
-                      >{{ stateLabels[item.status] }}</NTag
-                    >
-                    <p class="description">
-                      先修：{{
-                        node.prerequisites.length
-                          ? node.prerequisites.map(knowledgeName).join("、")
-                          : "无"
-                      }}<br />{{ item.evidence_count }} 道有效题 · 正确率
-                      {{
-                        item.correct_rate === null
-                          ? "暂无"
-                          : Math.round(item.correct_rate * 100) + "%"
-                      }}
-                    </p>
-                    <div class="evidence-list">
-                      <div v-for="c in item.cognitive" :key="c.level">
-                        <span>{{ levelLabels[c.level] }}</span
-                        ><span
-                          >{{ c.count }} 题 ·
-                          {{
-                            c.evidence_status === "insufficient"
-                              ? "证据不足"
-                              : Math.round((c.correct_rate || 0) * 100) + "%"
-                          }}</span
-                        >
-                      </div>
-                    </div>
-                    <p v-if="item.unmet_prerequisites.length" class="muted">
-                      待补先修：{{
-                        item.unmet_prerequisites.map(knowledgeName).join("、")
-                      }}
-                    </p>
-                    <NButton
-                      secondary
-                      :disabled="busy || !!item.unmet_prerequisites.length"
-                      @click="start(node.id)"
-                      >获取此知识点任务</NButton
-                    ></template
-                  >
-                </article>
-              </div>
+            <template v-if="page === '学习地图'">
+              <KnowledgeMapWorkspace :key="user.id" :scopes="scopes" :context="context" :state="state" :loading="flowLoading || busy" :call="learning.call" @choose="chooseScope" @start="start" @materials="page = '我的资料'">
+                <template #task>
+                  <WorkflowWorkspace compact :scopes="scopes" :context="context" :timeline="timeline" :loading="flowLoading || busy"
+                    @choose="chooseScope" @diagnose="start()" @recommend="workflow.recommend()" @open="openTask"
+                    @action="(action, id) => workflow.act(action, id)" @next="nextStep" @materials="page = '我的资料'"/>
+                </template>
+              </KnowledgeMapWorkspace>
             </template>
             <template v-else-if="page === '我的资料'">
               <div class="section-heading">
@@ -423,6 +316,8 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                   }}</NTag>
                   <h3 class="material-title">{{ m.title }}</h3>
                   <p class="material-text">{{ m.text }}</p>
+                  <NCheckbox :checked="!!m.external_processing_allowed" :disabled="flowLoading || mutating || !m.confirmed" @update:checked="allowed => externalConsent(m, allowed)">允许将这份讲义的已确认片段发送给配置的模型，用于语义索引和解释</NCheckbox>
+                  <p class="muted">默认不外传。撤销授权会清理向量索引和引用它的旧解释，关键词检索仍可使用。</p>
                   <template v-if="!m.chunks?.length"
                     ><label class="field"
                       >关联知识点<NSelect
@@ -589,8 +484,10 @@ const date = new Intl.DateTimeFormat("zh-CN", {
       :loading="busy || flowLoading"
       :error="error"
       :pending="pendingSubmission"
+      :call="learning.call"
       @submit="learning.submit"
       @history="page = '学习记录'"
+      @materials="page = '我的资料'"
       @next-task="nextStep"
       @complete="workflow.act('complete')"
       @rebuild="

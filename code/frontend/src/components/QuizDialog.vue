@@ -4,6 +4,7 @@ import { NModal, NButton, NTag, NAlert, NRadio, NRadioGroup } from "naive-ui";
 import { Check } from "lucide-vue-next";
 import { levelDescriptions, levelLabels } from "../types";
 import type { PendingSubmission, Task } from "../types";
+import SourceExplorer from "./SourceExplorer.vue";
 const props = defineProps<{
   show: boolean;
   task: Task | null;
@@ -11,6 +12,7 @@ const props = defineProps<{
   loading: boolean;
   error: string;
   pending: PendingSubmission | null;
+  call?: <T>(path: string, method?: string, body?: unknown) => Promise<T>;
 }>();
 const emit = defineEmits<{
   "update:show": [show: boolean];
@@ -19,10 +21,12 @@ const emit = defineEmits<{
   nextTask: [];
   complete: [];
   rebuild: [];
+  materials: [];
 }>();
 const index = ref(0),
   selected = ref<string | null>(null),
   finished = ref(false);
+const explanationOpen = ref(false);
 const question = computed(() => props.task?.questions[index.value]);
 const feedback = computed(() =>
   props.task?.attempts.find((a) => a.question_key === question.value?.key),
@@ -61,6 +65,7 @@ watch(
 watch(
   () => question.value?.key,
   () => {
+    explanationOpen.value = false;
     selected.value =
       feedback.value?.selected ||
       (uncertain.value ? props.pending?.selected || null : null);
@@ -267,6 +272,10 @@ function next() {
             index === task.questions.length - 1 ? "查看反馈" : "下一题"
           }}</NButton>
         </div>
+        <details v-if="feedback && call" :open="explanationOpen" class="history-details" @toggle="explanationOpen = ($event.target as HTMLDetailsElement).open">
+          <summary>查阅资料与 AI 辅助解释（可选）</summary>
+          <SourceExplorer v-if="explanationOpen" :key="feedback.id" :knowledge-id="question.knowledge_id" :knowledge-name="task.goal?.title || question.knowledge_id" :attempt-id="feedback.id" :call="call" @materials="emit('update:show',false); emit('materials')"/>
+        </details>
       </template>
     </template>
   </NModal>

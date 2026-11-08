@@ -68,6 +68,9 @@ def chunks_view(db, material):
 
 
 def purge_material_derivatives(db, material):
+    from .retrieval import invalidate_material_index
+
+    invalidate_material_index(db, material.id)
     for chunk in db.scalars(select(SourceChunk).where(SourceChunk.material_id == material.id)):
         chunk.text, chunk.status = "", "rejected"
     for job in db.scalars(
@@ -85,10 +88,14 @@ def job_view(job):
         "id": job.id,
         "kind": job.kind,
         "status": job.status,
-        "implementation": "mock",
+        "implementation": job.result.get("implementation", "mock"),
         "created_at": job.created_at,
         "result": job.result,
-        "notice": "这是可替换的 mock 任务，不执行真实 PDF 抽取或模型推理，不是质量/时延实测结果。",
+        "knowledge_id": job.params.get("knowledge_id"),
+        "attempt_id": job.params.get("attempt_id"),
+        "notice": "真实模型任务，不自动发布或改变学习证据。"
+        if job.kind.startswith("live_")
+        else "这是可替换的 mock 任务，不执行真实 PDF 抽取或模型推理，不是质量/时延实测结果。",
     }
 
 
@@ -117,6 +124,14 @@ def install_flow_routes(app, get_db, current_user, student, maintainer, services
 
     @app.get("/api/v1/capabilities", tags=["学习流程"])
     def capabilities(user=Depends(current_user)):
+        from .providers import ProviderFailure, provider_config
+
+        def configured(kind):
+            try:
+                return provider_config(kind).configured
+            except ProviderFailure:
+                return False
+
         return {
             "flow_version": "learning-flow-0.2",
             "modules": {
@@ -126,8 +141,12 @@ def install_flow_routes(app, get_db, current_user, student, maintainer, services
                 "content_bank": "demo-fixtures",
                 "pdf_extraction": "mock",
                 "knowledge_association": "mock",
-                "llm_annotation": "mock",
-                "llm_explanation": "api-placeholder",
+                "knowledge_map": "interactive-prerequisite-map",
+                "semantic_retrieval": "pgvector" if configured("embedding") else "not-configured",
+                "llm_annotation": "openai-compatible" if configured("generation") else "not-configured",
+                "llm_explanation": "grounded-openai-compatible"
+                if configured("generation")
+                else "not-configured",
                 "backup_and_performance_acceptance": "not_implemented",
             },
         }
@@ -376,7 +395,10 @@ def install_flow_routes(app, get_db, current_user, student, maintainer, services
                 job_view(j)
                 for j in db.scalars(
                     select(ServiceJob)
-                    .where(ServiceJob.user_id == user.id, ServiceJob.kind == "import")
+                    .where(
+                        ServiceJob.user_id == user.id,
+                        ServiceJob.kind.in_(("import", "live_index", "live_explanation")),
+                    )
                     .order_by(ServiceJob.created_at.desc())
                     .limit(50)
                 )
@@ -390,6 +412,8 @@ def install_flow_routes(app, get_db, current_user, student, maintainer, services
     @app.post("/api/v1/jobs/{job_id}/run", tags=["任务状态"])
     def run_job(job_id: str, request: Request, user=Depends(current_user), db=Depends(get_db)):
         job = owned(db, ServiceJob, job_id, user)
+        if job.kind.startswith("live_"):
+            reject(409, "真实模型任务由 worker 或 model-jobs dispatch 处理，不能作为 mock 运行")
         if job.kind == "annotation" and user.role != "maintainer":
             reject(403, "标注任务需要内容维护者权限")
         if job.status != "queued":
@@ -530,6 +554,8 @@ def install_flow_routes(app, get_db, current_user, student, maintainer, services
     @app.post("/api/v1/jobs/{job_id}/retry", status_code=202, tags=["任务状态"])
     def retry_job(job_id: str, request: Request, user=Depends(current_user), db=Depends(get_db)):
         old = owned(db, ServiceJob, job_id, user)
+        if old.kind.startswith("live_"):
+            reject(409, "请通过 model-jobs retry 显式重试真实模型任务")
         if old.kind == "annotation" and user.role != "maintainer":
             reject(403, "标注任务需要内容维护者权限")
         if old.status != "failed" or not old.result.get("retryable"):
@@ -560,13 +586,20 @@ def install_flow_routes(app, get_db, current_user, student, maintainer, services
     def confirm_chunk(
         material_id: str, chunk_id: str, body: ChunkChoice, user=Depends(student), db=Depends(get_db)
     ):
-        material = owned(db, Material, material_id, user)
+        from .retrieval import invalidate_material_index
+
+        material = db.scalar(
+            select(Material).where(Material.id == material_id, Material.user_id == user.id).with_for_update()
+        )
+        if not material:
+            reject(404, "资料不存在")
         chunk = db.get(SourceChunk, chunk_id)
         if material.deleted or not chunk or chunk.material_id != material.id:
             reject(404, "片段不存在")
         if body.knowledge_id not in {n["id"] for n in graph_of(db).nodes}:
             reject(422, "知识点不存在")
         chunk.knowledge_id, chunk.status = body.knowledge_id, body.status
+        invalidate_material_index(db, material.id)
         db.flush()
         material.confirmed = any(c["status"] == "confirmed" for c in chunks_view(db, material))
         db.commit()
@@ -617,7 +650,7 @@ def install_flow_routes(app, get_db, current_user, student, maintainer, services
                 {**job_view(j), "can_run": j.user_id == user.id}
                 for j in db.scalars(
                     select(ServiceJob)
-                    .where(ServiceJob.kind == "annotation")
+                    .where(ServiceJob.kind.in_(("annotation", "live_annotation")))
                     .order_by(ServiceJob.created_at.desc())
                     .limit(100)
                 )
@@ -647,8 +680,18 @@ def install_flow_routes(app, get_db, current_user, student, maintainer, services
         return {"settings": data, "implementation": "mock"}
 
     @app.post("/api/v1/admin/providers/live", tags=["系统管理"])
-    def live_provider_placeholder(user=Depends(administrator)):
-        reject(501, "真实模型适配器为 API 占位，当前不会接收密钥或发起外部调用")
+    def live_provider_status(user=Depends(administrator)):
+        from .providers import provider_config
+
+        cfg = provider_config("generation")
+        if not cfg.configured:
+            reject(501, "真实模型尚未配置，请在后端环境变量中填写地址、模型名和密钥")
+        return {
+            "implementation": "openai-compatible",
+            "model": cfg.model,
+            "configured": True,
+            "notice": "配置已就绪；此接口不发起付费调用，标注需显式建立任务。",
+        }
 
     @app.get("/api/v1/admin/users", tags=["系统管理"])
     def users(user=Depends(administrator), db=Depends(get_db)):

@@ -1,5 +1,7 @@
 # 原设计对齐：端到端流程原型
 
+2026-11-08 学习空间更新：交互地图、pgvector、真实模型标注/解释及持久化 worker 已实现；PDF 抽取仍为 mock。下文保留阶段方案，当前边界与验收证据见 [学习空间实现](learning_space_implementation.md)。
+
 更新：2026-10-28。依据仓库原有 [功能需求规范](../requirements/functional_spec.md)、[问题定义](../requirements/problem_definition.md) 和 [非功能需求](../requirements/nonfunctional_spec.md)。本次实现覆盖流程和持久化，不修改原需求，不代表正式功能或非功能验收通过。
 
 ## 运行与体验
@@ -7,10 +9,15 @@
 在仓库根目录：
 
 ```bash
+test -f .env || cp .env.example .env
+docker compose up -d --wait postgres
 uv sync --locked --python 3.12
-ARISTOTLE_DATABASE_URL=sqlite:///.local/integration.db uv run python -m aristotle_backend.seed --demo --design-flow
-ARISTOTLE_DATABASE_URL=sqlite:///.local/integration.db uv run uvicorn aristotle_backend.app:create_app --factory --host 127.0.0.1 --port 8020
+uv run python -m aristotle_backend.migrations
+uv run python -m aristotle_backend.seed --demo --design-flow
+uv run uvicorn aristotle_backend.app:create_app --factory --host 127.0.0.1 --port 8020
 ```
+
+2026-11-08 数据库更新：以上使用默认 PostgreSQL，仅对新演示库运行种子。保留旧 `.local/integration.db` 等数据时先按 [PostgreSQL 迁移说明](postgresql_migration.md) 导入，再启动服务。下文历史验证均基于当时版本，不视为 PostgreSQL 验证结果。
 
 另一个终端，进入 `code/frontend`：
 

@@ -18,7 +18,7 @@ const title = ref("我的学习讲义"),
   busy = ref(false),
   jobs = ref<Job[]>([]);
 async function loadJobs() {
-  jobs.value = (await props.call<{ items: Job[] }>("/jobs")).items;
+  jobs.value = (await props.call<{ items: Job[] }>("/jobs")).items.filter(j => j.kind === "import");
 }
 onMounted(() => run(loadJobs));
 async function run(operation: () => Promise<void>) {

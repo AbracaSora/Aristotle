@@ -96,7 +96,7 @@
 {"knowledge_id":"stack","confirmed":true}
 ```
 
-目前来源仅为“粘贴文本第 1 段”，未实现 PDF 页码或片段检索。删除后历史任务的资料引用返回 `unavailable=true` 和原因；不再返回原文。取消或改变关联同样会阻止旧任务继续展示不匹配资料。
+直接粘贴来源为“粘贴文本第 1 段”；已确认来源现可分段检索并保留字符位置，真实 PDF 页码抽取仍未实现。删除后历史任务的资料引用返回 `unavailable=true` 和原因；不再返回原文。取消或改变关联同样会阻止旧任务继续展示不匹配资料。
 
 ## 4. 维护与审核
 
@@ -108,7 +108,7 @@
 {"question_id":"team_example_1","question_version":1,"primary_level":"remember","secondary_levels":[],"rationale":"需要识别线性结构的一对一关系，属于事实提取。","confidence":0.5,"ambiguity_note":""}
 ```
 
-主标签与次标签使用六类英文枚举，次标签不重复、不包含主标签；理由非空，confidence 限制为 0—1。题目版本不符返回 409；非法标签、非法字段或伪造审核状态返回 422。当前 provider 固定为 `manual-prototype`，没有真实模型调用。
+主标签与次标签使用六类英文枚举，次标签不重复、不包含主标签；理由非空，confidence 限制为 0—1。题目版本不符返回 409；非法标签、非法字段或伪造审核状态返回 422。此手工候选入口使用 `manual-prototype`；真实模型候选使用第 6 节的独立入口，同样进入人工审核。
 
 审核请求：
 
@@ -131,6 +131,29 @@
 | 422 | 修正输入，不自动循环重试 |
 | 503 | 尚无知识结构，维护者需初始化或发布 |
 
-SQLite 竞争、服务故障等非业务错误不应被前端当作成功；本原型尚未实现统一追踪 ID、故障告警及所有 5xx 的 JSON 错误模型。
+数据库竞争、服务故障等非业务错误不应被前端当作成功；本原型尚未实现统一追踪 ID、故障告警及所有 5xx 的 JSON 错误模型。
 
 Vue 现在通过上述接口创建新任务与作答；业务数据不再写入 localStorage。旧浏览器记录只有题目 ID、对错、时间，无法作为可信服务端作答导入，本次不自动读取、上传或删除它们。登录令牌与当前任务 ID 仅保留在当前标签页 sessionStorage。
+
+## 6. 学习地图、检索与真实模型（2026-11-08）
+
+路径均以 `/api/v1` 为前缀，须携带现有 Bearer 会话。结构以 OpenAPI 为准；完整业务及模型配置见 [学习空间实现](learning_space_implementation.md)。
+
+| 方法与路径 | 请求 / 返回要点 |
+| --- | --- |
+| `GET /knowledge-map` | 学生；已发布版本、全图 nodes/edges、本人 states、window_days；不创建任务 |
+| `GET /model-status` | 已登录；仅 configured/model/namespace、enabled、storage；不探测模型、不返回密钥 |
+| `GET /retrieval/sources?knowledge_id=stack` | 学生；本人可用来源、位置、授权状态；linked-sources 不表示语义命中 |
+| `POST /retrieval/search` | query、knowledge_id、mode（keyword/semantic/hybrid）、limit（1–12）；语义类须 allow_external_query=true |
+| `POST /retrieval/index` | knowledge_id、allow_external=true；202 返回 live_index job |
+| `PATCH /materials/{id}/external-consent` | allowed 布尔值；本人资料，撤销即清理派生索引及相关旧解释 |
+| `POST /explanations` | knowledge_id、query、source_keys（1–6 个）、allow_external=true；可带本人 attempt_id；202 返回 live_explanation job |
+| `POST /admin/questions/{key}/model-annotations` | 维护者；无需正文，仅可草稿/待审核版本；202 返回 live_annotation job，候选不会自动发布 |
+| `GET /jobs/{id}` | 查询本人任务；status、result、implementation、知识点/作答上下文 |
+| `POST /model-jobs/{id}/dispatch` | 显式执行本人 queued 真实任务；多次竞争只领取一次 |
+| `POST /model-jobs/{id}/retry` | 仅 failed 且 retryable 的本人真实任务；重新计入调用配额 |
+| `GET /admin/model-calls` | 管理员；最近 100 条调用状态、用量和耗时，不含输入正文 |
+
+新任务返回 202 表示已接收，不能作为模型成功；轮询 `/jobs/{id}` 直到 succeeded/failed。默认后端响应后执行，也支持独立 worker。mock `/jobs/{id}/run` 不接受真实任务。关键词检索不发外部请求；语义查询是有总预算的同步请求，前端对应超时为 65 秒。私人资料须逐份授权，不能只用请求中的 allow_external 绕过。
+
+模型相关错误额外包含 `error.code`：403 consent_required、409 source_unavailable、413 scope_too_large、429 quota_exceeded、503 not_configured/disabled；无有效语义索引明确提示，不用关键词结果冒充。供应商或输出校验错误为 502；异步执行的错误记录在失败 job 中，返回可展示的脱敏原因。

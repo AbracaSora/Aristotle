@@ -1,0 +1,20 @@
+name: aristotle
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: ${ARISTOTLE_POSTGRES_DB:-aristotle}
+      POSTGRES_USER: ${ARISTOTLE_POSTGRES_USER:-aristotle}
+      POSTGRES_PASSWORD: ${ARISTOTLE_POSTGRES_PASSWORD:-aristotle-local}
+    ports:
+      - "127.0.0.1:${ARISTOTLE_POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+volumes:
+  postgres_data:

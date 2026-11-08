@@ -3,6 +3,7 @@ from pathlib import Path
 from sqlalchemy import (
     JSON,
     Boolean,
+    CheckConstraint,
     Float,
     ForeignKey,
     Integer,
@@ -11,8 +12,12 @@ from sqlalchemy import (
     UniqueConstraint,
     create_engine,
     event,
+    text,
 )
+from sqlalchemy.engine import make_url
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
+
+from .vector_type import Vector
 
 
 class Base(DeclarativeBase):
@@ -123,6 +128,7 @@ class Material(Base):
     knowledge_id: Mapped[str] = mapped_column(String)
     confirmed: Mapped[bool] = mapped_column(Boolean, default=False)
     deleted: Mapped[bool] = mapped_column(Boolean, default=False)
+    external_processing_allowed: Mapped[bool] = mapped_column(Boolean, default=False, server_default="0")
 
 
 class Audit(Base):
@@ -217,17 +223,96 @@ class SystemSetting(Base):
     data: Mapped[dict] = mapped_column(JSON)
 
 
-def open_database(url: str):
-    if url.startswith("sqlite:///") and not url.endswith(":memory:"):
-        Path(url.removeprefix("sqlite:///")).parent.mkdir(parents=True, exist_ok=True)
-    kwargs = {"connect_args": {"check_same_thread": False, "timeout": 15}} if url.startswith("sqlite") else {}
-    engine = create_engine(url, **kwargs)
-    if url.startswith("sqlite"):
+class SourceEmbedding(Base):
+    __tablename__ = "source_embeddings"
+    __table_args__ = (
+        UniqueConstraint("source_key", "namespace"),
+        CheckConstraint(
+            "(resource_id IS NOT NULL AND material_id IS NULL AND owner_id IS NULL AND chunk_id IS NULL) OR "
+            "(resource_id IS NULL AND material_id IS NOT NULL AND owner_id IS NOT NULL)",
+            name="embedding_source_owner",
+        ),
+    )
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    source_key: Mapped[str] = mapped_column(String)
+    resource_id: Mapped[str | None] = mapped_column(ForeignKey("learning_resources.id"), nullable=True)
+    material_id: Mapped[str | None] = mapped_column(ForeignKey("materials.id"), nullable=True, index=True)
+    chunk_id: Mapped[str | None] = mapped_column(ForeignKey("source_chunks.id"), nullable=True)
+    owner_id: Mapped[str | None] = mapped_column(ForeignKey("users.id"), nullable=True)
+    namespace: Mapped[str] = mapped_column(String, index=True)
+    source_hash: Mapped[str] = mapped_column(String)
+    dimensions: Mapped[int] = mapped_column(Integer)
+    vector: Mapped[list] = mapped_column(JSON().with_variant(Vector(), "postgresql"))
+    created_at: Mapped[float] = mapped_column(Float)
+
+
+class ModelCall(Base):
+    __tablename__ = "model_calls"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    purpose: Mapped[str] = mapped_column(String, index=True)
+    namespace: Mapped[str] = mapped_column(String)
+    model: Mapped[str] = mapped_column(String)
+    input_hash: Mapped[str] = mapped_column(String)
+    status: Mapped[str] = mapped_column(String)
+    reserved_requests: Mapped[int] = mapped_column(Integer)
+    external_calls: Mapped[int] = mapped_column(Integer, default=0)
+    usage: Mapped[dict] = mapped_column(JSON, default=dict)
+    error_code: Mapped[str] = mapped_column(String, default="")
+    duration_seconds: Mapped[float] = mapped_column(Float, default=0)
+    created_at: Mapped[float] = mapped_column(Float, index=True)
+
+
+def create_database_engine(url: str):
+    parsed = make_url(url)
+    sqlite = parsed.get_backend_name() == "sqlite"
+    if sqlite and parsed.database and parsed.database != ":memory:":
+        Path(parsed.database).parent.mkdir(parents=True, exist_ok=True)
+    kwargs = (
+        {"connect_args": {"check_same_thread": False, "timeout": 15}}
+        if sqlite
+        else {"connect_args": {"connect_timeout": 5}}
+    )
+    engine = create_engine(url, pool_pre_ping=True, **kwargs)
+    if sqlite:
 
         @event.listens_for(engine, "connect")
         def configure_sqlite(connection, _):
             connection.execute("PRAGMA foreign_keys=ON")
             connection.execute("PRAGMA busy_timeout=15000")
 
-    Base.metadata.create_all(engine)
+    return engine
+
+
+def open_database(url: str):
+    from .migrations import schema_head
+
+    engine = create_database_engine(url)
+    try:
+        with engine.connect() as connection:
+            # Startup never creates or changes tables. Deploy migrations explicitly.
+            from sqlalchemy import inspect
+
+            schema = (
+                connection.exec_driver_sql("SELECT current_schema()").scalar_one()
+                if connection.dialect.name == "postgresql"
+                else None
+            )
+            version_table = (
+                connection.dialect.identifier_preparer.quote(schema) + ".alembic_version"
+                if schema
+                else "alembic_version"
+            )
+            if not inspect(connection).has_table("alembic_version", schema=schema):
+                raise RuntimeError(
+                    "Database is not migrated; run: uv run python -m aristotle_backend.migrations"
+                )
+            revisions = set(connection.execute(text(f"SELECT version_num FROM {version_table}")).scalars())
+            if revisions != {schema_head()}:
+                raise RuntimeError(
+                    "Database schema is out of date; run: uv run python -m aristotle_backend.migrations"
+                )
+    except Exception:
+        engine.dispose()
+        raise
     return engine, sessionmaker(engine, expire_on_commit=False)

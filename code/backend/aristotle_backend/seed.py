@@ -7,7 +7,7 @@ from uuid import uuid4
 
 from sqlalchemy import select
 
-from .app import DEFAULT_DB
+from .config import database_url
 from .db import Annotation, Audit, Graph, Question, Review, User, open_database
 from .security import hash_password
 
@@ -210,7 +210,7 @@ def main():
         "--design-flow", action="store_true", help="增量添加设计对齐流程的范围、资料、题目和管理员 mock 夹具"
     )
     args = parser.parse_args()
-    engine, sessions = open_database(os.getenv("ARISTOTLE_DATABASE_URL", DEFAULT_DB))
+    engine, sessions = open_database(database_url())
     created = seed_demo(sessions, os.getenv("ARISTOTLE_DEMO_PASSWORD", "demo-password"))
     if args.design_flow:
         from .design_seed import seed_design_flow

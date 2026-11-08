@@ -8,6 +8,7 @@ const props = defineProps<{
   context: LearningContext | null;
   timeline: TimelineItem[];
   loading: boolean;
+  compact?: boolean;
 }>();
 const emit = defineEmits<{
   choose: [id: string];
@@ -54,7 +55,7 @@ const labels: Record<string, string> = {
 </script>
 <template>
   <section class="panel workflow-panel">
-    <div class="section-heading">
+    <div v-if="!compact" class="section-heading">
       <div>
         <span class="eyebrow">YOUR LEARNING PATH</span>
         <h2>从诊断到学习，再用证据检验</h2>
@@ -62,7 +63,7 @@ const labels: Record<string, string> = {
       <NTag type="success">规则编排 · 演示内容</NTag>
     </div>
     <NAlert type="success" class="motivation" role="status">{{ encouragement }}</NAlert>
-    <ol class="journey">
+    <ol v-if="!compact" class="journey">
       <li :class="{ current: !context?.selected_scope }">01 选择范围</li>
       <li :class="{ current: context?.stage === 'diagnosis' }">02 初始诊断</li>
       <li :class="{ current: context?.stage === 'recommendation' }">
@@ -71,7 +72,7 @@ const labels: Record<string, string> = {
       <li :class="{ current: context?.stage === 'activity' }">04 学习与练习</li>
       <li>05 反馈与复测</li>
     </ol>
-    <div class="scope-bar">
+    <div v-if="!compact" class="scope-bar">
       <label>学习范围</label
       ><NSelect
         aria-label="学习范围"

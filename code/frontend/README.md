@@ -1,16 +1,25 @@
 # Aristotle 408 学习端
 
-Vue 3 + TypeScript + Vite，沿用 Naive UI、Lucide 图标和绿色界面。学习端已对接后端 API：登录、知识状态、推荐关卡、服务端判分、学习记录和文字讲义均使用服务端数据。
+Vue 3 + TypeScript + Vite，沿用 Naive UI、Lucide 图标和绿色界面。默认主界面是可交互的先修关系地图，侧栏连接学习任务、维度证据、资料检索和有来源的模型解释。学习端已对接后端 API：登录、知识状态、推荐关卡、服务端判分、学习记录和文字讲义均使用服务端数据。
 
 ## 启动
+
+已有依赖与业务数据时，在仓库根目录运行 `uv run python scripts/run_learning_space.py`，即可启动 8020 后端和 5180 学习地图。完整验证加 `--verify`；仅重跑浏览器检查加 `--e2e`。`--probe-models` 另做 4 次真实调用，需先配置模型。详见 [学习空间实现](../../docs/software/learning_space_implementation.md)。
+
+以下保留分终端启动方式：
 
 先在仓库根目录启动后端：
 
 ```bash
+test -f .env || cp .env.example .env
+docker compose up -d --wait postgres
 uv sync --locked --python 3.12
+uv run python -m aristotle_backend.migrations
 uv run python -m aristotle_backend.seed --demo --design-flow
 uv run uvicorn aristotle_backend.app:create_app --factory --host 127.0.0.1 --port 8018
 ```
+
+以上种子用于新演示库；已有 SQLite 学习记录应先按 [PostgreSQL 迁移说明](../../docs/software/postgresql_migration.md) 导入，避免先填充目标库。
 
 另开终端，进入 `code/frontend`：
 
@@ -48,7 +57,7 @@ npm run build
 
 ## 已知边界
 
-当前为局部数据结构演示内容，真实 PDF/LLM 仍未接入；正式诊断效度、内容质量、学习收益及非功能需求尚未验收。范围、跳过/更换、资料回退/复测和学生报错已补齐，详见下述更新。
+当前为局部数据结构演示内容，真实模型标注与解释、语义检索已接入兼容接口，PDF 抽取仍为 mock；正式诊断效度、内容质量、学习收益及非功能需求尚未验收。范围、跳过/更换、资料回退/复测和学生报错已补齐，详见下述更新。
 
 ## 设计对齐原型（2026-10-28）
 

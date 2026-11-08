@@ -4,9 +4,19 @@
 
 本项目是[智能软件工程实践课程](https://github.com/bettermorn/IntelligentSWEPractice)的小组实践作品。目前已有需求分析稿、后端 API 原型，以及已接入 API 的 Vue 学习端，范围选择、分段诊断、学习安排、资料复习/练习、反馈复测、导入确认、标注审核和内容纠错已连接到持久化后端；尚未完成完整需求验收或学生试用。以下首版功能仍为产品规划，实际原型范围见各模块说明。
 
+## 当前实现（2026-11-08）
+
+主学习界面已改为可拖动、缩放和搜索的先修关系地图，侧栏连接原有诊断、任务、反馈和复测。后端新增 PostgreSQL + pgvector 语义检索、真实模型认知候选标注与有来源的解释；认知候选仍须人工审核，阅读和模型解释不增加学习证据。PDF 抽取、知识点候选关联仍为 mock，正式知识空间模型与质量评测尚未完成。
+
+本机 PostgreSQL 的 66 项集成测试、前端 20 项测试及构建、Chrome 学习流程和 4 次真实模型探测已通过；桌面与手机截图已核对。验证范围见 [学习空间实现记录](docs/software/learning_space_implementation.md)。
+
+已有本地环境可用 `uv run python scripts/run_learning_space.py` 启动，在 <http://127.0.0.1:5180/> 体验；首次安装、种子和模型配置见实现记录。
+
+![新版学习地图：先修关系、认知维度证据与学习侧栏（隔离测试数据）](docs/media/learning-map-desktop.png)
+
 ## 实机演示：围绕“栈”的学习闭环
 
-约 **66 秒**，展示当前原型从理解诊断、应用练习到资料复习和新题复测的实际操作。左侧为真实页面，右侧为对应概念说明；演示使用预设作答，部分等待与重复操作经过剪辑。
+约 **66 秒**，录制于 2026-10-28，展示当时原型从理解诊断、应用练习到资料复习和新题复测的实际操作。左侧为真实页面，右侧为对应概念说明；演示使用预设作答，部分等待与重复操作经过剪辑。
 
 [![栈知识点实机演示：诊断、认知目标、反馈调整与新题复测](docs/media/stack-learning-flow.gif)](docs/media/stack-learning-flow.mp4)
 
@@ -19,7 +29,7 @@
 | **基于多题证据的诊断** | 答对一道题仍显示证据不足；理解、应用分别统计，未覆盖的维度保留不确定性。 |
 | **形成性评价的反馈调整思路** | 作答暴露困难 → 提供解析与资料复习 → 用另一组题重新收集证据；阅读完成不直接增加掌握分数。 |
 
-演示题与作答结果用于说明系统行为。诊断阈值仍是初始参数，真实模型标注/PDF 处理保留 mock 或接口占位，诊断效度和学习效果仍待正式评测。
+演示题与作答结果用于说明系统行为。诊断阈值仍是初始参数，录制时模型标注/PDF 处理保留 mock 或接口占位；当前模型实现见上文，诊断效度和学习效果仍待正式评测。
 
 ## 产品定位
 
@@ -36,6 +46,10 @@
 | [非功能需求规范](docs/requirements/nonfunctional_spec.md) | URPS、安全隐私、标签质量与可测量的验收目标 |
 | [后端技术方案](docs/software/backend_technical_proposal.md) | 技术选择、架构、数据模型、事务与原型边界，待团队评审 |
 | [后端 API 约定](docs/software/backend_api.md) | 前端联调接口、错误与幂等约定 |
+| [PostgreSQL 迁移](docs/software/postgresql_migration.md) | 开发数据库启动、Alembic、旧数据导入、测试和实际验证状态 |
+| [功能补完讨论稿](docs/software/functional_completion_plan.md) | 设计讨论及后续工作，已实现范围见学习空间记录 |
+| [学习空间实现](docs/software/learning_space_implementation.md) | 知识地图、pgvector、模型调用、授权和本轮验证边界 |
+| [设计符合性检查](docs/software/design_compliance_review_20261108.md) | 原始 FR/NFR 对照、已复现偏差、原型缺口与验收边界 |
 | [规则基线](docs/algorithm/baseline.md) | 证据窗口、先修约束与选题逻辑 |
 | [后端原型验证](docs/software/backend_validation.md) | 本地检查证据与未验证范围 |
 | [原设计对齐流程](docs/software/design_aligned_workflow.md) | 完整流程、真实/mock/占位边界、API 和启动方式 |
@@ -110,4 +124,6 @@
 
 学习端启动见 [前端说明](code/frontend/README.md)。后端启动、演示账号与 API 工作台见 [后端说明](code/backend/README.md)。开发时分别启动后端和 Vite，前端通过代理调用 API，判分与业务数据由服务端处理。
 
-后端原型覆盖账号隔离、规则诊断和选题、持久化作答、文字资料及人工审核流程；真实 LLM/PDF 尚未接入，演示题不代表正式审核题库。开发中使用脱敏或获授权的样例资料，个人讲义、数据库、账号密钥及模型 API 凭据不提交到仓库。
+后端默认使用 **PostgreSQL + psycopg 3 + Alembic**。开发前启动 Compose 数据库并执行结构迁移；旧 SQLite 记录可导入空目标库，步骤和当前验证边界见 [数据库迁移说明](docs/software/postgresql_migration.md)。
+
+后端原型覆盖账号隔离、规则诊断和选题、持久化作答、文字资料及人工审核流程；LLM 标注和有来源解释已接入兼容接口，PDF 抽取仍为 mock；演示题不代表正式审核题库。开发中使用脱敏或获授权的样例资料，个人讲义、数据库、账号密钥及模型 API 凭据不提交到仓库。

@@ -100,7 +100,7 @@ def test_full_learning_flow_and_restart_persistence(client, login, app):
     assert len(client.get("/api/v1/history", headers=headers).json()["items"]) == 12
     states = client.get("/api/v1/learning-state", headers=headers).json()
     assert all(s["status"] == "provisional" for s in states["states"])
-    restarted = create_app(str(app.state.engine.url))
+    restarted = create_app(app.state.engine.url.render_as_string(hide_password=False))
     with TestClient(restarted) as second:
         assert len(second.get("/api/v1/history", headers=headers).json()["items"]) == 12
         assert second.get(f"/api/v1/tasks/{task['id']}", headers=headers).json()["attempts"]
@@ -327,7 +327,7 @@ def test_unsupported_first_release_labels_are_not_assigned(client, login):
 
 
 def test_openapi_and_demo_are_available(client):
-    assert client.get("/health").json()["external_model"] == "not_configured"
+    assert client.get("/health").json()["status"] == "ok"
     assert "/api/v1/tasks" in client.get("/openapi.json").json()["paths"]
     assert client.get("/demo").status_code == 200
 

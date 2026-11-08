@@ -15,7 +15,7 @@ export function createApiClient(
     async request<T>(path: string, method = "GET", body?: unknown): Promise<T> {
       let response: Response;
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 15000);
+      const timeout = setTimeout(() => controller.abort(), path === "/retrieval/search" ? 65000 : 15000);
       try {
         response = await fetch(base + path, {
           method,

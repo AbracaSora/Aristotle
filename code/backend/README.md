@@ -1,15 +1,19 @@
 # Aristotle 408 后端原型
 
-Python 3.12 + FastAPI + Pydantic 2 + SQLAlchemy 2.0 + SQLite。依赖在仓库根目录的 `pyproject.toml` / `uv.lock` 管理。
+Python 3.12 + FastAPI + Pydantic 2 + SQLAlchemy 2.0 + PostgreSQL（psycopg 3），使用 Alembic 迁移。SQLite 保留作测试和旧库导入。依赖在仓库根目录的 `pyproject.toml` / `uv.lock` 管理。
 
-这是可运行的后端设计原型：支持学生账号隔离、版本化知识图、分阶段诊断、规则推荐、任务作答与持久化、文字资料确认/删除，以及题目候选标注与人工审核。Vue 学习端已对接这些学生接口；真实 LLM、PDF、正式知识空间模型和备份轮换尚未实现。
+这是可运行的后端设计原型：支持学生账号隔离、版本化知识图、分阶段诊断、规则推荐、任务作答与持久化、文字资料确认/删除，以及题目候选标注与人工审核。Vue 学习端已对接这些学生接口；新增真实模型候选标注、有来源解释、pgvector 检索与持久化模型任务；PDF 抽取、正式知识空间模型和备份轮换尚未实现。新能力与验证边界见 [学习空间实现](../../docs/software/learning_space_implementation.md)。
 
 ## 启动
 
 在仓库根目录执行：
 
 ```bash
+test -f .env || cp .env.example .env
+docker compose up -d --wait postgres
 uv sync --locked --python 3.12
+uv run python -m aristotle_backend.migrations
+# 新演示环境才执行；保留旧数据时先走下方的 SQLite 导入流程。
 uv run python -m aristotle_backend.seed --demo --design-flow
 uv run uvicorn aristotle_backend.app:create_app --factory --host 127.0.0.1 --port 8018
 ```
@@ -19,11 +23,11 @@ uv run uvicorn aristotle_backend.app:create_app --factory --host 127.0.0.1 --por
 - OpenAPI：<http://127.0.0.1:8018/openapi.json>
 - 健康检查：<http://127.0.0.1:8018/health>
 
-初始化是显式、可重复执行的命令；数据库已有用户或知识图时跳过，不覆盖数据。服务启动只建表，不自动创建演示账号。默认数据库为仓库 `.local/aristotle.db`，重启保留内容；不要将其或任何真实资料提交 Git。
+初始化是显式、可重复执行的命令；数据库已有用户或知识图时跳过，不覆盖数据。服务启动只检查迁移版本，不建表、不自动创建演示账号，也不会在 PostgreSQL 失败时回退 SQLite。默认开发库为 Compose 的 PostgreSQL，监听本机 5433，命名卷保存数据。完整启动、SQLite 数据导入、验证及备份步骤见 [PostgreSQL 迁移说明](../../docs/software/postgresql_migration.md)。
 
 演示账号为 `student1`、`student2`、`editor`，初始密码均为 `demo-password`。首次初始化前可用环境变量 `ARISTOTLE_DEMO_PASSWORD` 改变演示密码；后续改变变量不会修改已建账号。演示账号只用于本地，不用于对外试用部署。
 
-如本机默认缓存无写权限，可在 uv 命令前加 `UV_CACHE_DIR=.local/uv-cache`。`.env.example` 仅说明可配置变量，程序不自动加载 `.env`。
+如本机默认缓存无写权限，可在 uv 命令前加 `UV_CACHE_DIR=.local/uv-cache`。复制 `.env.example` 到根目录 `.env` 后，API、迁移和种子会加载它；显式 shell 环境变量优先。样例凭据仅限本地开发，业务数据库、上传资料和真实凭据不提交 Git。
 
 ## 五分钟演示
 
@@ -46,7 +50,7 @@ uv run ruff format --check code/backend code/core_engine tests
 uv run pytest -q
 ```
 
-测试使用独立临时 SQLite 文件，不接触本地演示库或真实外部模型。CI 配置在 `.github/workflows/backend.yml`；尚未推送，因此不能声称 GitHub CI 已通过。
+默认测试使用独立临时 SQLite 文件；配置 `ARISTOTLE_TEST_DATABASE_URL` 可对专用 PostgreSQL 测试库运行集成测试，每个测试使用独立 schema，详见迁移说明。CI 配置在 `.github/workflows/backend.yml`，含 PostgreSQL 服务；配置存在不表示已取得 CI 通过结果。
 
 ## 文档
 
@@ -57,9 +61,9 @@ uv run pytest -q
 
 ## 运行限制
 
-当前面向单进程、本地演示；尚无登录限流、正式账号开通、HTTPS 部署或完整数据库迁移。首版建表使用 `create_all`，不能用于演进已有数据库结构。进入对外试用前需补 Alembic 迁移、PostgreSQL 验证、限流、密钥和备份管理、恢复演练及完整 AC/NFR 验收。
+当前仍面向单进程演示；默认持久化已改为 PostgreSQL，初始结构由 Alembic 管理，旧 SQLite 可显式导入。已有可独立运行的模型 worker 和数据库调用配额；尚无正式进程托管、登录限流、正式账号开通及 HTTPS 部署。进入对外试用前仍需并发负载验收、限流、密钥和备份管理、恢复演练及完整 AC/NFR 验收。实际验证结果以迁移说明记录为准。
 
-SQLite 在线备份可使用其 backup 命令；应另行制定备份权限、保留期和删除记录重放方案。本原型只保证资料从业务查询和当前在线字段中移除，尚未验证 SQLite 空闲页、WAL 或历史备份的安全擦除。
+PostgreSQL 备份使用 `pg_dump` 等工具；应另行制定备份权限、保留期和删除记录重放方案。本原型只保证资料从业务查询和当前在线字段中移除，尚未完成历史备份清理和恢复演练。
 
 ## 设计对齐原型（2026-10-28）
 

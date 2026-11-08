@@ -14,6 +14,8 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy import func, select, update
 from sqlalchemy.exc import IntegrityError
 
+from .assistance_routes import install_assistance_routes
+from .config import database_url as configured_database_url
 from .db import (
     Annotation,
     Attempt,
@@ -60,7 +62,6 @@ from .workflow import (
     selected_scope,
 )
 
-DEFAULT_DB = "sqlite:///" + str(Path(__file__).resolve().parents[3] / ".local" / "aristotle.db")
 bearer = HTTPBearer(auto_error=False)
 
 
@@ -182,6 +183,7 @@ def material_view(m, db=None):
         "text": m.text,
         "knowledge_id": m.knowledge_id,
         "confirmed": m.confirmed,
+        "external_processing_allowed": m.external_processing_allowed,
         "source_location": "粘贴文本第 1 段",
         "chunks": chunks_view(db, m) if db else [],
     }
@@ -227,10 +229,13 @@ def task_view(db, task):
 
 
 def create_app(database_url: str | None = None):
-    engine, sessions = open_database(database_url or os.getenv("ARISTOTLE_DATABASE_URL", DEFAULT_DB))
+    engine, sessions = open_database(configured_database_url(database_url))
 
     @asynccontextmanager
     async def lifespan(_):
+        from .model_jobs import expire_running
+
+        expire_running(sessions)
         yield
         engine.dispose()
 
@@ -242,6 +247,9 @@ def create_app(database_url: str | None = None):
         description="规则学习流程、账号隔离、内容审核和持久化。真实 LLM/PDF 尚未接入。",
     )
     app.state.sessions, app.state.engine, app.state.clock = sessions, engine, time.time
+    from .migrations import schema_head
+
+    app.state.schema_revision = schema_head()
     # Same-origin /demo works without CORS; Vue development ports are explicit.
     origins = os.getenv("ARISTOTLE_CORS_ORIGINS", "http://localhost:5173,http://localhost:5179").split(",")
     app.add_middleware(
@@ -283,11 +291,21 @@ def create_app(database_url: str | None = None):
     @app.get("/health", tags=["运行状态"])
     def health(db=Depends(get_db)):
         db.execute(select(1))
+        from .providers import ProviderFailure, provider_config
+
+        try:
+            generation_ready = provider_config("generation").configured
+            embedding_ready = provider_config("embedding").configured
+        except ProviderFailure:
+            generation_ready = embedding_ready = False
         return {
             "status": "ok",
+            "database": engine.dialect.name,
             "version": "0.1.0",
             "policy_version": POLICY_VERSION,
-            "external_model": "not_configured",
+            "schema_revision": app.state.schema_revision,
+            "external_model": "configured" if generation_ready else "not_configured",
+            "embedding": "configured" if embedding_ready else "not_configured",
         }
 
     @app.get("/", include_in_schema=False)
@@ -510,12 +528,19 @@ def create_app(database_url: str | None = None):
 
     @app.patch("/api/v1/materials/{material_id}", tags=["个人资料"])
     def update_material(material_id: str, body: MaterialUpdate, user=Depends(student), db=Depends(get_db)):
-        row = owned(db, Material, material_id, user)
+        row = db.scalar(
+            select(Material).where(Material.id == material_id, Material.user_id == user.id).with_for_update()
+        )
+        if not row:
+            fail(404, "资源不存在")
         if row.deleted:
             fail(404, "资源不存在")
         if body.knowledge_id not in {n["id"] for n in active_graph(db).nodes}:
             fail(422, "知识点不存在")
         row.knowledge_id, row.confirmed = body.knowledge_id, body.confirmed
+        from .retrieval import invalidate_material_index
+
+        invalidate_material_index(db, row.id)
         from .db import SourceChunk
 
         for chunk in db.scalars(select(SourceChunk).where(SourceChunk.material_id == row.id)):
@@ -714,6 +739,14 @@ def create_app(database_url: str | None = None):
         }
 
     install_flow_routes(
+        app,
+        get_db,
+        current_user,
+        student,
+        maintainer,
+        (learning_state, active_graph, task_view, owned, audit),
+    )
+    install_assistance_routes(
         app,
         get_db,
         current_user,

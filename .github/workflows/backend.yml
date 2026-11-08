@@ -1,20 +1,37 @@
 name: Backend checks
 on:
   push:
-    paths: ['code/backend/**', 'code/core_engine/**', 'tests/**', 'pyproject.toml', 'uv.lock', '.github/workflows/backend.yml']
+    paths: ['code/backend/**', 'code/core_engine/**', 'tests/**', 'scripts/**', 'pyproject.toml', 'uv.lock', 'compose.yaml', '.github/workflows/backend.yml']
   pull_request:
-    paths: ['code/backend/**', 'code/core_engine/**', 'tests/**', 'pyproject.toml', 'uv.lock', '.github/workflows/backend.yml']
+    paths: ['code/backend/**', 'code/core_engine/**', 'tests/**', 'scripts/**', 'pyproject.toml', 'uv.lock', 'compose.yaml', '.github/workflows/backend.yml']
 permissions:
   contents: read
 jobs:
   check:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: aristotle
+          POSTGRES_PASSWORD: ci-only
+          POSTGRES_DB: aristotle_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U aristotle -d aristotle_test"
+          --health-interval 3s
+          --health-timeout 3s
+          --health-retries 20
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
         with:
           version: '0.11.6'
       - run: uv sync --locked --python 3.12
-      - run: uv run ruff check code/backend code/core_engine tests
-      - run: uv run ruff format --check code/backend code/core_engine tests
+      - run: uv run ruff check code/backend code/core_engine tests scripts
+      - run: uv run ruff format --check code/backend code/core_engine tests scripts
       - run: uv run pytest -q
+      - run: uv run pytest -q tests/integration
+        env:
+          ARISTOTLE_TEST_DATABASE_URL: postgresql+psycopg://aristotle:ci-only@127.0.0.1:5432/aristotle_test

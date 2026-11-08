@@ -172,7 +172,7 @@ def test_import_failures_do_not_publish_material(client, login, design, scenario
     assert not client.get("/api/v1/materials", headers=h).json()["items"]
 
 
-def test_mock_annotation_config_roles_failure_and_review_gate(client, login, design):
+def test_mock_annotation_config_roles_failure_and_review_gate(client, login, design, monkeypatch):
     editor, admin, h = login("editor"), login("admin"), login()
     assert client.get("/api/v1/admin/provider-settings", headers=editor).status_code == 403
     assert client.get("/api/v1/admin/provider-settings", headers=admin).status_code == 200
@@ -203,6 +203,7 @@ def test_mock_annotation_config_roles_failure_and_review_gate(client, login, des
     candidates = client.get("/api/v1/admin/candidates", headers=editor).json()["items"]
     assert next(c for c in candidates if c["id"] == result["result"]["candidate_id"])["needs_attention"]
     assert client.get("/api/v1/admin/jobs", headers=h).status_code == 403
+    monkeypatch.setenv("ARISTOTLE_LLM_MODEL", "")
     assert client.post("/api/v1/admin/providers/live", headers=admin).status_code == 501
 
 

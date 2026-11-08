@@ -82,6 +82,7 @@ export interface Material {
   text: string;
   knowledge_id: string;
   confirmed: boolean;
+  external_processing_allowed?: boolean;
   source_location: string;
   chunks?: SourceChunk[];
 }
@@ -153,6 +154,8 @@ export interface LearningContext {
   stage: string;
 }
 export interface Job {
+  knowledge_id?: string | null;
+  attempt_id?: string | null;
   can_run?: boolean;
   id: string;
   kind: string;
