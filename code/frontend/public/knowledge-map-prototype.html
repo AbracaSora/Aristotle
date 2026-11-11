@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>考研 408 · 知识地图</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #eaf5ee;
+      --muted: #91ad9e;
+      --panel: rgba(13, 29, 27, .88);
+      --panel-2: rgba(24, 48, 43, .82);
+      --line: rgba(177, 220, 184, .18);
+      --gold: #f6c967;
+      --mint: #9fe2bc;
+      --danger: #ff9b8f;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: #081917;
+      overflow: hidden;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+      height: 100vh;
+    }
+
+    aside {
+      position: relative;
+      z-index: 2;
+      padding: 28px 22px;
+      border-right: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(12, 30, 28, .98), rgba(8, 22, 23, .94));
+      overflow: auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: Georgia, serif;
+      font-size: 27px;
+      letter-spacing: -.02em;
+      font-weight: 600;
+    }
+
+    .intro {
+      margin: 10px 0 24px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    label,
+    .label {
+      display: block;
+      margin: 17px 0 7px;
+      color: #c0d8c4;
+      font-size: 12px;
+    }
+
+    textarea,
+    input[type="number"],
+    input[type="text"] {
+      width: 100%;
+      border: 1px solid rgba(190, 230, 195, .2);
+      border-radius: 10px;
+      outline: none;
+      color: var(--ink);
+      background: rgba(0, 12, 14, .46);
+      font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    textarea {
+      min-height: 250px;
+      padding: 12px;
+      resize: vertical;
+    }
+
+    input[type="number"],
+    input[type="text"] {
+      padding: 10px 11px;
+    }
+
+    textarea:focus,
+    input:focus {
+      border-color: rgba(159, 226, 188, .7);
+      box-shadow: 0 0 0 3px rgba(159, 226, 188, .08);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .range-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--mint);
+    }
+
+    .range-value {
+      min-width: 34px;
+      color: var(--mint);
+      font: 12px ui-monospace, monospace;
+      text-align: right;
+    }
+
+    .cell-count-wrap {
+      display: grid;
+      grid-template-columns: 1fr 78px;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cell-count-wrap input[type="number"] {
+      width: 78px;
+      padding: 6px 8px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+    button {
+      border: 1px solid rgba(190, 230, 195, .22);
+      border-radius: 9px;
+      padding: 10px 13px;
+      color: var(--ink);
+      background: rgba(117, 180, 145, .1);
+      cursor: pointer;
+      font: 600 12px inherit;
+      transition: .2s ease;
+    }
+
+    button:hover,
+    button:focus-visible {
+      border-color: rgba(246, 201, 103, .75);
+      background: rgba(246, 201, 103, .13);
+      outline: none;
+    }
+
+    button.primary {
+      color: #14251e;
+      border-color: transparent;
+      background: linear-gradient(135deg, #f6cf79, #a9e4bc);
+    }
+
+    .status {
+      min-height: 20px;
+      margin: 12px 0 0;
+      color: var(--danger);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .status.ok {
+      color: var(--muted);
+    }
+
+    .info {
+      margin-top: 19px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .info h2 {
+      margin: 0 0 12px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+    }
+
+    .stat {
+      padding: 10px 8px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: rgba(255, 255, 255, .025);
+    }
+
+    .stat b {
+      display: block;
+      color: var(--gold);
+      font: 18px Georgia, serif;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .selected {
+      margin-top: 13px;
+      padding: 12px;
+      min-height: 86px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(246, 201, 103, .12), rgba(159, 226, 188, .08));
+    }
+
+    .selected strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--gold);
+      font-family: Georgia, serif;
+      font-size: 16px;
+    }
+
+    .selected p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .node-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-top: 13px;
+    }
+
+    .node-list button {
+      padding: 8px 9px;
+      overflow: hidden;
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .node-list button.active {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(246, 201, 103, .1);
+    }
+
+    .hint {
+      margin: 18px 0 0;
+      color: #668477;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    main {
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+      background: #102925;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+
+    .map-title {
+      position: absolute;
+      top: 24px;
+      left: 28px;
+      pointer-events: none;
+      text-shadow: 0 2px 15px #05110f;
+    }
+
+    .map-title span {
+      display: block;
+      color: #b8d7c1;
+      font: 11px ui-monospace, monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      opacity: .85;
+    }
+
+    .map-title h2 {
+      margin: 4px 0 0;
+      color: #f0dfad;
+      font: 28px Georgia, serif;
+      font-weight: 500;
+    }
+
+    .map-tip {
+      position: absolute;
+      right: 25px;
+      bottom: 20px;
+      padding: 9px 12px;
+      border: 1px solid rgba(207, 232, 198, .18);
+      border-radius: 8px;
+      color: #bdd3c0;
+      background: rgba(4, 17, 17, .54);
+      font-size: 11px;
+      backdrop-filter: blur(8px);
+    }
+
+    @media (max-width: 850px) {
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 100vh;
+      }
+
+      aside {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      main {
+        height: 70vh;
+        min-height: 520px;
+      }
+    }
+
+    body.embedded { overflow: hidden; background: transparent; }
+    body.embedded .app { display: block; height: 100vh; min-height: 0; }
+    body.embedded aside, body.embedded .map-title, body.embedded .map-tip { display: none; }
+    body.embedded main { height: 100vh; min-height: 0; padding: 0; }
+    body.embedded #map { width: 100%; height: 100%; display: block; }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <aside>
+      <p class="eyebrow">考研 408 · 数据结构</p>
+      <h1>知识地图</h1>
+      <p class="intro">从左向右阅读学习路径。选择一个知识点，查看学习目标和关联路线。</p>
+
+      <label for="graphInput">知识点与先修关系（JSON）</label>
+      <textarea id="graphInput" spellcheck="false"></textarea>
+      <div class="row">
+        <div>
+          <label for="seed">布局种子</label>
+          <input id="seed" type="text" value="qingyun-42" />
+        </div>
+        <div>
+          <label for="detail">地形细节</label>
+          <div class="range-wrap"><input id="detail" type="range" min="1" max="5" value="3" /><span class="range-value"
+              id="detailValue">3</span></div>
+        </div>
+      </div>
+      <label for="cellCount">底图细分数量</label>
+      <div class="cell-count-wrap">
+        <input id="cellCountRange" type="range" min="300" max="22000" step="100" value="1160" />
+        <input id="cellCount" type="number" min="100" max="22000" step="100" value="1160" inputmode="numeric" />
+      </div>
+      <div class="actions"><button class="primary" id="generate">生成地图</button><button id="example">载入数据结构示例</button></div>
+      <div id="status" class="status" role="alert"></div>
+
+      <section class="info" aria-live="polite">
+        <h2>地图概览</h2>
+        <div class="stats">
+          <div class="stat"><b id="nodeCount">—</b><span>知识点</span></div>
+          <div class="stat"><b id="edgeCount">—</b><span>先修关系</span></div>
+          <div class="stat"><b id="layerCount">—</b><span>学习层级</span></div>
+        </div>
+        <div class="selected" id="selected"><strong>选择知识点</strong>
+          <p>查看学习目标与关联知识点。</p>
+        </div>
+        <div class="node-list" id="nodeList"></div>
+        <p class="hint">操作：拖拽移动地图 · 滚轮缩放 · 点击知识点查看关联 · 双击画布回到全图</p>
+      </section>
+    </aside>
+    <main>
+      <div class="map-title"><span>学习路径</span>
+        <h2>知识点与先修关系</h2>
+      </div>
+      <canvas id="map" role="img" aria-label="知识点及其先修关系图"></canvas>
+      <div class="map-tip">蓝线 · 前置知识　金线 · 后续知识</div>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      if (new URLSearchParams(window.location.search).get('embedded') === '1') document.body.classList.add('embedded');
+      const sample = {
+  "nodes": [
+    {
+      "id": "linear",
+      "label": "线性表",
+      "type": "概念",
+      "description": "区分逻辑结构与存储结构。",
+      "difficulty": 1
+    },
+    {
+      "id": "array",
+      "label": "顺序表",
+      "type": "结构",
+      "description": "插入一个元素，数一数需要移动多少个元素。",
+      "difficulty": 2
+    },
+    {
+      "id": "linked",
+      "label": "链表",
+      "type": "结构",
+      "description": "画出插入前后的指针，分别检查表头和表尾。",
+      "difficulty": 2
+    },
+    {
+      "id": "stack",
+      "label": "栈",
+      "type": "结构",
+      "description": "根据入栈顺序，手推一组可行的出栈序列。",
+      "difficulty": 2
+    },
+    {
+      "id": "queue",
+      "label": "队列",
+      "type": "结构",
+      "description": "用循环数组实现队列，说明如何区分队满和队空。",
+      "difficulty": 2
+    },
+    {
+      "id": "tree",
+      "label": "二叉树",
+      "type": "结构",
+      "description": "用指针表示左右孩子，画出一棵二叉树。",
+      "difficulty": 3
+    },
+    {
+      "id": "dfs",
+      "label": "非递归中序遍历",
+      "type": "应用",
+      "description": "用栈记录待访问结点，手推一次中序遍历。",
+      "difficulty": 4
+    },
+    {
+      "id": "bfs",
+      "label": "层序遍历",
+      "type": "应用",
+      "description": "用队列逐层访问结点，写出每轮出队后的队列内容。",
+      "difficulty": 3
+    }
+  ],
+  "edges": [
+    [
+      "linear",
+      "array"
+    ],
+    [
+      "linear",
+      "linked"
+    ],
+    [
+      "array",
+      "stack"
+    ],
+    [
+      "array",
+      "queue"
+    ],
+    [
+      "linked",
+      "tree"
+    ],
+    [
+      "tree",
+      "dfs"
+    ],
+    [
+      "stack",
+      "dfs"
+    ],
+    [
+      "tree",
+      "bfs"
+    ],
+    [
+      "queue",
+      "bfs"
+    ]
+  ]
+};
+      const input = document.getElementById('graphInput');
+      const canvas = document.getElementById('map');
+      const ctx = canvas.getContext('2d');
+      const status = document.getElementById('status');
+      const seedInput = document.getElementById('seed');
+      const detailInput = document.getElementById('detail');
+      const detailValue = document.getElementById('detailValue');
+      const cellCountRange = document.getElementById('cellCountRange');
+      const cellCountInput = document.getElementById('cellCount');
+      const selectedEl = document.getElementById('selected');
+      const nodeList = document.getElementById('nodeList');
+      const state = { graph: null, layout: null, terrain: null, selected: null, hover: null, zoom: 1, panX: 0, panY: 0, dragging: false, moved: false, lastX: 0, lastY: 0, dpr: 1, width: 0, height: 0 };
+      const TAU = Math.PI * 2;
+      input.value = JSON.stringify(sample, null, 2);
+
+      function hashString(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+      function randFactory(seed) { let a = hashString(seed) || 1; return () => { a = (Math.imul(a, 1664525) + 1013904223) >>> 0; return a / 4294967296; }; }
+      function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+      function lerp(a, b, t) { return a + (b - a) * t; }
+      function smooth(t) { return t * t * (3 - 2 * t); }
+      function noise2(x, y, seed) {
+        const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
+        const h = (ix, iy) => { let n = hashString(seed + ':' + ix + ':' + iy); return (n % 10000) / 10000; };
+        const a = h(xi, yi), b = h(xi + 1, yi), c = h(xi, yi + 1), d = h(xi + 1, yi + 1);
+        const u = smooth(xf), v = smooth(yf);
+        return lerp(lerp(a, b, u), lerp(c, d, u), v);
+      }
+      function fract(v) { return v - Math.floor(v); }
+      function pointInPolygon(x, y, polygon) {
+        let inside = false;
+        for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+          const a = polygon[i], b = polygon[j];
+          if ((a.y > y) !== (b.y > y) && x < (b.x - a.x) * (y - a.y) / (b.y - a.y) + a.x) inside = !inside;
+        }
+        return inside;
+      }
+      function clipCell(poly, nx, ny, mx, my) {
+        const out = []; const inside = p => (p.x - mx) * nx + (p.y - my) * ny <= 0;
+        for (let i = 0; i < poly.length; i++) { const a = poly[i], b = poly[(i + 1) % poly.length], ia = inside(a), ib = inside(b); if (ia) out.push(a); if (ia !== ib) { const da = (a.x - mx) * nx + (a.y - my) * ny, db = (b.x - mx) * nx + (b.y - my) * ny, t = da / (da - db); out.push({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t }); } }
+        return out;
+      }
+      function buildDelaunayMesh(sites, width, height) {
+        const pad = Math.max(width, height) * 8, superSites = [{ x: width / 2 - pad, y: height / 2 + pad }, { x: width / 2, y: height / 2 - pad }, { x: width / 2 + pad, y: height / 2 + pad }];
+        const points = superSites.concat(sites); const circumcircle = tri => { const a = points[tri[0]], b = points[tri[1]], c = points[tri[2]], d = 2 * (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)); if (Math.abs(d) < 1e-9) return { x: 0, y: 0, r2: -1 }; const ax = a.x * a.x + a.y * a.y, bx = b.x * b.x + b.y * b.y, cx = c.x * c.x + c.y * c.y, x = (ax * (b.y - c.y) + bx * (c.y - a.y) + cx * (a.y - b.y)) / d, y = (ax * (c.x - b.x) + bx * (a.x - c.x) + cx * (b.x - a.x)) / d; return { x, y, r2: (x - a.x) ** 2 + (y - a.y) ** 2 }; };
+        let triangles = [[0, 1, 2]];
+        sites.forEach((_, siteIndex) => { const pointIndex = siteIndex + 3, p = points[pointIndex], bad = triangles.filter(tri => { const circle = circumcircle(tri); return circle.r2 >= 0 && (p.x - circle.x) ** 2 + (p.y - circle.y) ** 2 <= circle.r2 + 1e-7; }); const edgeCounts = new Map(); bad.forEach(tri => [[tri[0], tri[1]], [tri[1], tri[2]], [tri[2], tri[0]]].forEach(edge => { const key = edge[0] < edge[1] ? edge.join(':') : [edge[1], edge[0]].join(':'); const record = edgeCounts.get(key) || { edge, count: 0 }; record.count++; edgeCounts.set(key, record); })); triangles = triangles.filter(tri => !bad.includes(tri)); edgeCounts.forEach(record => { if (record.count === 1) triangles.push([record.edge[0], record.edge[1], pointIndex]); }); });
+        triangles = triangles.filter(tri => tri.every(index => index >= 3)); const neighbors = sites.map(() => new Set()); const centers = triangles.map(circumcircle); triangles.forEach(tri => { for (let i = 0; i < 3; i++) for (let j = i + 1; j < 3; j++) { const a = tri[i] - 3, b = tri[j] - 3; neighbors[a].add(b); neighbors[b].add(a); } }); const polygons = sites.map(() => []); triangles.forEach((tri, i) => tri.forEach(index => polygons[index - 3].push(centers[i]))); const cells = sites.map((site, i) => { const poly = polygons[i].sort((a, b) => Math.atan2(a.y - site.y, a.x - site.x) - Math.atan2(b.y - site.y, b.x - site.x)).map(p => ({ x: clamp(p.x, 0, width), y: clamp(p.y, 0, height) })); return { site, poly: poly.length > 2 ? poly : [{ x: site.x - 2, y: site.y - 2 }, { x: site.x + 2, y: site.y - 2 }, { x: site.x + 2, y: site.y + 2 }, { x: site.x - 2, y: site.y + 2 }] }; }); return { cells, neighbors };
+      }
+      function buildAdjacency(sites, width, height, useGridCells, gridCols, gridRows) {
+        const neighbors = sites.map(() => new Set());
+        if (useGridCells) {
+          sites.forEach((site, i) => { const col = i % gridCols, row = Math.floor(i / gridCols); for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { if (!dx && !dy) continue; const nc = col + dx, nr = row + dy; if (nc >= 0 && nc < gridCols && nr >= 0 && nr < gridRows) neighbors[i].add(nr * gridCols + nc); } });
+          return neighbors;
+        }
+        const bucketSize = Math.max(24, Math.sqrt((width * height) / Math.max(1, sites.length)) * 2.5);
+        const buckets = new Map(); const key = (x, y) => Math.floor(x / bucketSize) + ':' + Math.floor(y / bucketSize);
+        sites.forEach((site, i) => { const k = key(site.x, site.y); if (!buckets.has(k)) buckets.set(k, []); buckets.get(k).push(i); });
+        sites.forEach((site, i) => { const bx = Math.floor(site.x / bucketSize), by = Math.floor(site.y / bucketSize), candidates = []; for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) (buckets.get((bx + dx) + ':' + (by + dy)) || []).forEach(j => { if (j !== i) candidates.push(j); }); candidates.sort((a, b) => Math.hypot(sites[a].x - site.x, sites[a].y - site.y) - Math.hypot(sites[b].x - site.x, sites[b].y - site.y)); candidates.slice(0, 8).forEach(j => { neighbors[i].add(j); neighbors[j].add(i); }); });
+        return neighbors;
+      }
+      function parseGraph(raw) {
+        const data = JSON.parse(raw);
+        if (!data || !Array.isArray(data.nodes) || !Array.isArray(data.edges)) throw new Error('需要包含 nodes 和 edges 数组。');
+        const ids = new Set();
+        const nodes = data.nodes.map((n, i) => { if (!n || !n.id || ids.has(n.id)) throw new Error('节点 id 必须存在且唯一（第 ' + (i + 1) + ' 个节点有问题）。'); ids.add(n.id); const type = String(n.type || '知识点'); const fallbackDifficulty = type === '终点' ? 5 : type === '主峰' ? 4 : type === '关隘' ? 3 : 2; return { id: String(n.id), label: String(n.label || n.id), type, difficulty: clamp(Number(n.difficulty) || fallbackDifficulty, 1, 5), description: String(n.description || '暂未填写学习目标。') }; });
+        const edges = data.edges.map((e, i) => { if (!Array.isArray(e) || e.length !== 2 || !ids.has(e[0]) || !ids.has(e[1]) || e[0] === e[1]) throw new Error('第 ' + (i + 1) + ' 条边无效。'); return [String(e[0]), String(e[1])]; });
+        const indegree = new Map(nodes.map(n => [n.id, 0])); const out = new Map(nodes.map(n => [n.id, []]));
+        edges.forEach(([a, b]) => { indegree.set(b, indegree.get(b) + 1); out.get(a).push(b); });
+        const q = nodes.filter(n => indegree.get(n.id) === 0).map(n => n.id); let seen = 0;
+        while (q.length) { const id = q.shift(); seen++; out.get(id).forEach(next => { indegree.set(next, indegree.get(next) - 1); if (indegree.get(next) === 0) q.push(next); }); }
+        if (seen !== nodes.length) throw new Error('检测到环路：输入必须是 DAG。');
+        const incoming = new Map(nodes.map(n => [n.id, []]));
+        edges.forEach(([a, b]) => incoming.get(b).push(a));
+        return { nodes, edges, out, incoming };
+      }
+      function layoutGraph(graph, width, height, seed, terrain) {
+        const incoming = new Map(graph.nodes.map(n => [n.id, []]));
+        graph.edges.forEach(([a, b]) => incoming.get(b).push(a));
+        const rank = new Map();
+        const visit = id => { if (rank.has(id)) return rank.get(id); const parents = incoming.get(id); const r = parents.length ? Math.max(...parents.map(visit)) + 1 : 0; rank.set(id, r); return r; };
+        graph.nodes.forEach(n => visit(n.id));
+        const layers = [];[...rank.entries()].forEach(([id, r]) => { (layers[r] ||= []).push(id); });
+        const random = randFactory(seed + ':layout'); const marginX = Math.max(150, width * .16); const marginY = Math.max(145, height * .18); const maxRank = Math.max(1, layers.length - 1);
+        const widest = Math.max(1, ...layers.map(layer => layer.length));
+        width = Math.max(width, maxRank * 240 + marginX * 2);
+        height = Math.max(height, (widest - 1) * 150 + marginY * 2);
+        const pos = new Map();
+        layers.forEach((ids, rank) => {
+          ids.sort((a, b) => a.localeCompare(b));
+          ids.forEach((id, i) => {
+            const x = marginX + (width - 2 * marginX) * rank / maxRank;
+            const y = height / 2 + (i - (ids.length - 1) / 2) * 150;
+            const point = terrain ? terrain.snapHighPoint(x, y, 24) : { x, y };
+            pos.set(id, { x: point.x, y: point.y, rank });
+          });
+        });
+        const routes = new Map(); graph.edges.forEach(([a, b]) => { const p = pos.get(a), q = pos.get(b); routes.set(a + '>' + b, terrain && terrain.routeBetween ? terrain.routeBetween(p, q) : [p, q]); });
+        return { pos, layers, maxRank, routes, width, height };
+      }
+      function buildTerrain(width, height, detail, seed, requestedCellCount) {
+        const random = randFactory(seed + ':terrain'); const cx = width * .5, cy = height * .5, rx = width * .49, ry = height * .405;
+        const gaussian = (x, y, gx, gy, sx, sy, strength) => strength * Math.exp(-(((x - gx) / sx) ** 2 + ((y - gy) / sy) ** 2) * 1.35);
+        const segmentInfluence = (x, y, ax, ay, bx, by, width, strength) => { const dx = bx - ax, dy = by - ay, t = clamp(((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy), 0, 1); const px = ax + dx * t, py = ay + dy * t; return strength * Math.exp(-((x - px) ** 2 + (y - py) ** 2) / (width * width)); };
+        const heightAt = (x, y) => { const nx = (x - cx) / rx, ny = (y - cy) / ry; const coastNoise = (noise2(x / 260, y / 230, seed + ':coast-field') - .5) * .25; const coastDistance = Math.pow(Math.abs(nx), 2.25) + Math.pow(Math.abs(ny), 2.25) + coastNoise; const edge = clamp(1 - Math.pow(Math.max(0, coastDistance), .62), 0, 1); const left = gaussian(x, y, width * .22, height * .51, width * .3, height * .31, .45); const core = gaussian(x, y, width * .52, height * .48, width * .36, height * .3, .38); const right = gaussian(x, y, width * .79, height * .53, width * .3, height * .32, .48); const plateauWest = gaussian(x, y, width * .18, height * .3, width * .18, height * .16, .22); const plateauEast = gaussian(x, y, width * .82, height * .68, width * .2, height * .18, .2); const basinCenter = gaussian(x, y, width * .55, height * .56, width * .19, height * .14, .2); const basinSouth = gaussian(x, y, width * .42, height * .78, width * .17, height * .11, .16); const ridgeWest = segmentInfluence(x, y, width * .12, height * .25, width * .42, height * .72, width * .055, .34); const ridgeCentral = segmentInfluence(x, y, width * .35, height * .72, width * .54, height * .18, width * .05, .31); const ridgeEast = segmentInfluence(x, y, width * .56, height * .76, width * .9, height * .27, width * .055, .36); const ridgeNorth = segmentInfluence(x, y, width * .28, height * .24, width * .73, height * .2, width * .045, .2); const troughNorthWest = gaussian(x, y, width * .35, height * .12, width * .18, height * .08, .34); const troughNorthEast = gaussian(x, y, width * .78, height * .2, width * .15, height * .1, .28); const troughSouthWest = gaussian(x, y, width * .24, height * .86, width * .18, height * .09, .3); const troughSouthEast = gaussian(x, y, width * .7, height * .88, width * .22, height * .08, .3); const lowFrequency = noise2(x / 190, y / 190, seed + ':heightmap') * .16 + noise2(x / 72, y / 72, seed + ':detail') * .1; const relief = noise2(x / 28, y / 28, seed + ':relief') * .09; return clamp(edge * (.07 + left + core + right + plateauWest + plateauEast + ridgeWest + ridgeCentral + ridgeEast + ridgeNorth + lowFrequency + relief - basinCenter - basinSouth - troughNorthWest - troughNorthEast - troughSouthWest - troughSouthEast), 0, 1); };
+        const isLandPoint = (x, y) => heightAt(x, y) >= .13;
+        const moistureAt = (x, y) => clamp(.28 + noise2(x / 210, y / 210, seed + ':moisture') * .5 + noise2(x / 70, y / 70, seed + ':rainfall') * .22 + (1 - Math.abs(y / height - .5) * 1.7) * .12, 0, 1);
+        const island = []; const angularLobe = (angle, center, width, strength) => { let d = Math.atan2(Math.sin(angle - center), Math.cos(angle - center)); return strength * Math.exp(-(d * d) / (width * width)); };
+        for (let i = 0; i < 300; i++) { const a = i / 300 * TAU; const coastNoise = noise2(Math.cos(a) * 2.35, Math.sin(a) * 2.35, seed + ':coast') * .18 + noise2(Math.cos(a) * 7.5, Math.sin(a) * 7.5, seed + ':coast-detail') * .09; const rawShape = .84 + coastNoise + .12 * Math.sin(2 * a + .4) + .075 * Math.sin(3 * a - 1.1) + .045 * Math.sin(9 * a + 1.8) + angularLobe(a, 2.45, .33, .25) + angularLobe(a, -.65, .4, .2) + angularLobe(a, .18, .24, .16) + angularLobe(a, -2.7, .2, .13) - angularLobe(a, -2.05, .34, .22) - angularLobe(a, 1.18, .28, .2) - angularLobe(a, -.05, .18, .12); const shape = clamp(rawShape, .58, .995); island.push({ x: cx + Math.cos(a) * rx * shape, y: cy + Math.sin(a) * ry * shape }); }
+        const sites = []; const siteCount = clamp(Number(requestedCellCount) || 1160, 100, 22000); const useGridCells = siteCount > 5000; const gridCols = useGridCells ? Math.ceil(Math.sqrt(siteCount * width / height)) : 0; const gridRows = useGridCells ? Math.ceil(siteCount / gridCols) : 0;
+        for (let i = 0; i < siteCount; i++) { let x, y; if (useGridCells) { const col = i % gridCols, row = Math.floor(i / gridCols), cw = width / gridCols, ch = height / gridRows; x = (col + .2 + random() * .6) * cw; y = (row + .2 + random() * .6) * ch; } else { x = width * (.025 + random() * .95); y = height * (.025 + random() * .95); } const h = heightAt(x, y); sites.push({ x, y, h, moisture: moistureAt(x, y) }); }
+        const mesh = useGridCells ? { cells: sites.map((site, i) => { const col = i % gridCols, row = Math.floor(i / gridCols), cw = width / gridCols, ch = height / gridRows; return { site, poly: [{ x: col * cw, y: row * ch }, { x: (col + 1) * cw, y: row * ch }, { x: (col + 1) * cw, y: (row + 1) * ch }, { x: col * cw, y: (row + 1) * ch }] }; }), neighbors: buildAdjacency(sites, width, height, true, gridCols, gridRows) } : buildDelaunayMesh(sites, width, height);
+        const { cells, neighbors } = mesh;
+        const landSites = sites.filter(site => site.h >= .13 && isLandPoint(site.x, site.y));
+        const siteIndex = new Map(sites.map((site, i) => [site, i])); const flowTo = sites.map(() => -1); sites.forEach((site, i) => { if (!isLandPoint(site.x, site.y)) return; let best = -1, bestScore = site.h; neighbors[i].forEach(j => { if (sites[j].h < bestScore) { bestScore = sites[j].h; best = j; } }); flowTo[i] = best; });
+        const accumulation = sites.map(() => 1); sites.slice().sort((a, b) => b.h - a.h).forEach(site => { const i = siteIndex.get(site), next = flowTo[i]; if (next >= 0) accumulation[next] += accumulation[i]; });
+        const isInterior = site => site.x > width * .08 && site.x < width * .92 && site.y > height * .08 && site.y < height * .92;
+        const riverSources = landSites.filter(site => { const i = siteIndex.get(site); const hasHigherNeighbor = [...neighbors[i]].some(j => sites[j].h > site.h + .035); return isInterior(site) && site.h > .42 && hasHigherNeighbor && accumulation[i] >= Math.max(4, siteCount / 2400); }).sort((a, b) => accumulation[siteIndex.get(b)] - accumulation[siteIndex.get(a)]);
+        const rivers = []; const usedSources = [];
+        riverSources.forEach(source => { if (rivers.length >= 24 + detail * 6 || usedSources.some(other => Math.hypot(other.x - source.x, other.y - source.y) < 55)) return; usedSources.push(source); const path = []; let current = siteIndex.get(source); for (let step = 0; current >= 0 && step < 220; step++) { const site = sites[current]; if (!isLandPoint(site.x, site.y) || site.h < .16) break; path.push({ x: site.x, y: site.y }); current = flowTo[current]; } if (path.length >= 6) rivers.push(path); });
+        function snapHighPoint(x, y, radius) { const startInside = isLandPoint(x, y); let best = { x, y, v: startInside ? heightAt(x, y) : -1 }; for (let i = 0; i < 42; i++) { const a = random() * TAU, r = Math.sqrt(random()) * radius, px = clamp(x + Math.cos(a) * r, 25, width - 25), py = clamp(y + Math.sin(a) * r, 25, height - 25), v = isLandPoint(px, py) ? heightAt(px, py) : -1; if (v > best.v) best = { x: px, y: py, v }; } return best; }
+        function routeBetween(start, end) { const nearest = point => sites.reduce((best, site, i) => Math.hypot(site.x - point.x, site.y - point.y) < best.distance ? { i, distance: Math.hypot(site.x - point.x, site.y - point.y) } : best, { i: 0, distance: Infinity }).i; const startIndex = nearest(start), endIndex = nearest(end), open = [startIndex], cameFrom = new Map(), g = new Map([[startIndex, 0]]), f = new Map([[startIndex, Math.hypot(sites[startIndex].x - sites[endIndex].x, sites[startIndex].y - sites[endIndex].y)]]); while (open.length) { open.sort((a, b) => f.get(a) - f.get(b)); const current = open.shift(); if (current === endIndex) { const path = []; let node = current; while (node !== undefined) { path.push({ x: sites[node].x, y: sites[node].y }); node = cameFrom.get(node); } path.reverse(); if (path.length === 1) return [{ x: start.x, y: start.y }, { x: end.x, y: end.y }]; path[0] = { x: start.x, y: start.y }; path[path.length - 1] = { x: end.x, y: end.y }; return path; } neighbors[current].forEach(next => { const slope = Math.abs(sites[next].h - sites[current].h); const mountainPenalty = Math.max(0, sites[next].h - .64) * 9; const water = isLandPoint(sites[next].x, sites[next].y) && sites[next].h >= .13 ? 0 : 12; const tentative = g.get(current) + Math.hypot(sites[next].x - sites[current].x, sites[next].y - sites[current].y) * (1 + slope * 5 + mountainPenalty) + water; if (tentative < (g.get(next) ?? Infinity)) { cameFrom.set(next, current); g.set(next, tentative); f.set(next, tentative + Math.hypot(sites[next].x - sites[endIndex].x, sites[endIndex].y - sites[next].y)); if (!open.includes(next)) open.push(next); } }); } return [{ x: start.x, y: start.y }, { x: end.x, y: end.y }]; }
+        return { island, rivers, cells, sites, neighbors, flowTo, accumulation, routeBetween, seed, detail, heightAt, moistureAt, snapHighPoint, isLandPoint };
+      }
+      function resize() { const rect = canvas.getBoundingClientRect(); state.dpr = Math.min(2, window.devicePixelRatio || 1); state.width = rect.width; state.height = rect.height; canvas.width = Math.round(rect.width * state.dpr); canvas.height = Math.round(rect.height * state.dpr); ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0); if (state.graph) { fitView(); } }
+      const terrainLayer = document.createElement('canvas');
+      function generateWorld(graph, cells) {
+        const seed = seedInput.value;
+        const plan = layoutGraph(graph, state.width, state.height, seed);
+        state.terrain = buildTerrain(plan.width, plan.height, +detailInput.value, seed, cells);
+        state.layout = layoutGraph(graph, state.width, state.height, seed, state.terrain);
+        const scale = Math.min(state.dpr, 4096 / Math.max(plan.width, plan.height));
+        terrainLayer.width = Math.ceil(plan.width * scale);
+        terrainLayer.height = Math.ceil(plan.height * scale);
+        const layer = terrainLayer.getContext('2d');
+        layer.scale(terrainLayer.width / plan.width, terrainLayer.height / plan.height);
+        drawTerrain(layer, plan.width, plan.height);
+      }
+      function worldPoint(x, y) { return { x: (x - state.panX) / state.zoom, y: (y - state.panY) / state.zoom }; }
+      function draw() {
+        if (!state.graph || !state.layout || !state.terrain) return;
+        // The sea fills the viewport independently of the island's pan and zoom.
+        const sea = ctx.createLinearGradient(0, 0, state.width, state.height);
+        sea.addColorStop(0, '#6f91bd'); sea.addColorStop(.5, '#557ba8'); sea.addColorStop(1, '#3e628f');
+        ctx.fillStyle = sea; ctx.fillRect(0, 0, state.width, state.height);
+        ctx.save(); ctx.translate(state.panX, state.panY); ctx.scale(state.zoom, state.zoom);
+        ctx.drawImage(terrainLayer, 0, 0, state.layout.width, state.layout.height); drawRoads(); drawNodes(); ctx.restore();
+        if (state.hover && state.hover.screen) drawTooltip(state.hover.screen.x, state.hover.screen.y, state.hover.node);
+      }
+      function drawTerrain(ctx, w, h) {
+        const { island, detail, seed, isLandPoint } = state.terrain;
+        const isLand = site => site.h >= .13 && isLandPoint(site.x, site.y);
+        const colorForSite = site => { const v = site.h, m = site.moisture; if (v < .27) return [63, 125, 114]; if (v > .95) return m > .55 ? [232, 235, 228] : [176, 166, 149]; if (v > .82) return m > .58 ? [193, 187, 143] : [140, 120, 98]; if (v > .66) return m > .58 ? [159, 170, 122] : [132, 113, 91]; if (m > .68) return [78, 156, 125]; if (m < .34) return [169, 143, 96]; return [111, 166, 112]; };
+        ctx.globalAlpha = .96; state.terrain.cells.filter(({ site }) => isLand(site)).forEach(({ site, poly }) => { const c = colorForSite(site); ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`; ctx.beginPath(); poly.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); ctx.closePath(); ctx.fill(); ctx.strokeStyle = 'rgba(40, 98, 91, .1)'; ctx.lineWidth = .42; ctx.stroke(); }); ctx.globalAlpha = 1;
+        ctx.globalCompositeOperation = 'screen'; ctx.strokeStyle = 'rgba(196, 213, 145, .08)'; ctx.lineWidth = 1; for (let k = 0; k < 8 + detail * 3; k++) { const yy = h * (.15 + k / (12 + detail * 2)); ctx.beginPath(); for (let x = -40; x < w + 40; x += 24) { const y = yy + Math.sin(x / 100 + k * 1.9) * 14 + noise2(x / 70, k, seed) * 18; x === -40 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke(); } ctx.globalCompositeOperation = 'source-over';
+        ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.lineCap = 'round'; state.terrain.rivers.forEach((river, i) => { const major = i % 3 === 0; ctx.strokeStyle = major ? 'rgba(52, 128, 170, .72)' : 'rgba(70, 155, 190, .5)'; ctx.lineWidth = major ? 2.6 : 1.35; ctx.beginPath(); let started = false; river.forEach((p, j) => { if (!isLandPoint(p.x, p.y)) return; if (!started) { ctx.moveTo(p.x, p.y); started = true; } else { const prev = river[j - 1]; ctx.quadraticCurveTo(prev.x, prev.y, (prev.x + p.x) / 2, (prev.y + p.y) / 2); } }); if (started) ctx.stroke(); }); ctx.restore();
+      }
+      function drawRoads() {
+        const pos = state.layout.pos; const selected = state.selected;
+        state.graph.edges.forEach(([a, b], i) => { const p = pos.get(a), q = pos.get(b), route = state.layout.routes.get(a + '>' + b) || [p, q]; const prior = selected?.ancestors.has(a) && selected.ancestors.has(b); const active = prior || selected?.reachable.has(a) && selected.reachable.has(b); ctx.save(); ctx.lineCap = 'round'; ctx.strokeStyle = active ? 'rgba(193, 118, 53, .62)' : 'rgba(74, 61, 48, .62)'; ctx.lineWidth = active ? 8 : 6; ctx.beginPath(); route.forEach((point, j) => j ? ctx.lineTo(point.x, point.y) : ctx.moveTo(point.x, point.y)); ctx.stroke(); ctx.strokeStyle = prior ? '#80ddff' : active ? 'rgba(247, 205, 102, .95)' : 'rgba(224, 190, 116, .82)'; ctx.lineWidth = active ? 2.4 : 1.8; ctx.setLineDash([10, 8]); ctx.beginPath(); route.forEach((point, j) => j ? ctx.lineTo(point.x, point.y) : ctx.moveTo(point.x, point.y)); ctx.stroke(); ctx.restore(); });
+      }
+      function drawNodes() {
+        const pos = state.layout.pos; state.graph.nodes.forEach(node => { const p = pos.get(node.id); const active = state.selected && state.selected.id === node.id; const near = state.hover && state.hover.node.id === node.id; ctx.save(); ctx.translate(p.x, p.y);
+          if (active || near) { ctx.fillStyle = active ? 'rgba(246, 201, 103, .28)' : 'rgba(244, 250, 246, .2)'; ctx.beginPath(); ctx.arc(0, 0, 13, 0, TAU); ctx.fill(); }
+          ctx.lineCap = 'round'; ctx.strokeStyle = active ? '#7d4b15' : '#173f39'; ctx.lineWidth = active ? 3.5 : 3;
+          ctx.beginPath(); ctx.moveTo(0, 4); ctx.lineTo(0, -27); ctx.stroke();
+          ctx.fillStyle = active ? '#f6c967' : near ? '#fff0bf' : '#f4faf6'; ctx.strokeStyle = active ? '#7d4b15' : '#215b51'; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.moveTo(1, -27); ctx.lineTo(20, -21); ctx.lineTo(1, -14); ctx.closePath(); ctx.fill(); ctx.stroke();
+          ctx.font = '600 16px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillStyle = active ? '#ffe7a2' : '#f0ead0'; ctx.shadowColor = 'rgba(0,0,0,.9)'; ctx.shadowBlur = 6; ctx.fillText(node.label, 0, 11); ctx.restore(); });
+      }
+      function drawTooltip(x, y, node) { const text = node.label + ' · ' + node.type; ctx.save(); ctx.font = '12px system-ui'; const width = ctx.measureText(text).width + 20; const tx = clamp(x + 14, 8, state.width - width - 8), ty = clamp(y - 40, 8, state.height - 35); ctx.fillStyle = 'rgba(5, 19, 18, .93)'; ctx.strokeStyle = 'rgba(246, 201, 103, .5)'; ctx.beginPath(); ctx.roundRect(tx, ty, width, 27, 7); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#f4dda1'; ctx.textBaseline = 'middle'; ctx.fillText(text, tx + 10, ty + 14); ctx.restore(); }
+      function connected(start, links) {
+        const found = new Set([start]), pending = [start];
+        while (pending.length) {
+          for (const next of links.get(pending.pop())) {
+            if (!found.has(next)) { found.add(next); pending.push(next); }
+          }
+        }
+        return found;
+      }
+      function selectNode(node) {
+        const ancestors = connected(node.id, state.graph.incoming);
+        const reachable = connected(node.id, state.graph.out);
+        state.selected = { ...node, ancestors, reachable };
+        window.parent.postMessage({ type: 'knowledge-map-node-selected', id: node.id }, '*');
+        const title = document.createElement('strong'), info = document.createElement('p');
+        title.textContent = node.label;
+        info.textContent = node.description + ' · 前置知识点 ' + (ancestors.size - 1) + ' 个（蓝线），后续知识点 ' + (reachable.size - 1) + ' 个（金线） · ' + node.type + ' · 难度 ' + node.difficulty + '/5';
+        selectedEl.replaceChildren(title, info);
+        [...nodeList.children].forEach(b => b.classList.toggle('active', b.dataset.id === node.id)); draw(); }
+      function fitView() { state.zoom = Math.min(1, state.width / state.layout.width, state.height / state.layout.height); state.panX = (state.width - state.layout.width * state.zoom) / 2; state.panY = (state.height - state.layout.height * state.zoom) / 2; draw(); }
+      function renderNodeList() { nodeList.innerHTML = ''; state.graph.nodes.forEach(n => { const b = document.createElement('button'); b.type = 'button'; b.textContent = n.label; b.dataset.id = n.id; b.addEventListener('click', () => selectNode(n)); nodeList.appendChild(b); }); }
+      function generate() { try { const graph = parseGraph(input.value); const requestedCellCount = clamp(Number(cellCountInput.value) || 1160, 100, 22000); cellCountInput.value = requestedCellCount; cellCountRange.value = clamp(requestedCellCount, +cellCountRange.min, +cellCountRange.max); state.graph = graph; generateWorld(graph, requestedCellCount); state.selected = null; state.hover = null; document.getElementById('nodeCount').textContent = graph.nodes.length; document.getElementById('edgeCount').textContent = graph.edges.length; document.getElementById('layerCount').textContent = state.layout.layers.length; selectedEl.innerHTML = '<strong>选择知识点</strong><p>查看学习目标与关联知识点。</p>'; status.textContent = '生成成功 · ' + requestedCellCount + ' 个 Voronoi 单元已完成。'; status.className = 'status ok'; renderNodeList(); fitView(); } catch (e) { status.textContent = e.message || 'JSON 解析失败。'; status.className = 'status'; } }
+
+      canvas.addEventListener('pointerdown', e => { canvas.setPointerCapture(e.pointerId); state.dragging = true; state.moved = false; state.lastX = e.offsetX; state.lastY = e.offsetY; });
+      canvas.addEventListener('pointermove', e => { const dx = e.offsetX - state.lastX, dy = e.offsetY - state.lastY; if (state.dragging) { if (Math.abs(dx) + Math.abs(dy) > 2) state.moved = true; state.panX += dx; state.panY += dy; state.lastX = e.offsetX; state.lastY = e.offsetY; } const wp = worldPoint(e.offsetX, e.offsetY); let found = null; if (state.layout) state.graph.nodes.some(n => { const p = state.layout.pos.get(n.id); if (Math.hypot(wp.x - p.x, wp.y - p.y) < 33) { found = n; return true; } return false; }); state.hover = found ? { node: found, screen: { x: e.offsetX, y: e.offsetY } } : null; canvas.style.cursor = found ? 'pointer' : state.dragging ? 'grabbing' : 'grab'; draw(); });
+      canvas.addEventListener('pointerup', e => { state.dragging = false; if (!state.moved && state.hover) selectNode(state.hover.node); });
+      canvas.addEventListener('pointerleave', () => { state.hover = null; if (!state.dragging) draw(); });
+      canvas.addEventListener('wheel', e => { e.preventDefault(); const before = worldPoint(e.offsetX, e.offsetY); state.zoom = clamp(state.zoom * (e.deltaY > 0 ? .9 : 1.1), Math.min(.55, state.width / state.layout.width, state.height / state.layout.height), 2.8); state.panX = e.offsetX - before.x * state.zoom; state.panY = e.offsetY - before.y * state.zoom; draw(); }, { passive: false });
+      window.addEventListener('message', event => {
+        if (!event.data || event.data.type !== 'aristotle-knowledge-map') return;
+        document.body.classList.add('embedded');
+        input.value = JSON.stringify(event.data.graph || sample, null, 2);
+        generate();
+      });
+      canvas.addEventListener('dblclick', fitView); document.getElementById('generate').addEventListener('click', generate); document.getElementById('example').addEventListener('click', () => { input.value = JSON.stringify(sample, null, 2); generate(); }); detailInput.addEventListener('input', () => { detailValue.textContent = detailInput.value; }); cellCountRange.addEventListener('input', () => { cellCountInput.value = cellCountRange.value; }); cellCountInput.addEventListener('input', () => { const value = clamp(Number(cellCountInput.value) || 100, +cellCountInput.min, +cellCountInput.max); cellCountRange.value = clamp(value, +cellCountRange.min, +cellCountRange.max); }); window.addEventListener('resize', resize); resize(); generate();
+    })();
+  </script>
+</body>
+
+</html>

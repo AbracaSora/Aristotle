@@ -13,7 +13,7 @@ const username = ref("student1"),
     <section class="login-intro">
       <div class="brand">
         <span class="brand-icon"><Layers :size="23" /></span
-        ><span>Aristotle<small>408 · LEARNING STUDIO</small></span>
+        ><span>Aristotle 408<small>LEARNING STUDIO</small></span>
       </div>
       <span class="eyebrow">ONE STEP AT A TIME</span>
       <h1>让每一步学习，<br />都有方向。</h1>
@@ -93,3 +93,8 @@ const username = ref("student1"),
     </section>
   </main>
 </template>
+
+<style scoped>
+.brand > span:last-child { white-space: nowrap; }
+.brand-icon { flex-shrink: 0; }
+</style>

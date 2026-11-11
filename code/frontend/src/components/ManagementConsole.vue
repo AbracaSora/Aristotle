@@ -47,19 +47,16 @@ const draft = ref(
   ),
 );
 const graphJSON = ref("");
-const modelStatus = ref<any>(null), modelCalls = ref<any[]>([]);
 const levels = Object.entries(levelLabels)
   .filter(([v]) => !["evaluate", "create"].includes(v))
   .map(([value, label]) => ({ value, label }));
 async function reload() {
-  const [j, a, live] = await Promise.all([
+  const [j, a] = await Promise.all([
     props.call<{ items: Job[] }>("/admin/jobs"),
     props.call<{ items: any[] }>("/admin/audit"),
-    props.call<any>("/model-status"),
   ]);
   jobs.value = j.items;
   audit.value = a.items;
-  modelStatus.value = live;
   if (props.user.role === "maintainer") {
     const [q, c, r] = await Promise.all([
       props.call<{ items: any[] }>("/admin/questions"),
@@ -76,7 +73,6 @@ async function reload() {
     ]);
     settings.value = s.settings;
     users.value = u.items;
-    modelCalls.value = (await props.call<{items:any[]}>("/admin/model-calls")).items;
   }
 }
 async function run(fn: () => Promise<void>) {
@@ -164,9 +160,8 @@ onMounted(() => run(reload));
     <NButton :loading="busy" @click="run(reload)">刷新工作台</NButton>
   </div>
   <NAlert type="info" class="notice"
-    >PDF 仍使用 mock；认知标注可明确选择真实模型或故障模拟。草稿 → 候选 → 人工核验答案、解析和标签 → 发布。模型不能自行发布内容。</NAlert
+    >PDF 与认知标注使用预设样例。草稿 → 候选 → 人工核验答案、解析和标签 → 发布。模型不能自行发布内容。</NAlert
   >
-  <section class="panel" v-if="modelStatus"><h3>真实模型服务</h3><p>生成：{{modelStatus.generation.configured ? modelStatus.generation.model : '尚未配置'}} · Embedding：{{modelStatus.embedding.configured ? modelStatus.embedding.model : '尚未配置'}} · {{modelStatus.enabled ? '允许显式调用' : '管理员已禁用'}}</p><p class="muted">服务地址与密钥仅在后端 .env 配置。没有配置时不伪造模型输出。</p><details v-if="user.role==='admin'"><summary>模型调用记录（不含问题或私人正文）</summary><p v-for="c in modelCalls" :key="c.id">{{c.purpose}} · {{c.model}} · {{c.status}} · 实际请求 {{c.external_calls}} · {{c.usage.total_tokens || 0}} tokens · {{c.error_code}}</p></details></section>
   <NAlert v-if="notice" type="info" class="notice">{{ notice }}</NAlert>
   <template v-if="user.role === 'maintainer'">
     <section class="panel">
@@ -220,7 +215,6 @@ onMounted(() => run(reload));
       <NButton :loading="busy" :disabled="!selected" @click="annotate"
         >建立 mock 标注任务</NButton
       >
-      <NButton type="primary" :disabled="busy || !selected || !modelStatus?.generation.configured || !modelStatus?.enabled" @click="run(async()=>{result = await call<Job>(`/admin/questions/${selected}/model-annotations`, 'POST');})">请求真实模型标注</NButton>
       <div v-if="result" class="flow-focus">
         <NTag>{{ result.status }}</NTag>
         <p>{{ result.result.error || result.notice }}</p>
