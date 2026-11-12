@@ -57,7 +57,6 @@ const labels: Record<string, string> = {
   <section class="panel workflow-panel">
     <div v-if="!compact" class="section-heading">
       <div>
-        <span class="eyebrow">YOUR LEARNING PATH</span>
         <h2>从诊断到学习，再用证据检验</h2>
       </div>
       <NTag type="success">规则编排 · 演示内容</NTag>

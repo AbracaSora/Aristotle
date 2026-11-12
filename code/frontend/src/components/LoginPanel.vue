@@ -13,9 +13,8 @@ const username = ref("student1"),
     <section class="login-intro">
       <div class="brand">
         <span class="brand-icon"><Layers :size="23" /></span
-        ><span>Aristotle 408<small>LEARNING STUDIO</small></span>
+        ><span>Aristotle 408</span>
       </div>
-      <span class="eyebrow">ONE STEP AT A TIME</span>
       <h1>让每一步学习，<br />都有方向。</h1>
       <p>
         从已有的知识出发，先诊断起点，再安排资料学习与练习，最后通过复测检验。
@@ -25,7 +24,6 @@ const username = ref("student1"),
       </p>
     </section>
     <section class="panel login-card">
-      <span class="eyebrow">YOUR LEARNING SPACE</span>
       <h2>进入学习空间</h2>
       <p class="muted">
         使用分配的账号登录，作答、资料和进度将保存在学习服务中。

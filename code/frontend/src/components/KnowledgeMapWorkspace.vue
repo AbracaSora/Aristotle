@@ -106,7 +106,7 @@ onBeforeUnmount(() => { generation++;window.removeEventListener("message", handl
 <template>
   <section class="learning-map" aria-label="知识地图与学习路径">
     <header class="map-heading">
-      <div><span class="eyebrow">YOUR KNOWLEDGE, CONNECTED</span><h1>看见联系，找到下一步。</h1><p>沿着知识的联系学习，用每一次作答检验理解。</p></div>
+      <div><h1>看见联系，找到下一步。</h1><p>沿着知识的联系学习，用每一次作答检验理解。</p></div>
       <div class="map-scope"><label for="map-scope">学习范围</label><NSelect id="map-scope" aria-label="学习范围" :value="picked || context?.selected_scope?.id" :options="scopes.map(s => ({label:s.title, value:s.id, disabled:!s.published}))" @update:value="picked = $event"/><NButton :disabled="loading || !picked || picked === context?.selected_scope?.id" @click="picked && emit('choose', picked)">确认范围</NButton></div>
     </header>
     <NAlert v-if="mapError" type="warning" role="alert">{{ mapError }} <NButton text @click="load">重新加载地图</NButton></NAlert>

@@ -182,7 +182,7 @@ const date = new Intl.DateTimeFormat("zh-CN", {
       <aside class="sidebar">
         <a href="#" class="brand" @click.prevent="page = homePage()"><span class="brand-icon">
             <Layers :size="23" />
-          </span><span>Aristotle <span class="brand-number">408</span><small>LEARNING STUDIO</small></span></a>
+          </span><span>Aristotle <span class="brand-number">408</span></span></a>
         <p class="nav-label">我的学习空间</p>
         <nav aria-label="主导航">
           <button v-for="item in user.role === 'student'
@@ -198,9 +198,6 @@ const date = new Intl.DateTimeFormat("zh-CN", {
           </button>
         </nav>
         <div class="sidebar-note">
-          <span class="eyebrow">ONE STEP AT A TIME</span>
-          <p>每一次理解，<br />都让知识更进一步。</p>
-          <span>从数据结构开始。</span>
         </div>
         <div class="profile">
           <span class="avatar">{{ user.username[0]?.toUpperCase() }}</span>
@@ -242,7 +239,7 @@ const date = new Intl.DateTimeFormat("zh-CN", {
             <div v-if="page !== '学习地图'" class="heading">
               <div>
                 <p class="eyebrow">
-                  {{ date }} <span> / YOUR LEARNING JOURNEY</span>
+                  {{ date }}
                 </p>
                 <h1>
                   {{ page === "学习地图" ? "让每一步学习，都有方向。" : page }}
