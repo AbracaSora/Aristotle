@@ -1,0 +1,535 @@
+{
+  "target_year": 2027,
+  "subject": "计算机组成原理",
+  "subject_code": "CO",
+  "checked_date": "2026-11-16",
+  "official_book": {
+    "publisher": "高等教育出版社",
+    "author": "教育部教育考试院",
+    "isbn": "9787040684513",
+    "url": "https://xuanshu.hep.com.cn/front/h5Mobile/bookDetails?bookId=6aa97a0be119ac9729dd09ea"
+  },
+  "working_transcription_url": "https://zhenti.beokayy.club/outline",
+  "verification_status": "public_transcription_mapped_official_full_text_pending",
+  "interpretation": "条目编号为本科目内的考纲定位符；简称自行概括。按2027公开转录建立映射，未逐页核验官方出版正文。",
+  "items": [
+    {
+      "id": "1.1.1",
+      "topic_summary": "整机组成",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "CO-system"
+      ]
+    },
+    {
+      "id": "1.1.2",
+      "topic_summary": "硬件连接",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "CO-system"
+      ]
+    },
+    {
+      "id": "1.1.3",
+      "topic_summary": "软硬件分工",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "CO-system"
+      ]
+    },
+    {
+      "id": "1.1.4",
+      "topic_summary": "存储程序运行",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "CO-system",
+        "CO-translation"
+      ]
+    },
+    {
+      "id": "1.2",
+      "topic_summary": "性能度量",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "CO-performance"
+      ]
+    },
+    {
+      "id": "2.1.1",
+      "topic_summary": "进位制互换",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CO-radix"
+      ]
+    },
+    {
+      "id": "2.1.2",
+      "topic_summary": "定点编码",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CO-radix"
+      ]
+    },
+    {
+      "id": "2.2.1",
+      "topic_summary": "运算部件",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CO-alu"
+      ]
+    },
+    {
+      "id": "2.2.2",
+      "topic_summary": "加减与状态位",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CO-addsub"
+      ]
+    },
+    {
+      "id": "2.2.3",
+      "topic_summary": "乘除电路",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CO-muldiv"
+      ]
+    },
+    {
+      "id": "2.3.1",
+      "topic_summary": "无符号运算",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CO-signed"
+      ]
+    },
+    {
+      "id": "2.3.2",
+      "topic_summary": "带符号运算",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CO-signed"
+      ]
+    },
+    {
+      "id": "2.4.1",
+      "topic_summary": "浮点格式",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CO-float-format"
+      ]
+    },
+    {
+      "id": "2.4.2",
+      "topic_summary": "浮点加减",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CO-float-ops"
+      ]
+    },
+    {
+      "id": "3.1",
+      "topic_summary": "存储类型",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-hierarchy"
+      ]
+    },
+    {
+      "id": "3.2",
+      "topic_summary": "存储层次",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-hierarchy"
+      ]
+    },
+    {
+      "id": "3.3.1",
+      "topic_summary": "SRAM",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-semiconductor"
+      ]
+    },
+    {
+      "id": "3.3.2",
+      "topic_summary": "DRAM",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-semiconductor"
+      ]
+    },
+    {
+      "id": "3.3.3",
+      "topic_summary": "Flash",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-semiconductor"
+      ]
+    },
+    {
+      "id": "3.4.1",
+      "topic_summary": "芯片与内存条",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-capacity"
+      ]
+    },
+    {
+      "id": "3.4.2",
+      "topic_summary": "多体组织",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-interleave"
+      ]
+    },
+    {
+      "id": "3.4.3",
+      "topic_summary": "主存连接",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-capacity"
+      ]
+    },
+    {
+      "id": "3.5.1",
+      "topic_summary": "磁盘",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-disk"
+      ]
+    },
+    {
+      "id": "3.5.2",
+      "topic_summary": "固态盘",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-ssd"
+      ]
+    },
+    {
+      "id": "3.6.1",
+      "topic_summary": "缓存原理",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-cache-map"
+      ]
+    },
+    {
+      "id": "3.6.2",
+      "topic_summary": "缓存映射",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-cache-map"
+      ]
+    },
+    {
+      "id": "3.6.3",
+      "topic_summary": "缓存替换",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-cache-policy"
+      ]
+    },
+    {
+      "id": "3.6.4",
+      "topic_summary": "缓存写策略",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-cache-policy"
+      ]
+    },
+    {
+      "id": "3.7.1",
+      "topic_summary": "虚存概念",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-virtual"
+      ]
+    },
+    {
+      "id": "3.7.2",
+      "topic_summary": "页表与快表",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-virtual"
+      ]
+    },
+    {
+      "id": "3.7.3",
+      "topic_summary": "分段",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-virtual"
+      ]
+    },
+    {
+      "id": "3.7.4",
+      "topic_summary": "段页结合",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CO-virtual"
+      ]
+    },
+    {
+      "id": "4.1",
+      "topic_summary": "机器指令概念",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CO-instruction"
+      ]
+    },
+    {
+      "id": "4.2",
+      "topic_summary": "指令字段",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CO-instruction"
+      ]
+    },
+    {
+      "id": "4.3",
+      "topic_summary": "寻址",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CO-addressing"
+      ]
+    },
+    {
+      "id": "4.4",
+      "topic_summary": "对齐与端序",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CO-endian"
+      ]
+    },
+    {
+      "id": "4.5",
+      "topic_summary": "指令集取舍",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CO-risc"
+      ]
+    },
+    {
+      "id": "4.6.1",
+      "topic_summary": "编译汇编链接",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CO-translation"
+      ]
+    },
+    {
+      "id": "4.6.2",
+      "topic_summary": "条件控制",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CO-branches"
+      ]
+    },
+    {
+      "id": "4.6.3",
+      "topic_summary": "循环控制",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CO-branches"
+      ]
+    },
+    {
+      "id": "4.6.4",
+      "topic_summary": "函数调用",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CO-calls"
+      ]
+    },
+    {
+      "id": "5.1",
+      "topic_summary": "处理器结构",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-registers"
+      ]
+    },
+    {
+      "id": "5.2",
+      "topic_summary": "指令执行步骤",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-cycle"
+      ]
+    },
+    {
+      "id": "5.3",
+      "topic_summary": "数据通路",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-datapath"
+      ]
+    },
+    {
+      "id": "5.4",
+      "topic_summary": "控制信号产生",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-control"
+      ]
+    },
+    {
+      "id": "5.5.1",
+      "topic_summary": "事件概念",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-exceptions"
+      ]
+    },
+    {
+      "id": "5.5.2",
+      "topic_summary": "事件分类",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-exceptions"
+      ]
+    },
+    {
+      "id": "5.5.3",
+      "topic_summary": "检测响应",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-exceptions"
+      ]
+    },
+    {
+      "id": "5.6.1",
+      "topic_summary": "流水概念",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-pipeline"
+      ]
+    },
+    {
+      "id": "5.6.2",
+      "topic_summary": "阶段实现",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-pipeline"
+      ]
+    },
+    {
+      "id": "5.6.3",
+      "topic_summary": "冒险处理",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-hazards"
+      ]
+    },
+    {
+      "id": "5.6.4",
+      "topic_summary": "多发射与动态流水",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-superscalar"
+      ]
+    },
+    {
+      "id": "5.7.1",
+      "topic_summary": "指令流数据流分类",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-parallel"
+      ]
+    },
+    {
+      "id": "5.7.2",
+      "topic_summary": "硬件线程",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-parallel"
+      ]
+    },
+    {
+      "id": "5.7.3",
+      "topic_summary": "多核",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-parallel"
+      ]
+    },
+    {
+      "id": "5.7.4",
+      "topic_summary": "共享存储多处理",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CO-parallel"
+      ]
+    },
+    {
+      "id": "6.1.1",
+      "topic_summary": "总线概念",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CO-bus"
+      ]
+    },
+    {
+      "id": "6.1.2",
+      "topic_summary": "组成与指标",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CO-bus"
+      ]
+    },
+    {
+      "id": "6.1.3",
+      "topic_summary": "事务时序",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CO-bus-timing"
+      ]
+    },
+    {
+      "id": "6.2.1",
+      "topic_summary": "接口结构",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CO-io-interface"
+      ]
+    },
+    {
+      "id": "6.2.2",
+      "topic_summary": "端口编址",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CO-io-interface"
+      ]
+    },
+    {
+      "id": "6.3.1",
+      "topic_summary": "查询I/O",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CO-polling"
+      ]
+    },
+    {
+      "id": "6.3.2",
+      "topic_summary": "中断I/O",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CO-interrupt-io"
+      ]
+    },
+    {
+      "id": "6.3.3",
+      "topic_summary": "DMA",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CO-dma"
+      ]
+    }
+  ],
+  "scope_notes": [
+    "考纲条目与知识节点允许多对多对应；节点题量达标不表示条目内所有细节或所有难度均已充分测量。",
+    "题目的syllabus_refs沿用所属知识节点的考纲定位，不代表单道题同时考查所有列出的条目。",
+    "本包提供纯文字单选题，不包括绘图、实验、程序设计及综合解答题。"
+  ]
+}

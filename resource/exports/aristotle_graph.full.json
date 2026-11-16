@@ -1,0 +1,1477 @@
+{
+  "version": "kew-408-text-v1",
+  "nodes": [
+    {
+      "id": "DS-basics",
+      "name": "数据、逻辑结构与存储结构",
+      "prerequisites": []
+    },
+    {
+      "id": "DS-adt",
+      "name": "抽象数据类型与基本操作",
+      "prerequisites": [
+        "DS-basics"
+      ]
+    },
+    {
+      "id": "DS-algorithm",
+      "name": "算法特性与正确性",
+      "prerequisites": [
+        "DS-basics"
+      ]
+    },
+    {
+      "id": "DS-complexity",
+      "name": "时间与空间复杂度",
+      "prerequisites": [
+        "DS-algorithm"
+      ]
+    },
+    {
+      "id": "DS-list",
+      "name": "线性表的逻辑性质",
+      "prerequisites": [
+        "DS-basics"
+      ]
+    },
+    {
+      "id": "DS-seqlist",
+      "name": "顺序表访问与更新",
+      "prerequisites": [
+        "DS-list"
+      ]
+    },
+    {
+      "id": "DS-singly",
+      "name": "单链表操作",
+      "prerequisites": [
+        "DS-list"
+      ]
+    },
+    {
+      "id": "DS-linked-variants",
+      "name": "双向、循环与静态链表",
+      "prerequisites": [
+        "DS-singly"
+      ]
+    },
+    {
+      "id": "DS-list-applications",
+      "name": "线性表合并、去重与选择",
+      "prerequisites": [
+        "DS-seqlist",
+        "DS-singly"
+      ]
+    },
+    {
+      "id": "DS-stack",
+      "name": "栈的规则与顺序栈",
+      "prerequisites": [
+        "DS-list"
+      ]
+    },
+    {
+      "id": "DS-linked-stack",
+      "name": "链栈实现",
+      "prerequisites": [
+        "DS-singly",
+        "DS-stack"
+      ]
+    },
+    {
+      "id": "DS-queue",
+      "name": "队列规则与循环队列",
+      "prerequisites": [
+        "DS-list"
+      ]
+    },
+    {
+      "id": "DS-linked-queue",
+      "name": "链队列实现",
+      "prerequisites": [
+        "DS-queue",
+        "DS-singly"
+      ]
+    },
+    {
+      "id": "DS-stack-applications",
+      "name": "括号、表达式与递归栈",
+      "prerequisites": [
+        "DS-stack"
+      ]
+    },
+    {
+      "id": "DS-queue-applications",
+      "name": "队列调度与层次处理",
+      "prerequisites": [
+        "DS-queue"
+      ]
+    },
+    {
+      "id": "DS-array-address",
+      "name": "多维数组地址计算",
+      "prerequisites": [
+        "DS-seqlist"
+      ]
+    },
+    {
+      "id": "DS-matrix-storage",
+      "name": "特殊矩阵压缩存储",
+      "prerequisites": [
+        "DS-array-address"
+      ]
+    },
+    {
+      "id": "DS-tree",
+      "name": "树的术语与计数",
+      "prerequisites": [
+        "DS-basics"
+      ]
+    },
+    {
+      "id": "DS-binary",
+      "name": "二叉树性质",
+      "prerequisites": [
+        "DS-tree"
+      ]
+    },
+    {
+      "id": "DS-binary-storage",
+      "name": "二叉树顺序与链式存储",
+      "prerequisites": [
+        "DS-binary"
+      ]
+    },
+    {
+      "id": "DS-traversal",
+      "name": "二叉树遍历与重建",
+      "prerequisites": [
+        "DS-binary-storage"
+      ]
+    },
+    {
+      "id": "DS-threaded",
+      "name": "线索二叉树",
+      "prerequisites": [
+        "DS-traversal"
+      ]
+    },
+    {
+      "id": "DS-tree-storage",
+      "name": "树的双亲、孩子与兄弟表示",
+      "prerequisites": [
+        "DS-tree"
+      ]
+    },
+    {
+      "id": "DS-forest-conversion",
+      "name": "树森林与二叉树转换",
+      "prerequisites": [
+        "DS-binary",
+        "DS-tree-storage"
+      ]
+    },
+    {
+      "id": "DS-forest-traversal",
+      "name": "树与森林遍历",
+      "prerequisites": [
+        "DS-forest-conversion",
+        "DS-traversal"
+      ]
+    },
+    {
+      "id": "DS-huffman",
+      "name": "哈夫曼构造与编码",
+      "prerequisites": [
+        "DS-binary"
+      ]
+    },
+    {
+      "id": "DS-union-find",
+      "name": "并查集与集合合并",
+      "prerequisites": [
+        "DS-tree"
+      ]
+    },
+    {
+      "id": "DS-heap",
+      "name": "堆的性质与优先队列",
+      "prerequisites": [
+        "DS-binary-storage"
+      ]
+    },
+    {
+      "id": "DS-graph",
+      "name": "图的基本性质",
+      "prerequisites": [
+        "DS-basics"
+      ]
+    },
+    {
+      "id": "DS-adj-matrix",
+      "name": "邻接矩阵",
+      "prerequisites": [
+        "DS-graph"
+      ]
+    },
+    {
+      "id": "DS-adj-list",
+      "name": "邻接表",
+      "prerequisites": [
+        "DS-graph"
+      ]
+    },
+    {
+      "id": "DS-cross-multilist",
+      "name": "十字链表与邻接多重表",
+      "prerequisites": [
+        "DS-adj-list"
+      ]
+    },
+    {
+      "id": "DS-dfs",
+      "name": "深度优先遍历",
+      "prerequisites": [
+        "DS-adj-list"
+      ]
+    },
+    {
+      "id": "DS-bfs",
+      "name": "广度优先遍历",
+      "prerequisites": [
+        "DS-adj-list",
+        "DS-queue"
+      ]
+    },
+    {
+      "id": "DS-mst",
+      "name": "最小生成树",
+      "prerequisites": [
+        "DS-graph"
+      ]
+    },
+    {
+      "id": "DS-shortest",
+      "name": "最短路径",
+      "prerequisites": [
+        "DS-graph"
+      ]
+    },
+    {
+      "id": "DS-topological",
+      "name": "DAG与拓扑排序",
+      "prerequisites": [
+        "DS-graph"
+      ]
+    },
+    {
+      "id": "DS-critical",
+      "name": "AOE关键路径",
+      "prerequisites": [
+        "DS-topological"
+      ]
+    },
+    {
+      "id": "DS-search-basics",
+      "name": "查找条件与平均查找长度",
+      "prerequisites": [
+        "DS-basics"
+      ]
+    },
+    {
+      "id": "DS-sequential-search",
+      "name": "顺序查找",
+      "prerequisites": [
+        "DS-search-basics"
+      ]
+    },
+    {
+      "id": "DS-block-search",
+      "name": "分块查找",
+      "prerequisites": [
+        "DS-sequential-search"
+      ]
+    },
+    {
+      "id": "DS-binary-search",
+      "name": "折半查找",
+      "prerequisites": [
+        "DS-search-basics",
+        "DS-seqlist"
+      ]
+    },
+    {
+      "id": "DS-bst",
+      "name": "二叉搜索树",
+      "prerequisites": [
+        "DS-binary",
+        "DS-search-basics"
+      ]
+    },
+    {
+      "id": "DS-avl",
+      "name": "AVL平衡二叉树",
+      "prerequisites": [
+        "DS-bst"
+      ]
+    },
+    {
+      "id": "DS-red-black",
+      "name": "红黑树",
+      "prerequisites": [
+        "DS-bst"
+      ]
+    },
+    {
+      "id": "DS-b-tree",
+      "name": "B树操作与高度",
+      "prerequisites": [
+        "DS-search-basics",
+        "DS-tree"
+      ]
+    },
+    {
+      "id": "DS-b-plus",
+      "name": "B+树结构与范围查询",
+      "prerequisites": [
+        "DS-b-tree"
+      ]
+    },
+    {
+      "id": "DS-hash",
+      "name": "散列与冲突处理",
+      "prerequisites": [
+        "DS-search-basics"
+      ]
+    },
+    {
+      "id": "DS-naive-match",
+      "name": "字符串与朴素模式匹配",
+      "prerequisites": [
+        "DS-seqlist"
+      ]
+    },
+    {
+      "id": "DS-kmp",
+      "name": "KMP与前缀函数",
+      "prerequisites": [
+        "DS-naive-match"
+      ]
+    },
+    {
+      "id": "DS-search-choice",
+      "name": "查找方法分析与选择",
+      "prerequisites": [
+        "DS-search-basics"
+      ]
+    },
+    {
+      "id": "DS-sort-basics",
+      "name": "排序、稳定性与代价",
+      "prerequisites": [
+        "DS-seqlist"
+      ]
+    },
+    {
+      "id": "DS-insertion",
+      "name": "直接插入排序",
+      "prerequisites": [
+        "DS-sort-basics"
+      ]
+    },
+    {
+      "id": "DS-binary-insertion",
+      "name": "折半插入排序",
+      "prerequisites": [
+        "DS-binary-search",
+        "DS-insertion"
+      ]
+    },
+    {
+      "id": "DS-bubble",
+      "name": "冒泡排序",
+      "prerequisites": [
+        "DS-sort-basics"
+      ]
+    },
+    {
+      "id": "DS-selection",
+      "name": "简单选择排序",
+      "prerequisites": [
+        "DS-sort-basics"
+      ]
+    },
+    {
+      "id": "DS-shell",
+      "name": "希尔排序",
+      "prerequisites": [
+        "DS-insertion"
+      ]
+    },
+    {
+      "id": "DS-quick",
+      "name": "快速排序",
+      "prerequisites": [
+        "DS-sort-basics"
+      ]
+    },
+    {
+      "id": "DS-heap-sort",
+      "name": "堆排序",
+      "prerequisites": [
+        "DS-heap",
+        "DS-sort-basics"
+      ]
+    },
+    {
+      "id": "DS-merge-sort",
+      "name": "二路归并排序",
+      "prerequisites": [
+        "DS-sort-basics"
+      ]
+    },
+    {
+      "id": "DS-radix",
+      "name": "基数排序",
+      "prerequisites": [
+        "DS-sort-basics"
+      ]
+    },
+    {
+      "id": "DS-external",
+      "name": "外部归并与I/O代价",
+      "prerequisites": [
+        "DS-merge-sort"
+      ]
+    },
+    {
+      "id": "DS-replacement",
+      "name": "置换选择与最佳归并",
+      "prerequisites": [
+        "DS-external",
+        "DS-heap"
+      ]
+    },
+    {
+      "id": "DS-sort-choice",
+      "name": "排序算法分析与选择",
+      "prerequisites": [
+        "DS-sort-basics"
+      ]
+    },
+    {
+      "id": "CO-system",
+      "name": "计算机层次与存储程序",
+      "prerequisites": []
+    },
+    {
+      "id": "CO-translation",
+      "name": "编译、汇编、链接与执行",
+      "prerequisites": [
+        "CO-system"
+      ]
+    },
+    {
+      "id": "CO-performance",
+      "name": "时钟、CPI与性能评价",
+      "prerequisites": [
+        "CO-system"
+      ]
+    },
+    {
+      "id": "CO-radix",
+      "name": "进位制与定点表示",
+      "prerequisites": []
+    },
+    {
+      "id": "CO-signed",
+      "name": "有符号与无符号整数",
+      "prerequisites": [
+        "CO-radix"
+      ]
+    },
+    {
+      "id": "CO-alu",
+      "name": "加法器与ALU",
+      "prerequisites": [
+        "CO-radix"
+      ]
+    },
+    {
+      "id": "CO-addsub",
+      "name": "补码加减与标志位",
+      "prerequisites": [
+        "CO-alu",
+        "CO-signed"
+      ]
+    },
+    {
+      "id": "CO-muldiv",
+      "name": "整数乘除及实现",
+      "prerequisites": [
+        "CO-alu",
+        "CO-signed"
+      ]
+    },
+    {
+      "id": "CO-float-format",
+      "name": "IEEE754浮点表示",
+      "prerequisites": [
+        "CO-radix",
+        "CO-signed"
+      ]
+    },
+    {
+      "id": "CO-float-ops",
+      "name": "浮点加减与舍入",
+      "prerequisites": [
+        "CO-addsub",
+        "CO-float-format"
+      ]
+    },
+    {
+      "id": "CO-hierarchy",
+      "name": "存储层次与局部性",
+      "prerequisites": [
+        "CO-system"
+      ]
+    },
+    {
+      "id": "CO-semiconductor",
+      "name": "SRAM、DRAM与Flash",
+      "prerequisites": [
+        "CO-hierarchy"
+      ]
+    },
+    {
+      "id": "CO-capacity",
+      "name": "主存芯片扩展与连接",
+      "prerequisites": [
+        "CO-radix",
+        "CO-semiconductor"
+      ]
+    },
+    {
+      "id": "CO-interleave",
+      "name": "多模块主存",
+      "prerequisites": [
+        "CO-capacity"
+      ]
+    },
+    {
+      "id": "CO-disk",
+      "name": "磁盘结构与访问时间",
+      "prerequisites": [
+        "CO-hierarchy"
+      ]
+    },
+    {
+      "id": "CO-ssd",
+      "name": "固态存储与擦写粒度",
+      "prerequisites": [
+        "CO-semiconductor"
+      ]
+    },
+    {
+      "id": "CO-cache-map",
+      "name": "Cache映射与地址划分",
+      "prerequisites": [
+        "CO-hierarchy",
+        "CO-radix"
+      ]
+    },
+    {
+      "id": "CO-cache-policy",
+      "name": "Cache替换与写策略",
+      "prerequisites": [
+        "CO-cache-map"
+      ]
+    },
+    {
+      "id": "CO-virtual",
+      "name": "页、段与TLB",
+      "prerequisites": [
+        "CO-hierarchy",
+        "CO-radix"
+      ]
+    },
+    {
+      "id": "CO-instruction",
+      "name": "指令语义与格式",
+      "prerequisites": [
+        "CO-radix",
+        "CO-system"
+      ]
+    },
+    {
+      "id": "CO-addressing",
+      "name": "指令寻址方式",
+      "prerequisites": [
+        "CO-instruction"
+      ]
+    },
+    {
+      "id": "CO-endian",
+      "name": "字节序与数据对齐",
+      "prerequisites": [
+        "CO-radix"
+      ]
+    },
+    {
+      "id": "CO-risc",
+      "name": "CISC与RISC",
+      "prerequisites": [
+        "CO-instruction"
+      ]
+    },
+    {
+      "id": "CO-branches",
+      "name": "选择循环的机器表示",
+      "prerequisites": [
+        "CO-addressing",
+        "CO-instruction"
+      ]
+    },
+    {
+      "id": "CO-calls",
+      "name": "过程调用与栈帧",
+      "prerequisites": [
+        "CO-branches"
+      ]
+    },
+    {
+      "id": "CO-registers",
+      "name": "CPU寄存器与功能",
+      "prerequisites": [
+        "CO-instruction",
+        "CO-system"
+      ]
+    },
+    {
+      "id": "CO-cycle",
+      "name": "指令周期与微操作",
+      "prerequisites": [
+        "CO-registers"
+      ]
+    },
+    {
+      "id": "CO-datapath",
+      "name": "数据通路与控制信号",
+      "prerequisites": [
+        "CO-alu",
+        "CO-cycle"
+      ]
+    },
+    {
+      "id": "CO-control",
+      "name": "硬布线与微程序控制",
+      "prerequisites": [
+        "CO-datapath"
+      ]
+    },
+    {
+      "id": "CO-exceptions",
+      "name": "异常、中断与响应",
+      "prerequisites": [
+        "CO-cycle"
+      ]
+    },
+    {
+      "id": "CO-pipeline",
+      "name": "流水线时序与吞吐",
+      "prerequisites": [
+        "CO-cycle"
+      ]
+    },
+    {
+      "id": "CO-hazards",
+      "name": "流水线冒险及处理",
+      "prerequisites": [
+        "CO-datapath",
+        "CO-pipeline"
+      ]
+    },
+    {
+      "id": "CO-superscalar",
+      "name": "多发射与动态调度",
+      "prerequisites": [
+        "CO-hazards"
+      ]
+    },
+    {
+      "id": "CO-parallel",
+      "name": "多处理器与多线程",
+      "prerequisites": [
+        "CO-system"
+      ]
+    },
+    {
+      "id": "CO-bus",
+      "name": "总线组成与带宽",
+      "prerequisites": [
+        "CO-radix",
+        "CO-system"
+      ]
+    },
+    {
+      "id": "CO-bus-timing",
+      "name": "总线事务与定时",
+      "prerequisites": [
+        "CO-bus"
+      ]
+    },
+    {
+      "id": "CO-io-interface",
+      "name": "I/O接口与端口编址",
+      "prerequisites": [
+        "CO-addressing",
+        "CO-bus"
+      ]
+    },
+    {
+      "id": "CO-polling",
+      "name": "程序查询I/O",
+      "prerequisites": [
+        "CO-io-interface"
+      ]
+    },
+    {
+      "id": "CO-interrupt-io",
+      "name": "中断I/O与屏蔽",
+      "prerequisites": [
+        "CO-exceptions",
+        "CO-io-interface"
+      ]
+    },
+    {
+      "id": "CO-dma",
+      "name": "DMA控制与传送",
+      "prerequisites": [
+        "CO-io-interface"
+      ]
+    },
+    {
+      "id": "OS-basics",
+      "name": "操作系统目标与功能",
+      "prerequisites": []
+    },
+    {
+      "id": "OS-evolution",
+      "name": "批处理、分时与实时系统",
+      "prerequisites": [
+        "OS-basics"
+      ]
+    },
+    {
+      "id": "OS-privilege",
+      "name": "用户态与内核态",
+      "prerequisites": [
+        "OS-basics"
+      ]
+    },
+    {
+      "id": "OS-traps",
+      "name": "中断异常的内核处理",
+      "prerequisites": [
+        "OS-privilege"
+      ]
+    },
+    {
+      "id": "OS-syscall",
+      "name": "系统调用接口",
+      "prerequisites": [
+        "OS-privilege",
+        "OS-traps"
+      ]
+    },
+    {
+      "id": "OS-loading",
+      "name": "程序链接与装入",
+      "prerequisites": [
+        "OS-basics"
+      ]
+    },
+    {
+      "id": "OS-address-space",
+      "name": "进程地址空间与映像",
+      "prerequisites": [
+        "OS-loading"
+      ]
+    },
+    {
+      "id": "OS-kernel",
+      "name": "内核结构与模块划分",
+      "prerequisites": [
+        "OS-basics",
+        "OS-privilege"
+      ]
+    },
+    {
+      "id": "OS-boot",
+      "name": "引导与启动过程",
+      "prerequisites": [
+        "OS-kernel"
+      ]
+    },
+    {
+      "id": "OS-virtualization",
+      "name": "虚拟机与隔离",
+      "prerequisites": [
+        "OS-kernel",
+        "OS-privilege"
+      ]
+    },
+    {
+      "id": "OS-process",
+      "name": "进程状态与控制",
+      "prerequisites": [
+        "OS-address-space"
+      ]
+    },
+    {
+      "id": "OS-threads",
+      "name": "线程模型与共享",
+      "prerequisites": [
+        "OS-process"
+      ]
+    },
+    {
+      "id": "OS-ipc",
+      "name": "共享内存、消息、管道与信号",
+      "prerequisites": [
+        "OS-process"
+      ]
+    },
+    {
+      "id": "OS-schedule-metrics",
+      "name": "调度目标与指标",
+      "prerequisites": [
+        "OS-process"
+      ]
+    },
+    {
+      "id": "OS-schedule-algorithms",
+      "name": "CPU调度算法与实现",
+      "prerequisites": [
+        "OS-schedule-metrics"
+      ]
+    },
+    {
+      "id": "OS-multicpu",
+      "name": "多处理机与线程调度",
+      "prerequisites": [
+        "OS-schedule-algorithms",
+        "OS-threads"
+      ]
+    },
+    {
+      "id": "OS-context",
+      "name": "上下文切换",
+      "prerequisites": [
+        "OS-privilege",
+        "OS-process"
+      ]
+    },
+    {
+      "id": "OS-mutex",
+      "name": "临界区、软件与硬件互斥",
+      "prerequisites": [
+        "OS-threads"
+      ]
+    },
+    {
+      "id": "OS-semaphore",
+      "name": "信号量同步",
+      "prerequisites": [
+        "OS-mutex"
+      ]
+    },
+    {
+      "id": "OS-condition",
+      "name": "条件变量与管程",
+      "prerequisites": [
+        "OS-mutex"
+      ]
+    },
+    {
+      "id": "OS-classic-sync",
+      "name": "生产消费、读写与哲学家",
+      "prerequisites": [
+        "OS-condition",
+        "OS-semaphore"
+      ]
+    },
+    {
+      "id": "OS-deadlock",
+      "name": "死锁条件、预防与避免",
+      "prerequisites": [
+        "OS-mutex",
+        "OS-process"
+      ]
+    },
+    {
+      "id": "OS-allocation",
+      "name": "地址转换与连续分配",
+      "prerequisites": [
+        "OS-address-space"
+      ]
+    },
+    {
+      "id": "OS-paging",
+      "name": "页式内存管理",
+      "prerequisites": [
+        "OS-allocation"
+      ]
+    },
+    {
+      "id": "OS-segmentation",
+      "name": "段式与段页式管理",
+      "prerequisites": [
+        "OS-allocation",
+        "OS-paging"
+      ]
+    },
+    {
+      "id": "OS-demand",
+      "name": "请求分页与缺页处理",
+      "prerequisites": [
+        "OS-paging",
+        "OS-traps"
+      ]
+    },
+    {
+      "id": "OS-frames",
+      "name": "页框分配与回收",
+      "prerequisites": [
+        "OS-demand"
+      ]
+    },
+    {
+      "id": "OS-replacement",
+      "name": "页面置换策略",
+      "prerequisites": [
+        "OS-frames"
+      ]
+    },
+    {
+      "id": "OS-mmap",
+      "name": "内存映射文件",
+      "prerequisites": [
+        "OS-demand"
+      ]
+    },
+    {
+      "id": "OS-working-set",
+      "name": "工作集、抖动与性能",
+      "prerequisites": [
+        "OS-replacement"
+      ]
+    },
+    {
+      "id": "OS-files",
+      "name": "文件语义与基本操作",
+      "prerequisites": [
+        "OS-basics"
+      ]
+    },
+    {
+      "id": "OS-inode",
+      "name": "文件元数据与索引结点",
+      "prerequisites": [
+        "OS-files"
+      ]
+    },
+    {
+      "id": "OS-file-layout",
+      "name": "文件逻辑与物理结构",
+      "prerequisites": [
+        "OS-files",
+        "OS-inode"
+      ]
+    },
+    {
+      "id": "OS-protection",
+      "name": "文件保护与权限",
+      "prerequisites": [
+        "OS-files",
+        "OS-privilege"
+      ]
+    },
+    {
+      "id": "OS-directory",
+      "name": "目录路径与链接",
+      "prerequisites": [
+        "OS-inode"
+      ]
+    },
+    {
+      "id": "OS-filesystem",
+      "name": "文件系统布局、VFS与挂载",
+      "prerequisites": [
+        "OS-directory",
+        "OS-file-layout"
+      ]
+    },
+    {
+      "id": "OS-free-space",
+      "name": "外存空闲空间管理",
+      "prerequisites": [
+        "OS-file-layout"
+      ]
+    },
+    {
+      "id": "OS-devices",
+      "name": "设备分类与接口",
+      "prerequisites": [
+        "OS-basics"
+      ]
+    },
+    {
+      "id": "OS-io-modes",
+      "name": "轮询、中断与DMA方式",
+      "prerequisites": [
+        "OS-devices",
+        "OS-traps"
+      ]
+    },
+    {
+      "id": "OS-io-layers",
+      "name": "I/O软件层次",
+      "prerequisites": [
+        "OS-devices",
+        "OS-kernel"
+      ]
+    },
+    {
+      "id": "OS-io-api",
+      "name": "阻塞、非阻塞与设备API",
+      "prerequisites": [
+        "OS-io-layers",
+        "OS-process"
+      ]
+    },
+    {
+      "id": "OS-buffer",
+      "name": "缓冲区管理",
+      "prerequisites": [
+        "OS-io-modes"
+      ]
+    },
+    {
+      "id": "OS-spool",
+      "name": "设备分配与SPOOLing",
+      "prerequisites": [
+        "OS-buffer",
+        "OS-devices"
+      ]
+    },
+    {
+      "id": "OS-driver",
+      "name": "设备驱动程序接口",
+      "prerequisites": [
+        "OS-io-layers",
+        "OS-io-modes"
+      ]
+    },
+    {
+      "id": "OS-disk-schedule",
+      "name": "磁盘组织与调度",
+      "prerequisites": [
+        "OS-devices"
+      ]
+    },
+    {
+      "id": "OS-ssd",
+      "name": "SSD特性与磨损均衡",
+      "prerequisites": [
+        "OS-devices"
+      ]
+    },
+    {
+      "id": "CN-basics",
+      "name": "网络组成、功能与分类",
+      "prerequisites": []
+    },
+    {
+      "id": "CN-performance",
+      "name": "时延、吞吐与带宽",
+      "prerequisites": [
+        "CN-basics"
+      ]
+    },
+    {
+      "id": "CN-layers",
+      "name": "分层、服务、接口与协议",
+      "prerequisites": [
+        "CN-basics"
+      ]
+    },
+    {
+      "id": "CN-models",
+      "name": "OSI与TCP/IP模型",
+      "prerequisites": [
+        "CN-layers"
+      ]
+    },
+    {
+      "id": "CN-signals",
+      "name": "信号、码元与传输速率",
+      "prerequisites": [
+        "CN-performance"
+      ]
+    },
+    {
+      "id": "CN-capacity",
+      "name": "奈奎斯特与香农界限",
+      "prerequisites": [
+        "CN-signals"
+      ]
+    },
+    {
+      "id": "CN-encoding",
+      "name": "编码与调制",
+      "prerequisites": [
+        "CN-signals"
+      ]
+    },
+    {
+      "id": "CN-switching",
+      "name": "交换方式、数据报与虚电路",
+      "prerequisites": [
+        "CN-basics",
+        "CN-performance"
+      ]
+    },
+    {
+      "id": "CN-media",
+      "name": "传输介质与物理接口",
+      "prerequisites": [
+        "CN-signals"
+      ]
+    },
+    {
+      "id": "CN-repeaters",
+      "name": "中继器与集线器",
+      "prerequisites": [
+        "CN-media"
+      ]
+    },
+    {
+      "id": "CN-framing",
+      "name": "链路服务与组帧",
+      "prerequisites": [
+        "CN-encoding",
+        "CN-layers"
+      ]
+    },
+    {
+      "id": "CN-detect",
+      "name": "奇偶与CRC检错",
+      "prerequisites": [
+        "CN-framing"
+      ]
+    },
+    {
+      "id": "CN-correct",
+      "name": "码距与纠错编码",
+      "prerequisites": [
+        "CN-detect"
+      ]
+    },
+    {
+      "id": "CN-stopwait",
+      "name": "停止等待与可靠传输",
+      "prerequisites": [
+        "CN-detect",
+        "CN-framing"
+      ]
+    },
+    {
+      "id": "CN-gbn",
+      "name": "后退N帧协议",
+      "prerequisites": [
+        "CN-stopwait"
+      ]
+    },
+    {
+      "id": "CN-sr",
+      "name": "选择重传协议",
+      "prerequisites": [
+        "CN-stopwait"
+      ]
+    },
+    {
+      "id": "CN-multiplex",
+      "name": "信道划分与多路复用",
+      "prerequisites": [
+        "CN-signals"
+      ]
+    },
+    {
+      "id": "CN-random-access",
+      "name": "ALOHA与载波侦听",
+      "prerequisites": [
+        "CN-framing",
+        "CN-performance"
+      ]
+    },
+    {
+      "id": "CN-token",
+      "name": "令牌与轮询接入",
+      "prerequisites": [
+        "CN-framing"
+      ]
+    },
+    {
+      "id": "CN-ethernet",
+      "name": "局域网与以太网",
+      "prerequisites": [
+        "CN-framing",
+        "CN-random-access"
+      ]
+    },
+    {
+      "id": "CN-wifi",
+      "name": "无线局域网与CSMA/CA",
+      "prerequisites": [
+        "CN-random-access"
+      ]
+    },
+    {
+      "id": "CN-vlan",
+      "name": "VLAN划分与标记",
+      "prerequisites": [
+        "CN-ethernet"
+      ]
+    },
+    {
+      "id": "CN-ppp",
+      "name": "广域链路与PPP",
+      "prerequisites": [
+        "CN-framing"
+      ]
+    },
+    {
+      "id": "CN-switch",
+      "name": "以太网交换机",
+      "prerequisites": [
+        "CN-ethernet"
+      ]
+    },
+    {
+      "id": "CN-internetwork",
+      "name": "网络互连与网络层",
+      "prerequisites": [
+        "CN-layers",
+        "CN-switching"
+      ]
+    },
+    {
+      "id": "CN-forwarding",
+      "name": "路由选择与最长前缀转发",
+      "prerequisites": [
+        "CN-internetwork"
+      ]
+    },
+    {
+      "id": "CN-sdn",
+      "name": "SDN控制与数据平面",
+      "prerequisites": [
+        "CN-forwarding"
+      ]
+    },
+    {
+      "id": "CN-congestion",
+      "name": "网络拥塞与控制",
+      "prerequisites": [
+        "CN-internetwork",
+        "CN-performance"
+      ]
+    },
+    {
+      "id": "CN-routing",
+      "name": "静态动态与路由算法",
+      "prerequisites": [
+        "CN-internetwork"
+      ]
+    },
+    {
+      "id": "CN-ipv4",
+      "name": "IPv4首部与分片",
+      "prerequisites": [
+        "CN-internetwork"
+      ]
+    },
+    {
+      "id": "CN-ip-address",
+      "name": "IPv4地址与NAT",
+      "prerequisites": [
+        "CN-ipv4"
+      ]
+    },
+    {
+      "id": "CN-subnet",
+      "name": "子网、CIDR与路由聚合",
+      "prerequisites": [
+        "CN-ip-address"
+      ]
+    },
+    {
+      "id": "CN-arp",
+      "name": "ARP与邻接地址解析",
+      "prerequisites": [
+        "CN-ethernet",
+        "CN-ip-address"
+      ]
+    },
+    {
+      "id": "CN-dhcp",
+      "name": "DHCP配置流程",
+      "prerequisites": [
+        "CN-ip-address"
+      ]
+    },
+    {
+      "id": "CN-icmp",
+      "name": "ICMP差错与诊断",
+      "prerequisites": [
+        "CN-ipv4"
+      ]
+    },
+    {
+      "id": "CN-ipv6",
+      "name": "IPv6首部与地址",
+      "prerequisites": [
+        "CN-ip-address",
+        "CN-ipv4"
+      ]
+    },
+    {
+      "id": "CN-rip",
+      "name": "距离向量与RIP",
+      "prerequisites": [
+        "CN-routing"
+      ]
+    },
+    {
+      "id": "CN-ospf",
+      "name": "链路状态与OSPF",
+      "prerequisites": [
+        "CN-routing"
+      ]
+    },
+    {
+      "id": "CN-bgp",
+      "name": "自治系统与BGP",
+      "prerequisites": [
+        "CN-routing"
+      ]
+    },
+    {
+      "id": "CN-multicast",
+      "name": "IP组播与组地址",
+      "prerequisites": [
+        "CN-ip-address"
+      ]
+    },
+    {
+      "id": "CN-mobile-ip",
+      "name": "移动IP与隧道",
+      "prerequisites": [
+        "CN-ip-address"
+      ]
+    },
+    {
+      "id": "CN-router",
+      "name": "路由器组成与转发表",
+      "prerequisites": [
+        "CN-forwarding"
+      ]
+    },
+    {
+      "id": "CN-ports",
+      "name": "传输层服务与端口",
+      "prerequisites": [
+        "CN-internetwork"
+      ]
+    },
+    {
+      "id": "CN-udp",
+      "name": "UDP报文与校验",
+      "prerequisites": [
+        "CN-detect",
+        "CN-ports"
+      ]
+    },
+    {
+      "id": "CN-tcp-stream",
+      "name": "TCP字节流、序号与可靠性",
+      "prerequisites": [
+        "CN-ports",
+        "CN-stopwait"
+      ]
+    },
+    {
+      "id": "CN-tcp-connect",
+      "name": "TCP连接建立与释放",
+      "prerequisites": [
+        "CN-tcp-stream"
+      ]
+    },
+    {
+      "id": "CN-tcp-window",
+      "name": "TCP流量控制",
+      "prerequisites": [
+        "CN-tcp-stream"
+      ]
+    },
+    {
+      "id": "CN-tcp-congestion",
+      "name": "TCP拥塞控制",
+      "prerequisites": [
+        "CN-congestion",
+        "CN-tcp-window"
+      ]
+    },
+    {
+      "id": "CN-app-model",
+      "name": "客户服务器与P2P",
+      "prerequisites": [
+        "CN-ports"
+      ]
+    },
+    {
+      "id": "CN-dns",
+      "name": "域名层次、服务器与解析",
+      "prerequisites": [
+        "CN-app-model",
+        "CN-udp"
+      ]
+    },
+    {
+      "id": "CN-ftp",
+      "name": "FTP控制与数据连接",
+      "prerequisites": [
+        "CN-app-model",
+        "CN-tcp-connect"
+      ]
+    },
+    {
+      "id": "CN-email",
+      "name": "邮件系统、MIME与收发协议",
+      "prerequisites": [
+        "CN-app-model",
+        "CN-tcp-stream"
+      ]
+    },
+    {
+      "id": "CN-web",
+      "name": "WWW、HTTP与缓存",
+      "prerequisites": [
+        "CN-app-model",
+        "CN-dns",
+        "CN-tcp-stream"
+      ]
+    }
+  ]
+}
