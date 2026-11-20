@@ -1,0 +1,553 @@
+{
+  "target_year": 2027,
+  "subject": "操作系统",
+  "subject_code": "OS",
+  "checked_date": "2026-11-16",
+  "official_book": {
+    "publisher": "高等教育出版社",
+    "author": "教育部教育考试院",
+    "isbn": "9787040684513",
+    "url": "https://xuanshu.hep.com.cn/front/h5Mobile/bookDetails?bookId=6aa97a0be119ac9729dd09ea"
+  },
+  "working_transcription_url": "https://zhenti.beokayy.club/outline",
+  "verification_status": "public_transcription_mapped_official_full_text_pending",
+  "interpretation": "条目编号为本科目内的考纲定位符；简称自行概括。按2027公开转录建立映射，未逐页核验官方出版正文。",
+  "items": [
+    {
+      "id": "1.1",
+      "topic_summary": "系统目标与功能",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "OS-basics"
+      ]
+    },
+    {
+      "id": "1.2",
+      "topic_summary": "系统演进",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "OS-evolution"
+      ]
+    },
+    {
+      "id": "1.3.1",
+      "topic_summary": "执行权限",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "OS-privilege"
+      ]
+    },
+    {
+      "id": "1.3.2",
+      "topic_summary": "事件处理",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "OS-traps"
+      ]
+    },
+    {
+      "id": "1.3.3",
+      "topic_summary": "系统调用",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "OS-syscall"
+      ]
+    },
+    {
+      "id": "1.3.4",
+      "topic_summary": "链接装入",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "OS-loading"
+      ]
+    },
+    {
+      "id": "1.3.5",
+      "topic_summary": "地址空间",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "OS-address-space"
+      ]
+    },
+    {
+      "id": "1.4",
+      "topic_summary": "内核组织",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "OS-kernel"
+      ]
+    },
+    {
+      "id": "1.5",
+      "topic_summary": "启动过程",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "OS-boot"
+      ]
+    },
+    {
+      "id": "1.6",
+      "topic_summary": "虚拟执行环境",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "OS-virtualization"
+      ]
+    },
+    {
+      "id": "2.1.1",
+      "topic_summary": "进程线程概念",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-process",
+        "OS-threads"
+      ]
+    },
+    {
+      "id": "2.1.2",
+      "topic_summary": "状态转换",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-process"
+      ]
+    },
+    {
+      "id": "2.1.3",
+      "topic_summary": "线程实现",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-threads"
+      ]
+    },
+    {
+      "id": "2.1.4",
+      "topic_summary": "控制组织",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-process",
+        "OS-threads"
+      ]
+    },
+    {
+      "id": "2.1.5",
+      "topic_summary": "进程通信",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-ipc"
+      ]
+    },
+    {
+      "id": "2.2.1",
+      "topic_summary": "调度概念",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-schedule-metrics"
+      ]
+    },
+    {
+      "id": "2.2.2",
+      "topic_summary": "调度指标",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-schedule-metrics"
+      ]
+    },
+    {
+      "id": "2.2.3",
+      "topic_summary": "实现与时机",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-schedule-algorithms",
+        "OS-multicpu"
+      ]
+    },
+    {
+      "id": "2.2.4",
+      "topic_summary": "调度策略",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-schedule-algorithms"
+      ]
+    },
+    {
+      "id": "2.2.5",
+      "topic_summary": "多处理机调度",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-multicpu"
+      ]
+    },
+    {
+      "id": "2.2.6",
+      "topic_summary": "执行现场切换",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-context"
+      ]
+    },
+    {
+      "id": "2.3.1",
+      "topic_summary": "同步互斥概念",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-mutex"
+      ]
+    },
+    {
+      "id": "2.3.2",
+      "topic_summary": "软硬件实现",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-mutex"
+      ]
+    },
+    {
+      "id": "2.3.3",
+      "topic_summary": "锁",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-mutex"
+      ]
+    },
+    {
+      "id": "2.3.4",
+      "topic_summary": "信号量",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-semaphore"
+      ]
+    },
+    {
+      "id": "2.3.5",
+      "topic_summary": "条件变量",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-condition"
+      ]
+    },
+    {
+      "id": "2.3.6",
+      "topic_summary": "经典同步模型",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-classic-sync"
+      ]
+    },
+    {
+      "id": "2.4.1",
+      "topic_summary": "死锁概念",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-deadlock"
+      ]
+    },
+    {
+      "id": "2.4.2",
+      "topic_summary": "预防",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-deadlock"
+      ]
+    },
+    {
+      "id": "2.4.3",
+      "topic_summary": "避免",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-deadlock"
+      ]
+    },
+    {
+      "id": "2.4.4",
+      "topic_summary": "检测恢复",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "OS-deadlock"
+      ]
+    },
+    {
+      "id": "3.1.1",
+      "topic_summary": "地址与保护",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "OS-allocation"
+      ]
+    },
+    {
+      "id": "3.1.2",
+      "topic_summary": "连续分区",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "OS-allocation"
+      ]
+    },
+    {
+      "id": "3.1.3",
+      "topic_summary": "分页",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "OS-paging"
+      ]
+    },
+    {
+      "id": "3.1.4",
+      "topic_summary": "分段",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "OS-segmentation"
+      ]
+    },
+    {
+      "id": "3.1.5",
+      "topic_summary": "段页结合",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "OS-segmentation"
+      ]
+    },
+    {
+      "id": "3.2.1",
+      "topic_summary": "虚存概念",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "OS-demand"
+      ]
+    },
+    {
+      "id": "3.2.2",
+      "topic_summary": "按需调页",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "OS-demand"
+      ]
+    },
+    {
+      "id": "3.2.3",
+      "topic_summary": "页框管理",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "OS-frames"
+      ]
+    },
+    {
+      "id": "3.2.4",
+      "topic_summary": "置换",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "OS-replacement"
+      ]
+    },
+    {
+      "id": "3.2.5",
+      "topic_summary": "文件映射",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "OS-mmap"
+      ]
+    },
+    {
+      "id": "3.2.6",
+      "topic_summary": "虚存性能",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "OS-working-set"
+      ]
+    },
+    {
+      "id": "4.1.1",
+      "topic_summary": "文件概念",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "OS-files"
+      ]
+    },
+    {
+      "id": "4.1.2",
+      "topic_summary": "元数据",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "OS-inode"
+      ]
+    },
+    {
+      "id": "4.1.3",
+      "topic_summary": "文件操作",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "OS-files"
+      ]
+    },
+    {
+      "id": "4.1.4",
+      "topic_summary": "权限保护",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "OS-protection"
+      ]
+    },
+    {
+      "id": "4.1.5",
+      "topic_summary": "逻辑组织",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "OS-file-layout"
+      ]
+    },
+    {
+      "id": "4.1.6",
+      "topic_summary": "块分配",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "OS-file-layout"
+      ]
+    },
+    {
+      "id": "4.2.1",
+      "topic_summary": "目录概念",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "OS-directory"
+      ]
+    },
+    {
+      "id": "4.2.2",
+      "topic_summary": "目录树",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "OS-directory"
+      ]
+    },
+    {
+      "id": "4.2.3",
+      "topic_summary": "目录操作",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "OS-directory"
+      ]
+    },
+    {
+      "id": "4.2.4",
+      "topic_summary": "链接语义",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "OS-directory"
+      ]
+    },
+    {
+      "id": "4.3.1",
+      "topic_summary": "文件系统布局",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "OS-filesystem"
+      ]
+    },
+    {
+      "id": "4.3.2",
+      "topic_summary": "空闲空间",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "OS-free-space"
+      ]
+    },
+    {
+      "id": "4.3.3",
+      "topic_summary": "统一文件接口",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "OS-filesystem"
+      ]
+    },
+    {
+      "id": "4.3.4",
+      "topic_summary": "挂载",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "OS-filesystem"
+      ]
+    },
+    {
+      "id": "5.1.1",
+      "topic_summary": "设备类型",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "OS-devices"
+      ]
+    },
+    {
+      "id": "5.1.2",
+      "topic_summary": "传输控制",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "OS-io-modes"
+      ]
+    },
+    {
+      "id": "5.1.3",
+      "topic_summary": "软件分层",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "OS-io-layers"
+      ]
+    },
+    {
+      "id": "5.1.4",
+      "topic_summary": "应用接口",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "OS-io-api"
+      ]
+    },
+    {
+      "id": "5.2.1",
+      "topic_summary": "缓冲",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "OS-buffer"
+      ]
+    },
+    {
+      "id": "5.2.2",
+      "topic_summary": "设备分配",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "OS-spool"
+      ]
+    },
+    {
+      "id": "5.2.3",
+      "topic_summary": "假脱机",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "OS-spool"
+      ]
+    },
+    {
+      "id": "5.2.4",
+      "topic_summary": "驱动接口",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "OS-driver"
+      ]
+    },
+    {
+      "id": "5.3.1",
+      "topic_summary": "磁盘管理",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "OS-disk-schedule"
+      ]
+    },
+    {
+      "id": "5.3.2",
+      "topic_summary": "固态盘管理",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "OS-ssd"
+      ]
+    }
+  ],
+  "scope_notes": [
+    "考纲条目与知识节点允许多对多对应；节点题量达标不表示条目内所有细节或所有难度均已充分测量。",
+    "题目的syllabus_refs沿用所属知识节点的考纲定位，不代表单道题同时考查所有列出的条目。",
+    "本包提供纯文字单选题，不包括绘图、实验、程序设计及综合解答题。"
+  ]
+}

@@ -1,0 +1,1305 @@
+{
+  "resource_validation": "passed",
+  "structural_checks": [
+    "unique_ids",
+    "unique_stems",
+    "unique_options",
+    "answer_membership",
+    "text_only",
+    "3_to_5_per_point",
+    "outline_reference_coverage",
+    "edge_references",
+    "edge_directions",
+    "required_dag",
+    "recommended_dag"
+  ],
+  "subjects": [
+    {
+      "subject": "数据结构",
+      "subject_code": "DS",
+      "directory": "data-structures",
+      "knowledge_points": 64,
+      "questions": 213,
+      "relations": 118,
+      "syllabus_items": 56,
+      "questions_per_point": {
+        "min": 3,
+        "max": 5
+      },
+      "canonical_sha256": {
+        "knowledge_points.jsonl": "2b7233f6ca9db2ea375d9fc9629c56b101cd84ed93314872f513945164a4cf07",
+        "questions.jsonl": "a1357d5db804414de445eb52f236b5fc4312553a3353e421b74ef52bf8e2849b",
+        "relations.jsonl": "eb2530e1ed0a6cc62d557bb13ec1c9b057da1be359578fbcc93d79c82aaa754b",
+        "syllabus.json": "0d132d8b35225285a7cb203c7699c01fa6d25ce610c741c5186856603dfdc4c4"
+      }
+    },
+    {
+      "subject": "计算机组成原理",
+      "subject_code": "CO",
+      "directory": "computer-organization",
+      "knowledge_points": 40,
+      "questions": 128,
+      "relations": 56,
+      "syllabus_items": 64,
+      "questions_per_point": {
+        "min": 3,
+        "max": 4
+      },
+      "canonical_sha256": {
+        "knowledge_points.jsonl": "4379942a5fe60be62c834fd8ecd84f015414cfb751322a995d0e6e202f98f676",
+        "questions.jsonl": "5d244d824518ccb90f2b5bb50b090f43243342083d8db02af8f0b676ef290556",
+        "relations.jsonl": "f2db70cef7c759b50db4a5c6f0c3c2ebf239ada48cd8f0e0a7d7fd284a78b0ec",
+        "syllabus.json": "59c0a427b278560ab48f76e23cf36e1468230a795465a0e7c493649b01a59d96"
+      }
+    },
+    {
+      "subject": "操作系统",
+      "subject_code": "OS",
+      "directory": "operating-systems",
+      "knowledge_points": 46,
+      "questions": 146,
+      "relations": 63,
+      "syllabus_items": 66,
+      "questions_per_point": {
+        "min": 3,
+        "max": 5
+      },
+      "canonical_sha256": {
+        "knowledge_points.jsonl": "be606c5b7b0a0b10efe6c5e27c1a3bc3bb33ec2265426cf1853ed045057cab25",
+        "questions.jsonl": "8a4974bdb0beaed4e18ede4c8cd44d0394fb6d99ff51f778d9cbd5252b27e96a",
+        "relations.jsonl": "5e07ff2dca46a49e661a51f6f23c1b3002c6c1f1d596ff49efe4a55d48178ba7",
+        "syllabus.json": "f57b531682e7407e96df11fdbd6a76ba85e9f661546b309803d4c3ced086ab02"
+      }
+    },
+    {
+      "subject": "计算机网络",
+      "subject_code": "CN",
+      "directory": "computer-networks",
+      "knowledge_points": 53,
+      "questions": 163,
+      "relations": 73,
+      "syllabus_items": 80,
+      "questions_per_point": {
+        "min": 3,
+        "max": 4
+      },
+      "canonical_sha256": {
+        "knowledge_points.jsonl": "443887ea67b3f452ed31c4f3defdc4f387c325618957e99c5bbf181c1558cb45",
+        "questions.jsonl": "8439c41968c50796684b2d82ceb150b34bfe26d096dc3dd2424148b124e021e3",
+        "relations.jsonl": "18ece7013a3f04188eae5b00574b9dad18ee7efa517c92261f9304308c3e3769",
+        "syllabus.json": "3dab938b3ea5e4a1692145180dbd01daf605f26ff8cbb516c8e714e6c8476e20"
+      }
+    }
+  ],
+  "total_knowledge_points": 203,
+  "total_questions": 650,
+  "total_relations": 325,
+  "coverage_summary": {
+    "points_with_3_to_5_questions": 203,
+    "points_with_three_questions_in_every_level": 0,
+    "missing_to_three_per_level": {
+      "remember": 595,
+      "understand": 392,
+      "apply": 380,
+      "analyze": 420
+    },
+    "note": "每点总题量与每个认知维度的题量是不同指标；逐点分布可通过--views-dir生成。"
+  },
+  "answer_checks": {
+    "status": "passed",
+    "checked_questions": 189,
+    "total_questions": 650,
+    "per_subject": {
+      "DS": 80,
+      "CO": 43,
+      "OS": 27,
+      "CN": 39
+    },
+    "scope": "独立计算和状态模拟；仅覆盖列出的题目，不代表全部定性答案及认知标签已经核验。",
+    "question_sha256": {
+      "DS": "a1357d5db804414de445eb52f236b5fc4312553a3353e421b74ef52bf8e2849b",
+      "CO": "5d244d824518ccb90f2b5bb50b090f43243342083d8db02af8f0b676ef290556",
+      "OS": "8a4974bdb0beaed4e18ede4c8cd44d0394fb6d99ff51f778d9cbd5252b27e96a",
+      "CN": "8439c41968c50796684b2d82ceb150b34bfe26d096dc3dd2424148b124e021e3"
+    },
+    "verifier_sha256": "b64e81025e68a4de87b68356568568d0c41dd83653ed7ef52b1b2d55c541fd15",
+    "fixture_sha256": "70eca78afc23b2f0698d44a6179294f675b5d7d9a837f41e4951fd45405a21bf",
+    "results": [
+      {
+        "question_id": "KEW-DS-adt-02",
+        "computed_answer": "{2,7}",
+        "method": "set difference",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-seqlist-01",
+        "computed_answer": "5",
+        "method": "enumerate shifted positions",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-seqlist-02",
+        "computed_answer": "260",
+        "method": "byte offset",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-list-applications-01",
+        "computed_answer": "(1,2,4,8,9)",
+        "method": "set union",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-list-applications-03",
+        "computed_answer": "3",
+        "method": "distinct values",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-stack-01",
+        "computed_answer": "1，8",
+        "method": "stack simulation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-stack-03",
+        "computed_answer": "3，1，2",
+        "method": "enumerate all legal stack orders",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-queue-01",
+        "computed_answer": "4",
+        "method": "circular queue count",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-queue-02",
+        "computed_answer": "1",
+        "method": "enumerate full-state rear positions",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-stack-applications-01",
+        "computed_answer": "2",
+        "method": "bracket depth simulation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-stack-applications-02",
+        "computed_answer": "ab-c*d+",
+        "method": "shunting-yard conversion",
+        "status": "passed"
+      },
+      {
+        "question_id": "DS-2024-02",
+        "computed_answer": "xyzu-*v/+",
+        "method": "shunting-yard conversion",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-array-address-01",
+        "computed_answer": "1052",
+        "method": "row-major offset",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-array-address-02",
+        "computed_answer": "214",
+        "method": "column-major offset",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-array-address-03",
+        "computed_answer": "1和3",
+        "method": "compare row/column strides",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-matrix-storage-01",
+        "computed_answer": "7",
+        "method": "enumerate lower-triangle storage",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-matrix-storage-02",
+        "computed_answer": "15",
+        "method": "full matrix minus stored triangular cells",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-matrix-storage-03",
+        "computed_answer": "16",
+        "method": "enumerate tridiagonal cells",
+        "status": "passed"
+      },
+      {
+        "question_id": "DS-2020-01",
+        "computed_answer": "22",
+        "method": "enumerate upper triangle by column with symmetry",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-tree-01",
+        "computed_answer": "17",
+        "method": "tree edge count",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-tree-02",
+        "computed_answer": "5",
+        "method": "degree sum identity",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-tree-03",
+        "computed_answer": "第5层",
+        "method": "edge depth plus one",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-binary-01",
+        "computed_answer": "7",
+        "method": "solve binary degree and node-count identities",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-binary-02",
+        "computed_answer": "15",
+        "method": "sum of layer capacities",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-binary-03",
+        "computed_answer": "5号结点",
+        "method": "enumerate complete-tree child indices",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-binary-storage-01",
+        "computed_answer": "6",
+        "method": "array parent index",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-binary-storage-03",
+        "computed_answer": "31",
+        "method": "simulate right-child indices",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-traversal-01",
+        "computed_answer": "A、B、D、C、E",
+        "method": "recursive traversal",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-traversal-02",
+        "computed_answer": "4",
+        "method": "locate postorder root in inorder",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-tree-storage-01",
+        "computed_answer": "1、0",
+        "method": "follow parent array",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-forest-traversal-01",
+        "computed_answer": "A、B、D、C",
+        "method": "ordered tree preorder",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-forest-traversal-02",
+        "computed_answer": "D、B、C、A",
+        "method": "ordered tree postorder",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-huffman-01",
+        "computed_answer": "0、10、110、111",
+        "method": "test all pairwise codeword prefixes",
+        "status": "passed"
+      },
+      {
+        "question_id": "DS-2019-03",
+        "computed_answer": "58",
+        "method": "full binary tree count",
+        "status": "passed"
+      },
+      {
+        "question_id": "DS-2021-05",
+        "computed_answer": "200",
+        "method": "priority-queue Huffman construction",
+        "status": "passed"
+      },
+      {
+        "question_id": "DS-2023-04",
+        "computed_answer": "2.5",
+        "method": "Huffman WPL divided by frequency",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-heap-01",
+        "computed_answer": "[10,7,9,2,3,8]",
+        "method": "max-heap sift up",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-heap-02",
+        "computed_answer": "[8,7,3,2]",
+        "method": "max-heap removal",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-graph-01",
+        "computed_answer": "14",
+        "method": "handshake identity",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-graph-02",
+        "computed_answer": "9",
+        "method": "each directed edge contributes one indegree",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-adj-matrix-01",
+        "computed_answer": "4",
+        "method": "symmetric matrix entries per edge",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-adj-list-01",
+        "computed_answer": "16",
+        "method": "undirected adjacency incidence count",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-dfs-01",
+        "computed_answer": "1、2、4、3",
+        "method": "DFS with sorted neighbors",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-bfs-01",
+        "computed_answer": "1、2、3、4、5",
+        "method": "BFS simulation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-bfs-02",
+        "computed_answer": "2",
+        "method": "unweighted distance",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-mst-01",
+        "computed_answer": "6",
+        "method": "enumerate all spanning trees",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-shortest-01",
+        "computed_answer": "6",
+        "method": "Bellman-Ford relaxation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-topological-01",
+        "computed_answer": "B、A、C、D",
+        "method": "validate precedence for every option",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-critical-01",
+        "computed_answer": "8",
+        "method": "enumerate AOE source-sink path lengths",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-critical-02",
+        "computed_answer": "1",
+        "method": "latest start minus earliest start",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-search-basics-01",
+        "computed_answer": "5/3",
+        "method": "weighted exact rational average",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-sequential-search-01",
+        "computed_answer": "4",
+        "method": "enumerate successful search positions",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-sequential-search-02",
+        "computed_answer": "3",
+        "method": "ordered sequential scan",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-block-search-03",
+        "computed_answer": "4",
+        "method": "enumerate all nine successful searches",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-binary-search-01",
+        "computed_answer": "14、27",
+        "method": "binary search simulation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-b-tree-01",
+        "computed_answer": "2",
+        "method": "minimum nonroot B-tree occupancy",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-b-tree-02",
+        "computed_answer": "30",
+        "method": "split median",
+        "status": "passed"
+      },
+      {
+        "question_id": "DS-2021-09",
+        "computed_answer": "11",
+        "method": "enumerate feasible second-layer B-tree occupancies",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-hash-01",
+        "computed_answer": "0.75",
+        "method": "load ratio",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-hash-02",
+        "computed_answer": "3、4、5",
+        "method": "linear probing insertion",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-naive-match-01",
+        "computed_answer": "0和2",
+        "method": "enumerate substring matches",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-naive-match-02",
+        "computed_answer": "12",
+        "method": "naive matcher with comparison counter",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-kmp-01",
+        "computed_answer": "[0,0,1,2,3,0,1]",
+        "method": "brute-force longest proper border, independent of KMP",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-kmp-02",
+        "computed_answer": "3",
+        "method": "border-length fallback",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-insertion-01",
+        "computed_answer": "[2,4,5,1]",
+        "method": "two insertion-sort passes",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-binary-insertion-02",
+        "computed_answer": "3，即已有两个4之后",
+        "method": "stable upper-bound insertion position",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-bubble-01",
+        "computed_answer": "[1,3,2,4]",
+        "method": "one left-to-right bubble pass",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-selection-01",
+        "computed_answer": "[1,3,5,6]",
+        "method": "first selection-sort pass",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-shell-01",
+        "computed_answer": "[5,4,3,8,7,6]",
+        "method": "sort each gap-three subsequence",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-quick-03",
+        "computed_answer": "[2,1,3,4,5]",
+        "method": "Lomuto partition simulation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-heap-sort-02",
+        "computed_answer": "[9,7,3,1,10]",
+        "method": "heap-sort extraction and adjustment",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-merge-sort-01",
+        "computed_answer": "1、2、4、6",
+        "method": "independent sorted merge result",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-merge-sort-03",
+        "computed_answer": "3",
+        "method": "count pairwise merge rounds",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-radix-01",
+        "computed_answer": "[31,42,12,24,15]",
+        "method": "stable digit-key sort",
+        "status": "passed"
+      },
+      {
+        "question_id": "DS-2021-10",
+        "computed_answer": "301,892",
+        "method": "stable units-digit order and neighboring records",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-external-01",
+        "computed_answer": "2",
+        "method": "count four-way merge rounds",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-external-02",
+        "computed_answer": "600",
+        "method": "block reads and writes across stages",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-replacement-01",
+        "computed_answer": "[4,7,9]",
+        "method": "replacement selection active/frozen simulation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-DS-replacement-02",
+        "computed_answer": "19",
+        "method": "enumerate all two-stage merge choices",
+        "status": "passed"
+      },
+      {
+        "question_id": "DS-2020-02",
+        "computed_answer": "b,c,e",
+        "method": "original stack trace simulation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-performance-01",
+        "computed_answer": "1.2 GHz",
+        "method": "cycles / allowed time",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-performance-02",
+        "computed_answer": "4倍",
+        "method": "Amdahl limit with unaccelerated fraction .25",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-performance-04",
+        "computed_answer": "400",
+        "method": "instruction count / time / one million",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-radix-01",
+        "computed_answer": "45",
+        "method": "binary place values",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-radix-02",
+        "computed_answer": "00111010",
+        "method": "hex to binary conversion",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-radix-04",
+        "computed_answer": "-5",
+        "method": "sign-magnitude negative sign and magnitude",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-signed-01",
+        "computed_answer": "-10",
+        "method": "8-bit two complement interpretation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-signed-03",
+        "computed_answer": "128和-128",
+        "method": "unsigned and signed views",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-alu-01",
+        "computed_answer": "1和1",
+        "method": "full adder sum and carry",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-alu-03",
+        "computed_answer": "0110",
+        "method": "bitwise exclusive or",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-addsub-01",
+        "computed_answer": "10100000，发生有符号溢出",
+        "method": "two positive signed operands overflow signed range",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-addsub-02",
+        "computed_answer": "有最高位进位，没有有符号溢出",
+        "method": "independent unsigned carry and signed overflow predicates",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-muldiv-01",
+        "computed_answer": "20位",
+        "method": "maximum product bit length",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-muldiv-02",
+        "computed_answer": "-6",
+        "method": "arithmetic right shift",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-muldiv-04",
+        "computed_answer": "13、26、104",
+        "method": "enumerate set-bit partial products",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-float-format-01",
+        "computed_answer": "1.0",
+        "method": "decode IEEE binary32 bits",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-float-format-02",
+        "computed_answer": "-2.0",
+        "method": "decode negative binary32 bits",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-float-ops-02",
+        "computed_answer": "1.75",
+        "method": "exact rational addition",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-float-ops-04",
+        "computed_answer": "1.10₂",
+        "method": "nearest even on representable quarter increments",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-hierarchy-02",
+        "computed_answer": "4ns",
+        "method": "hit latency plus miss probability times extra penalty",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-capacity-01",
+        "computed_answer": "8K字",
+        "method": "parallel chips for word width, remaining groups for depth",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-capacity-02",
+        "computed_answer": "16根",
+        "method": "byte address bits",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-interleave-01",
+        "computed_answer": "2号体",
+        "method": "low-order interleave modulo",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-disk-01",
+        "computed_answer": "5ms",
+        "method": "half a revolution",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-disk-02",
+        "computed_answer": "13ms",
+        "method": "sum serial access components",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-cache-map-01",
+        "computed_answer": "20位",
+        "method": "address bits minus offset and direct-map index",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-cache-map-02",
+        "computed_answer": "3号行",
+        "method": "block-to-line modulo",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-cache-policy-01",
+        "computed_answer": "B",
+        "method": "LRU simulation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-virtual-01",
+        "computed_answer": "0x345",
+        "method": "page offset remainder",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-virtual-04",
+        "computed_answer": "4520",
+        "method": "segment base plus validated in-bounds offset",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-instruction-01",
+        "computed_answer": "1024种",
+        "method": "remaining address encodings",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-addressing-01",
+        "computed_answer": "1024",
+        "method": "base displacement sum",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-addressing-02",
+        "computed_answer": "17",
+        "method": "two-step indirect load",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-endian-01",
+        "computed_answer": "0x89ABCDEF",
+        "method": "little-endian reconstruction",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-endian-02",
+        "computed_answer": "0x34",
+        "method": "big-endian byte extraction",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-calls-03",
+        "computed_answer": "988",
+        "method": "predecrement stack",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-cycle-02",
+        "computed_answer": "6",
+        "method": "serial cycle sum",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-pipeline-01",
+        "computed_answer": "14",
+        "method": "pipeline filling plus remaining completions",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-pipeline-03",
+        "computed_answer": "6ns",
+        "method": "critical stage plus latch overhead",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-bus-01",
+        "computed_answer": "400MB/s",
+        "method": "bytes per cycle times cycles per second",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-bus-timing-02",
+        "computed_answer": "6",
+        "method": "one address phase plus four data cycles",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-polling-02",
+        "computed_answer": "2%",
+        "method": "poll duration / poll interval",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CO-interrupt-io-03",
+        "computed_answer": "1%",
+        "method": "interrupt service fraction",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-schedule-metrics-01",
+        "computed_answer": "乙更优，其带权周转为2",
+        "method": "compare normalized turnaround",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-schedule-metrics-02",
+        "computed_answer": "3",
+        "method": "first scheduled minus arrival",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-schedule-algorithms-01",
+        "computed_answer": "C、B、A",
+        "method": "nonpreemptive SJF ordering",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-schedule-algorithms-02",
+        "computed_answer": "6",
+        "method": "round-robin queue simulation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-schedule-algorithms-04",
+        "computed_answer": "A，响应比为3",
+        "method": "HRRN ratio calculation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-context-02",
+        "computed_answer": "2%",
+        "method": "context switch time fraction",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-semaphore-01",
+        "computed_answer": "3",
+        "method": "available permits versus five acquisitions without release",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-classic-sync-01",
+        "computed_answer": "5和0",
+        "method": "empty slots and products",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-deadlock-02",
+        "computed_answer": "存在，先P1后P2",
+        "method": "single-resource banker safety simulation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-allocation-01",
+        "computed_answer": "合法，2499",
+        "method": "bounds check and base translation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-allocation-02",
+        "computed_answer": "500大小的块",
+        "method": "first-fit scan",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-paging-01",
+        "computed_answer": "2和2108",
+        "method": "page quotient and offset remainder",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-paging-02",
+        "computed_answer": "4MiB",
+        "method": "page count times PTE size",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-segmentation-02",
+        "computed_answer": "越界，应拒绝或产生保护异常",
+        "method": "exclusive segment bound",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-frames-03",
+        "computed_answer": "4和8",
+        "method": "proportional frame allocation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-replacement-01",
+        "computed_answer": "1",
+        "method": "FIFO replacement simulation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-replacement-02",
+        "computed_answer": "2",
+        "method": "LRU replacement simulation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-replacement-04",
+        "computed_answer": "B",
+        "method": "Clock second-chance scan",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-working-set-03",
+        "computed_answer": "90 ns",
+        "method": "baseline plus expected additional fault cost",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-files-02",
+        "computed_answer": "30",
+        "method": "advance open-file offset",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-inode-02",
+        "computed_answer": "1024",
+        "method": "pointers per indirect block",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-file-layout-02",
+        "computed_answer": "3",
+        "method": "round up allocated data blocks",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-free-space-01",
+        "computed_answer": "1024",
+        "method": "one bitmap bit per block",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-buffer-02",
+        "computed_answer": "5秒",
+        "method": "buffer capacity divided by net accumulation",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-disk-schedule-01",
+        "computed_answer": "55、58、10",
+        "method": "SSTF request selection",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-disk-schedule-02",
+        "computed_answer": "88",
+        "method": "FCFS head movements",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-OS-disk-schedule-05",
+        "computed_answer": "338",
+        "method": "SCAN goes to endpoint before reversal",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-performance-01",
+        "computed_answer": "2 ms",
+        "method": "serialization delay",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-performance-02",
+        "computed_answer": "1 ms",
+        "method": "extra propagation distance divided by signal speed",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-performance-03",
+        "computed_answer": "4 Mbit/s",
+        "method": "bottleneck upper bound",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-layers-03",
+        "computed_answer": "940 B",
+        "method": "two encapsulation headers",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-signals-01",
+        "computed_answer": "9600 bit/s",
+        "method": "symbols per second times bits per symbol",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-capacity-01",
+        "computed_answer": "16种",
+        "method": "solve Nyquist bound for alphabet size",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-capacity-02",
+        "computed_answer": "5 Mbit/s",
+        "method": "Shannon with linear signal-noise ratio",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-encoding-04",
+        "computed_answer": "64 kbit/s",
+        "method": "PCM sample rate times bits per sample",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-switching-02",
+        "computed_answer": "16 ms",
+        "method": "two full store-and-forward serializations",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-framing-02",
+        "computed_answer": "1111100",
+        "method": "five-one bit stuffing",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-detect-01",
+        "computed_answer": "0",
+        "method": "even parity bit",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-detect-02",
+        "computed_answer": "001",
+        "method": "polynomial modulo-two long division",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-correct-01",
+        "computed_answer": "2",
+        "method": "bounded-distance correction radius",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-correct-02",
+        "computed_answer": "2",
+        "method": "Hamming distance",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-correct-03",
+        "computed_answer": "4",
+        "method": "single-error syndrome capacity",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-stopwait-02",
+        "computed_answer": "1/9",
+        "method": "stop-wait serialization fraction",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-gbn-01",
+        "computed_answer": "7",
+        "method": "GBN sequence-space constraint",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-gbn-02",
+        "computed_answer": "2、3、4",
+        "method": "retransmit outstanding suffix from timed-out base",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-sr-01",
+        "computed_answer": "8",
+        "method": "equal SR window half sequence space",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-multiplex-02",
+        "computed_answer": "256 kbit/s",
+        "method": "TDM frame size times frame rate",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-random-access-02",
+        "computed_answer": "400 bit",
+        "method": "collision detection needs round-trip propagation duration",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-random-access-04",
+        "computed_answer": "0.368",
+        "method": "slotted ALOHA throughput at unit offered load",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-ethernet-01",
+        "computed_answer": "48 bit",
+        "method": "address representation bit count",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-forwarding-02",
+        "computed_answer": "C",
+        "method": "longest-prefix lookup",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-routing-02",
+        "computed_answer": "6",
+        "method": "Dijkstra-style independent graph search",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-ipv4-01",
+        "computed_answer": "72 B",
+        "method": "subtract IHL in 32-bit words from total length",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-ipv4-02",
+        "computed_answer": "1480 B，185",
+        "method": "fragment payload rounded to 8-byte units",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-subnet-01",
+        "computed_answer": "30",
+        "method": "conventional host capacity",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-subnet-02",
+        "computed_answer": "192.168.20.191",
+        "method": "subnet broadcast with four equal /26 partitions",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-ipv6-01",
+        "computed_answer": "16 B",
+        "method": "hex groups to address bytes",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-ipv6-03",
+        "computed_answer": "2001:db8::1",
+        "method": "IPv6 zero compression",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-rip-02",
+        "computed_answer": "5",
+        "method": "neighbor distance plus one hop",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-ospf-03",
+        "computed_answer": "15",
+        "method": "path metric sum",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-udp-02",
+        "computed_answer": "128",
+        "method": "UDP header plus data length",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-tcp-stream-01",
+        "computed_answer": "1300",
+        "method": "next expected byte sequence",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-tcp-connect-01",
+        "computed_answer": "700",
+        "method": "SYN consumes one sequence number",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-tcp-window-01",
+        "computed_answer": "5000 B",
+        "method": "smaller flow/congestion window minus bytes in flight",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-tcp-congestion-01",
+        "computed_answer": "8 MSS",
+        "method": "three ideal slow-start doubling rounds",
+        "status": "passed"
+      },
+      {
+        "question_id": "KEW-CN-tcp-congestion-02",
+        "computed_answer": "8 MSS和1 MSS",
+        "method": "classic Reno timeout threshold and loss window",
+        "status": "passed"
+      }
+    ]
+  },
+  "integration_checks": {
+    "status": "blocked_graph_node_limit",
+    "subject_graph_models": "passed",
+    "question_models": {
+      "status": "passed",
+      "count": 650
+    },
+    "candidate_models": {
+      "status": "passed",
+      "count": 650
+    },
+    "merged_dag": {
+      "status": "passed",
+      "nodes": 203
+    },
+    "merged_graph_model": {
+      "status": "blocked",
+      "max_nodes": 200,
+      "errors": [
+        {
+          "location": [
+            "nodes"
+          ],
+          "type": "too_long",
+          "message": "List should have at most 200 items after validation, not 203"
+        }
+      ]
+    },
+    "code_sha256": {
+      "code/backend/aristotle_backend/schemas.py": "4d785d6f223cfe6f4072e91874b0e574e7d8ca1a2c24c60ef840d1fa57d2a968",
+      "code/core_engine/aristotle_core/policy.py": "1b9b629969522223a72f4ecd7f7fff6c2e3329601355810560dd18fb79df51ad"
+    },
+    "scope": "实际请求模型及图校验；未执行HTTP、数据库或发布操作。"
+  },
+  "cross_subject_relations_sha256": "a63ac1074925de3327691981ae15dc9863aa01bc109f60afef3e1bbc4bc02580",
+  "builder_sha256": "cd2e2945e8f361adbc1a73b01e22fd1a87a7c0a1c74e91dd3eeec7a871361bba",
+  "export_sha256": {
+    "aristotle_graph.full.json": "e0c92a76ad0f5d327e9c76aae72ee60a340c3c8bfde20f52ba8975974f5b54d3",
+    "aristotle_questions.jsonl": "9ecf2a5efb4a6468e8a319151d1b1a30ad1673c5ae4a5ab669d5306afba9e3b5",
+    "aristotle_candidates.jsonl": "2ca060987b12e5000253b88d936f5a8aa06b7ee3243b9678289faba2726f7fe8"
+  }
+}

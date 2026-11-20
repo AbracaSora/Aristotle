@@ -1,0 +1,482 @@
+{
+  "target_year": 2027,
+  "subject": "数据结构",
+  "checked_date": "2026-11-15",
+  "official_book": {
+    "publisher": "高等教育出版社",
+    "author": "教育部教育考试院",
+    "isbn": "9787040684513",
+    "url": "https://xuanshu.hep.com.cn/front/h5Mobile/bookDetails?bookId=6aa97a0be119ac9729dd09ea"
+  },
+  "working_transcription_url": "https://zhenti.beokayy.club/outline",
+  "cross_check_2026_url": "https://www.kmxwd.com/uploads/images/20251015/68eef5daf0564.pdf",
+  "verification_status": "public_transcription_mapped_official_full_text_pending",
+  "interpretation": "按2027公开转录的条目位置建立独立知识点，2026公开大纲转录作交叉参照。书目已确认，但未逐页核验2027官方书内正文。编号为本项目定位符，简称为自行概括。",
+  "items": [
+    {
+      "id": "1.1",
+      "topic_summary": "结构基本术语",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "DS-basics",
+        "DS-adt"
+      ]
+    },
+    {
+      "id": "1.2",
+      "topic_summary": "算法基础",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "DS-algorithm",
+        "DS-complexity"
+      ]
+    },
+    {
+      "id": "2.1",
+      "topic_summary": "线性关系",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "DS-list"
+      ]
+    },
+    {
+      "id": "2.2.1",
+      "topic_summary": "顺序表示",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "DS-seqlist"
+      ]
+    },
+    {
+      "id": "2.2.2",
+      "topic_summary": "链接表示",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "DS-singly",
+        "DS-linked-variants"
+      ]
+    },
+    {
+      "id": "2.3",
+      "topic_summary": "线性表问题求解",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "DS-list-applications"
+      ]
+    },
+    {
+      "id": "3.1",
+      "topic_summary": "栈队列规则",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "DS-stack",
+        "DS-queue"
+      ]
+    },
+    {
+      "id": "3.2",
+      "topic_summary": "数组实现栈队列",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "DS-stack",
+        "DS-queue"
+      ]
+    },
+    {
+      "id": "3.3",
+      "topic_summary": "链接实现栈队列",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "DS-linked-stack",
+        "DS-linked-queue"
+      ]
+    },
+    {
+      "id": "3.4",
+      "topic_summary": "多维数组布局",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "DS-array-address"
+      ]
+    },
+    {
+      "id": "3.5",
+      "topic_summary": "特殊矩阵压缩",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "DS-matrix-storage"
+      ]
+    },
+    {
+      "id": "3.6",
+      "topic_summary": "受限线性结构与数组应用",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "DS-stack-applications",
+        "DS-queue-applications",
+        "DS-matrix-storage"
+      ]
+    },
+    {
+      "id": "4.1",
+      "topic_summary": "树的术语",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "DS-tree"
+      ]
+    },
+    {
+      "id": "4.2.1",
+      "topic_summary": "二叉树定义与性质",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "DS-binary"
+      ]
+    },
+    {
+      "id": "4.2.2",
+      "topic_summary": "二叉树存储",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "DS-binary-storage"
+      ]
+    },
+    {
+      "id": "4.2.3",
+      "topic_summary": "二叉树访问次序",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "DS-traversal"
+      ]
+    },
+    {
+      "id": "4.2.4",
+      "topic_summary": "遍历线索",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "DS-threaded"
+      ]
+    },
+    {
+      "id": "4.3.1",
+      "topic_summary": "一般树表示",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "DS-tree-storage"
+      ]
+    },
+    {
+      "id": "4.3.2",
+      "topic_summary": "森林二叉化",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "DS-forest-conversion"
+      ]
+    },
+    {
+      "id": "4.3.3",
+      "topic_summary": "树森林访问次序",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "DS-forest-traversal"
+      ]
+    },
+    {
+      "id": "4.4.1",
+      "topic_summary": "带权最优树与编码",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "DS-huffman"
+      ]
+    },
+    {
+      "id": "4.4.2",
+      "topic_summary": "集合查询合并",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "DS-union-find"
+      ]
+    },
+    {
+      "id": "4.4.3",
+      "topic_summary": "堆及使用场景",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "DS-heap"
+      ]
+    },
+    {
+      "id": "5.1",
+      "topic_summary": "顶点边与连通",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "DS-graph"
+      ]
+    },
+    {
+      "id": "5.2.1",
+      "topic_summary": "矩阵表示图",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "DS-adj-matrix"
+      ]
+    },
+    {
+      "id": "5.2.2",
+      "topic_summary": "邻接项表示图",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "DS-adj-list"
+      ]
+    },
+    {
+      "id": "5.2.3",
+      "topic_summary": "多重链接表示边",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "DS-cross-multilist"
+      ]
+    },
+    {
+      "id": "5.3.1",
+      "topic_summary": "深度扩展",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "DS-dfs"
+      ]
+    },
+    {
+      "id": "5.3.2",
+      "topic_summary": "广度扩展",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "DS-bfs"
+      ]
+    },
+    {
+      "id": "5.4.1",
+      "topic_summary": "最小权生成树",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "DS-mst"
+      ]
+    },
+    {
+      "id": "5.4.2",
+      "topic_summary": "路径距离优化",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "DS-shortest"
+      ]
+    },
+    {
+      "id": "5.4.3",
+      "topic_summary": "有向依赖排序",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "DS-topological"
+      ]
+    },
+    {
+      "id": "5.4.4",
+      "topic_summary": "工程最长路径",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "DS-critical"
+      ]
+    },
+    {
+      "id": "6.1",
+      "topic_summary": "查询代价",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "DS-search-basics"
+      ]
+    },
+    {
+      "id": "6.2",
+      "topic_summary": "逐项查询",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "DS-sequential-search"
+      ]
+    },
+    {
+      "id": "6.3",
+      "topic_summary": "块索引查询",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "DS-block-search"
+      ]
+    },
+    {
+      "id": "6.4",
+      "topic_summary": "有序区间折半",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "DS-binary-search"
+      ]
+    },
+    {
+      "id": "6.5.1",
+      "topic_summary": "二叉有序树",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "DS-bst"
+      ]
+    },
+    {
+      "id": "6.5.2",
+      "topic_summary": "高度平衡维护",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "DS-avl"
+      ]
+    },
+    {
+      "id": "6.5.3",
+      "topic_summary": "着色平衡维护",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "DS-red-black"
+      ]
+    },
+    {
+      "id": "6.6",
+      "topic_summary": "多路有序索引",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "DS-b-tree",
+        "DS-b-plus"
+      ]
+    },
+    {
+      "id": "6.7",
+      "topic_summary": "散列地址查询",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "DS-hash"
+      ]
+    },
+    {
+      "id": "6.8",
+      "topic_summary": "文本中的模式定位",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "DS-naive-match",
+        "DS-kmp"
+      ]
+    },
+    {
+      "id": "6.9",
+      "topic_summary": "查找策略比较",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "DS-search-choice"
+      ]
+    },
+    {
+      "id": "7.1",
+      "topic_summary": "排序性质与成本",
+      "chapter_number": 7,
+      "knowledge_point_ids": [
+        "DS-sort-basics"
+      ]
+    },
+    {
+      "id": "7.2",
+      "topic_summary": "线性定位插入",
+      "chapter_number": 7,
+      "knowledge_point_ids": [
+        "DS-insertion"
+      ]
+    },
+    {
+      "id": "7.3",
+      "topic_summary": "折半定位插入",
+      "chapter_number": 7,
+      "knowledge_point_ids": [
+        "DS-binary-insertion"
+      ]
+    },
+    {
+      "id": "7.4",
+      "topic_summary": "相邻交换",
+      "chapter_number": 7,
+      "knowledge_point_ids": [
+        "DS-bubble"
+      ]
+    },
+    {
+      "id": "7.5",
+      "topic_summary": "逐轮选最小",
+      "chapter_number": 7,
+      "knowledge_point_ids": [
+        "DS-selection"
+      ]
+    },
+    {
+      "id": "7.6",
+      "topic_summary": "增量分组插入",
+      "chapter_number": 7,
+      "knowledge_point_ids": [
+        "DS-shell"
+      ]
+    },
+    {
+      "id": "7.7",
+      "topic_summary": "枢轴划分",
+      "chapter_number": 7,
+      "knowledge_point_ids": [
+        "DS-quick"
+      ]
+    },
+    {
+      "id": "7.8",
+      "topic_summary": "利用堆排序",
+      "chapter_number": 7,
+      "knowledge_point_ids": [
+        "DS-heap-sort"
+      ]
+    },
+    {
+      "id": "7.9",
+      "topic_summary": "有序段合并",
+      "chapter_number": 7,
+      "knowledge_point_ids": [
+        "DS-merge-sort"
+      ]
+    },
+    {
+      "id": "7.10",
+      "topic_summary": "按位分配",
+      "chapter_number": 7,
+      "knowledge_point_ids": [
+        "DS-radix"
+      ]
+    },
+    {
+      "id": "7.11",
+      "topic_summary": "磁盘排序",
+      "chapter_number": 7,
+      "knowledge_point_ids": [
+        "DS-external",
+        "DS-replacement"
+      ]
+    },
+    {
+      "id": "7.12",
+      "topic_summary": "排序策略比较",
+      "chapter_number": 7,
+      "knowledge_point_ids": [
+        "DS-sort-choice"
+      ]
+    }
+  ],
+  "scope_notes": [
+    "共56个考纲末级定位条目；同一条目可拆为多个知识点。",
+    "选择题覆盖不等于覆盖考纲要求的完整C/C++程序设计能力，本版不提供编程题。",
+    "静态链表、KMP、置换选择等作为相关考纲条目的常用实现细化，不能声称都被考纲逐字点名。",
+    "未按C的教材扩展目录加入计数排序或稀疏矩阵作为独立必考点。"
+  ]
+}

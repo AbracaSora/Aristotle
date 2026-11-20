@@ -1,0 +1,666 @@
+{
+  "target_year": 2027,
+  "subject": "计算机网络",
+  "subject_code": "CN",
+  "checked_date": "2026-11-16",
+  "official_book": {
+    "publisher": "高等教育出版社",
+    "author": "教育部教育考试院",
+    "isbn": "9787040684513",
+    "url": "https://xuanshu.hep.com.cn/front/h5Mobile/bookDetails?bookId=6aa97a0be119ac9729dd09ea"
+  },
+  "working_transcription_url": "https://zhenti.beokayy.club/outline",
+  "verification_status": "public_transcription_mapped_official_full_text_pending",
+  "interpretation": "条目编号为本科目内的考纲定位符；简称自行概括。按2027公开转录建立映射，未逐页核验官方出版正文。",
+  "items": [
+    {
+      "id": "1.1.1",
+      "topic_summary": "网络组成与用途",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "CN-basics"
+      ]
+    },
+    {
+      "id": "1.1.2",
+      "topic_summary": "网络分类",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "CN-basics"
+      ]
+    },
+    {
+      "id": "1.1.3",
+      "topic_summary": "性能度量",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "CN-performance"
+      ]
+    },
+    {
+      "id": "1.2.1",
+      "topic_summary": "分层组织",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "CN-layers"
+      ]
+    },
+    {
+      "id": "1.2.2",
+      "topic_summary": "协议服务接口",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "CN-layers"
+      ]
+    },
+    {
+      "id": "1.2.3",
+      "topic_summary": "参考模型",
+      "chapter_number": 1,
+      "knowledge_point_ids": [
+        "CN-models"
+      ]
+    },
+    {
+      "id": "2.1.1",
+      "topic_summary": "通信术语",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CN-signals"
+      ]
+    },
+    {
+      "id": "2.1.2",
+      "topic_summary": "信道容量",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CN-capacity"
+      ]
+    },
+    {
+      "id": "2.1.3",
+      "topic_summary": "信号编码",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CN-encoding"
+      ]
+    },
+    {
+      "id": "2.1.4",
+      "topic_summary": "交换方式",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CN-switching"
+      ]
+    },
+    {
+      "id": "2.1.5",
+      "topic_summary": "逻辑连接方式",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CN-switching"
+      ]
+    },
+    {
+      "id": "2.2.1",
+      "topic_summary": "传输媒介",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CN-media"
+      ]
+    },
+    {
+      "id": "2.2.2",
+      "topic_summary": "物理接口",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CN-media"
+      ]
+    },
+    {
+      "id": "2.3.1",
+      "topic_summary": "信号中继",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CN-repeaters"
+      ]
+    },
+    {
+      "id": "2.3.2",
+      "topic_summary": "共享集线",
+      "chapter_number": 2,
+      "knowledge_point_ids": [
+        "CN-repeaters"
+      ]
+    },
+    {
+      "id": "3.1",
+      "topic_summary": "链路功能",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-framing"
+      ]
+    },
+    {
+      "id": "3.2",
+      "topic_summary": "帧边界",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-framing"
+      ]
+    },
+    {
+      "id": "3.3.1",
+      "topic_summary": "检错",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-detect"
+      ]
+    },
+    {
+      "id": "3.3.2",
+      "topic_summary": "纠错",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-correct"
+      ]
+    },
+    {
+      "id": "3.4.1",
+      "topic_summary": "窗口与可靠性",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-stopwait"
+      ]
+    },
+    {
+      "id": "3.4.2",
+      "topic_summary": "停止等待",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-stopwait"
+      ]
+    },
+    {
+      "id": "3.4.3",
+      "topic_summary": "回退重传",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-gbn"
+      ]
+    },
+    {
+      "id": "3.4.4",
+      "topic_summary": "选择重传",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-sr"
+      ]
+    },
+    {
+      "id": "3.5.1",
+      "topic_summary": "信道划分",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-multiplex"
+      ]
+    },
+    {
+      "id": "3.5.2",
+      "topic_summary": "竞争接入",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-random-access"
+      ]
+    },
+    {
+      "id": "3.5.3",
+      "topic_summary": "有序接入",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-token"
+      ]
+    },
+    {
+      "id": "3.6.1",
+      "topic_summary": "局域组织",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-ethernet"
+      ]
+    },
+    {
+      "id": "3.6.2",
+      "topic_summary": "以太网",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-ethernet"
+      ]
+    },
+    {
+      "id": "3.6.3",
+      "topic_summary": "无线局域网",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-wifi"
+      ]
+    },
+    {
+      "id": "3.6.4",
+      "topic_summary": "虚拟局域网",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-vlan"
+      ]
+    },
+    {
+      "id": "3.7.1",
+      "topic_summary": "广域互连",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-ppp"
+      ]
+    },
+    {
+      "id": "3.7.2",
+      "topic_summary": "点到点协议",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-ppp"
+      ]
+    },
+    {
+      "id": "3.8",
+      "topic_summary": "链路交换设备",
+      "chapter_number": 3,
+      "knowledge_point_ids": [
+        "CN-switch"
+      ]
+    },
+    {
+      "id": "4.1.1",
+      "topic_summary": "异构互连",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-internetwork"
+      ]
+    },
+    {
+      "id": "4.1.2",
+      "topic_summary": "选路转发",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-forwarding"
+      ]
+    },
+    {
+      "id": "4.1.3",
+      "topic_summary": "控制转发分离",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-sdn"
+      ]
+    },
+    {
+      "id": "4.1.4",
+      "topic_summary": "网络拥塞",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-congestion"
+      ]
+    },
+    {
+      "id": "4.2.1",
+      "topic_summary": "静态动态",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-routing"
+      ]
+    },
+    {
+      "id": "4.2.2",
+      "topic_summary": "距离向量",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-routing"
+      ]
+    },
+    {
+      "id": "4.2.3",
+      "topic_summary": "链路状态",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-routing"
+      ]
+    },
+    {
+      "id": "4.2.4",
+      "topic_summary": "层次化",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-routing"
+      ]
+    },
+    {
+      "id": "4.3.1",
+      "topic_summary": "IPv4分组",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-ipv4"
+      ]
+    },
+    {
+      "id": "4.3.2",
+      "topic_summary": "地址转换",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-ip-address"
+      ]
+    },
+    {
+      "id": "4.3.3",
+      "topic_summary": "地址前缀",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-subnet"
+      ]
+    },
+    {
+      "id": "4.3.4",
+      "topic_summary": "地址配置与诊断",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-arp",
+        "CN-dhcp",
+        "CN-icmp"
+      ]
+    },
+    {
+      "id": "4.4.1",
+      "topic_summary": "IPv6特性",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-ipv6"
+      ]
+    },
+    {
+      "id": "4.4.2",
+      "topic_summary": "IPv6地址",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-ipv6"
+      ]
+    },
+    {
+      "id": "4.5.1",
+      "topic_summary": "自治系统",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-rip",
+        "CN-bgp"
+      ]
+    },
+    {
+      "id": "4.5.2",
+      "topic_summary": "域内域间",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-rip",
+        "CN-bgp"
+      ]
+    },
+    {
+      "id": "4.5.3",
+      "topic_summary": "RIP",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-rip"
+      ]
+    },
+    {
+      "id": "4.5.4",
+      "topic_summary": "OSPF",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-ospf"
+      ]
+    },
+    {
+      "id": "4.5.5",
+      "topic_summary": "BGP",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-bgp"
+      ]
+    },
+    {
+      "id": "4.6.1",
+      "topic_summary": "群组通信",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-multicast"
+      ]
+    },
+    {
+      "id": "4.6.2",
+      "topic_summary": "组地址",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-multicast"
+      ]
+    },
+    {
+      "id": "4.7.1",
+      "topic_summary": "移动身份",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-mobile-ip"
+      ]
+    },
+    {
+      "id": "4.7.2",
+      "topic_summary": "移动转送",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-mobile-ip"
+      ]
+    },
+    {
+      "id": "4.8.1",
+      "topic_summary": "路由器结构",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-router"
+      ]
+    },
+    {
+      "id": "4.8.2",
+      "topic_summary": "转发表",
+      "chapter_number": 4,
+      "knowledge_point_ids": [
+        "CN-router"
+      ]
+    },
+    {
+      "id": "5.1.1",
+      "topic_summary": "传输服务",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CN-ports"
+      ]
+    },
+    {
+      "id": "5.1.2",
+      "topic_summary": "进程端点",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CN-ports"
+      ]
+    },
+    {
+      "id": "5.1.3",
+      "topic_summary": "连接服务差异",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CN-ports"
+      ]
+    },
+    {
+      "id": "5.2.1",
+      "topic_summary": "UDP格式",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CN-udp"
+      ]
+    },
+    {
+      "id": "5.2.2",
+      "topic_summary": "UDP校验",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CN-udp"
+      ]
+    },
+    {
+      "id": "5.3.1",
+      "topic_summary": "TCP格式",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CN-tcp-stream"
+      ]
+    },
+    {
+      "id": "5.3.2",
+      "topic_summary": "连接管理",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CN-tcp-connect"
+      ]
+    },
+    {
+      "id": "5.3.3",
+      "topic_summary": "可靠字节流",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CN-tcp-stream"
+      ]
+    },
+    {
+      "id": "5.3.4",
+      "topic_summary": "接收窗口",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CN-tcp-window"
+      ]
+    },
+    {
+      "id": "5.3.5",
+      "topic_summary": "拥塞窗口",
+      "chapter_number": 5,
+      "knowledge_point_ids": [
+        "CN-tcp-congestion"
+      ]
+    },
+    {
+      "id": "6.1.1",
+      "topic_summary": "客户服务器",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CN-app-model"
+      ]
+    },
+    {
+      "id": "6.1.2",
+      "topic_summary": "对等应用",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CN-app-model"
+      ]
+    },
+    {
+      "id": "6.2.1",
+      "topic_summary": "域名层次",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CN-dns"
+      ]
+    },
+    {
+      "id": "6.2.2",
+      "topic_summary": "解析服务器",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CN-dns"
+      ]
+    },
+    {
+      "id": "6.2.3",
+      "topic_summary": "查询过程",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CN-dns"
+      ]
+    },
+    {
+      "id": "6.3.1",
+      "topic_summary": "文件传输工作方式",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CN-ftp"
+      ]
+    },
+    {
+      "id": "6.3.2",
+      "topic_summary": "控制与数据通道",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CN-ftp"
+      ]
+    },
+    {
+      "id": "6.4.1",
+      "topic_summary": "邮件系统结构",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CN-email"
+      ]
+    },
+    {
+      "id": "6.4.2",
+      "topic_summary": "内容格式",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CN-email"
+      ]
+    },
+    {
+      "id": "6.4.3",
+      "topic_summary": "收发协议",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CN-email"
+      ]
+    },
+    {
+      "id": "6.5.1",
+      "topic_summary": "万维网组成",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CN-web"
+      ]
+    },
+    {
+      "id": "6.5.2",
+      "topic_summary": "HTTP",
+      "chapter_number": 6,
+      "knowledge_point_ids": [
+        "CN-web"
+      ]
+    }
+  ],
+  "scope_notes": [
+    "考纲条目与知识节点允许多对多对应；节点题量达标不表示条目内所有细节或所有难度均已充分测量。",
+    "题目的syllabus_refs沿用所属知识节点的考纲定位，不代表单道题同时考查所有列出的条目。",
+    "本包提供纯文字单选题，不包括绘图、实验、程序设计及综合解答题。"
+  ]
+}

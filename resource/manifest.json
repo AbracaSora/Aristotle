@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "exam": "408计算机学科专业基础",
+  "target_year": 2027,
+  "subjects": [
+    {
+      "subject": "数据结构",
+      "subject_code": "DS",
+      "directory": "data-structures",
+      "knowledge_points": 64,
+      "questions": 213,
+      "relations": 118,
+      "syllabus_items": 56,
+      "questions_per_point": {
+        "min": 3,
+        "max": 5
+      },
+      "canonical_sha256": {
+        "knowledge_points.jsonl": "2b7233f6ca9db2ea375d9fc9629c56b101cd84ed93314872f513945164a4cf07",
+        "questions.jsonl": "a1357d5db804414de445eb52f236b5fc4312553a3353e421b74ef52bf8e2849b",
+        "relations.jsonl": "eb2530e1ed0a6cc62d557bb13ec1c9b057da1be359578fbcc93d79c82aaa754b",
+        "syllabus.json": "0d132d8b35225285a7cb203c7699c01fa6d25ce610c741c5186856603dfdc4c4"
+      }
+    },
+    {
+      "subject": "计算机组成原理",
+      "subject_code": "CO",
+      "directory": "computer-organization",
+      "knowledge_points": 40,
+      "questions": 128,
+      "relations": 56,
+      "syllabus_items": 64,
+      "questions_per_point": {
+        "min": 3,
+        "max": 4
+      },
+      "canonical_sha256": {
+        "knowledge_points.jsonl": "4379942a5fe60be62c834fd8ecd84f015414cfb751322a995d0e6e202f98f676",
+        "questions.jsonl": "5d244d824518ccb90f2b5bb50b090f43243342083d8db02af8f0b676ef290556",
+        "relations.jsonl": "f2db70cef7c759b50db4a5c6f0c3c2ebf239ada48cd8f0e0a7d7fd284a78b0ec",
+        "syllabus.json": "59c0a427b278560ab48f76e23cf36e1468230a795465a0e7c493649b01a59d96"
+      }
+    },
+    {
+      "subject": "操作系统",
+      "subject_code": "OS",
+      "directory": "operating-systems",
+      "knowledge_points": 46,
+      "questions": 146,
+      "relations": 63,
+      "syllabus_items": 66,
+      "questions_per_point": {
+        "min": 3,
+        "max": 5
+      },
+      "canonical_sha256": {
+        "knowledge_points.jsonl": "be606c5b7b0a0b10efe6c5e27c1a3bc3bb33ec2265426cf1853ed045057cab25",
+        "questions.jsonl": "8a4974bdb0beaed4e18ede4c8cd44d0394fb6d99ff51f778d9cbd5252b27e96a",
+        "relations.jsonl": "5e07ff2dca46a49e661a51f6f23c1b3002c6c1f1d596ff49efe4a55d48178ba7",
+        "syllabus.json": "f57b531682e7407e96df11fdbd6a76ba85e9f661546b309803d4c3ced086ab02"
+      }
+    },
+    {
+      "subject": "计算机网络",
+      "subject_code": "CN",
+      "directory": "computer-networks",
+      "knowledge_points": 53,
+      "questions": 163,
+      "relations": 73,
+      "syllabus_items": 80,
+      "questions_per_point": {
+        "min": 3,
+        "max": 4
+      },
+      "canonical_sha256": {
+        "knowledge_points.jsonl": "443887ea67b3f452ed31c4f3defdc4f387c325618957e99c5bbf181c1558cb45",
+        "questions.jsonl": "8439c41968c50796684b2d82ceb150b34bfe26d096dc3dd2424148b124e021e3",
+        "relations.jsonl": "18ece7013a3f04188eae5b00574b9dad18ee7efa517c92261f9304308c3e3769",
+        "syllabus.json": "3dab938b3ea5e4a1692145180dbd01daf605f26ff8cbb516c8e714e6c8476e20"
+      }
+    }
+  ],
+  "total_knowledge_points": 203,
+  "total_questions": 650,
+  "total_relations": 325,
+  "cross_subject_relations": 15,
+  "canonical_layout": "<subject>/questions.jsonl, knowledge_points.jsonl, relations.jsonl, syllabus.json",
+  "cross_subject_relation_file": "cross_subject_relations.jsonl",
+  "exports": {
+    "graph": "exports/aristotle_graph.full.json",
+    "questions": "exports/aristotle_questions.jsonl",
+    "candidates": "exports/aristotle_candidates.jsonl"
+  },
+  "rebuild": "python3 resource/scripts/build_resources.py --write",
+  "verify": "python3 resource/scripts/build_resources.py",
+  "optional_views": "python3 resource/scripts/build_resources.py --views-dir /tmp/aristotle-review",
+  "report": "validation_report.json",
+  "integration_status": "blocked_graph_node_limit",
+  "active_graph_limit": 200,
+  "field_mapping": {
+    "knowledge_point_id": "QuestionInput.knowledge_id",
+    "stem": "QuestionInput.prompt",
+    "options": "A/B/C/D顺序转换为文本数组",
+    "answer": "正确选项字母转换为对应文本",
+    "cognitive_level_candidate": "CandidateInput.primary_level",
+    "prerequisite_of": "GraphInput.nodes[].prerequisites"
+  },
+  "metadata_note": "科目、章节、难度、考纲定位和其他关系保留在规范JSONL，接口导出不增加后端未定义字段。"
+}
