@@ -43,6 +43,7 @@ export interface LearningState {
   notice: string;
 }
 export interface Question {
+  generation_prompt?: string | null;
   key: string;
   question_id: string;
   version: number;

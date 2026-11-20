@@ -405,6 +405,7 @@
     </main>
   </div>
 
+  <script src="/map-road-layout.js"></script>
   <script>
     (() => {
       if (new URLSearchParams(window.location.search).get('embedded') === '1') document.body.classList.add('embedded');
@@ -517,7 +518,7 @@
       const cellCountInput = document.getElementById('cellCount');
       const selectedEl = document.getElementById('selected');
       const nodeList = document.getElementById('nodeList');
-      const state = { graph: null, layout: null, terrain: null, selected: null, hover: null, zoom: 1, panX: 0, panY: 0, dragging: false, moved: false, lastX: 0, lastY: 0, dpr: 1, width: 0, height: 0 };
+      const state = { overview: false, graph: null, layout: null, terrain: null, selected: null, hover: null, zoom: 1, panX: 0, panY: 0, dragging: false, moved: false, lastX: 0, lastY: 0, dpr: 1, width: 0, height: 0 };
       const TAU = Math.PI * 2;
       input.value = JSON.stringify(sample, null, 2);
 
@@ -582,34 +583,71 @@
         return { nodes, edges, out, incoming };
       }
       function layoutGraph(graph, width, height, seed, terrain) {
-        const incoming = new Map(graph.nodes.map(n => [n.id, []]));
-        graph.edges.forEach(([a, b]) => incoming.get(b).push(a));
+        // Compact topological bands: depth determines order, not unbounded world size.
         const rank = new Map();
-        const visit = id => { if (rank.has(id)) return rank.get(id); const parents = incoming.get(id); const r = parents.length ? Math.max(...parents.map(visit)) + 1 : 0; rank.set(id, r); return r; };
+        const visit = id => { if (rank.has(id)) return rank.get(id); const parents = graph.incoming.get(id); const r = parents.length ? Math.max(...parents.map(visit)) + 1 : 0; rank.set(id, r); return r; };
         graph.nodes.forEach(n => visit(n.id));
-        const layers = [];[...rank.entries()].forEach(([id, r]) => { (layers[r] ||= []).push(id); });
-        const random = randFactory(seed + ':layout'); const marginX = Math.max(150, width * .16); const marginY = Math.max(145, height * .18); const maxRank = Math.max(1, layers.length - 1);
-        const widest = Math.max(1, ...layers.map(layer => layer.length));
-        width = Math.max(width, maxRank * 240 + marginX * 2);
-        height = Math.max(height, (widest - 1) * 150 + marginY * 2);
-        const pos = new Map();
-        layers.forEach((ids, rank) => {
-          ids.sort((a, b) => a.localeCompare(b));
-          ids.forEach((id, i) => {
-            const x = marginX + (width - 2 * marginX) * rank / maxRank;
-            const y = height / 2 + (i - (ids.length - 1) / 2) * 150;
-            const point = terrain ? terrain.snapHighPoint(x, y, 24) : { x, y };
-            pos.set(id, { x: point.x, y: point.y, rank });
+        const layers = [];
+        graph.nodes.forEach(n => (layers[rank.get(n.id)] ||= []).push(n.id));
+        const order = new Map();
+        layers.forEach(ids => ids.forEach((id,i) => order.set(id,i)));
+        // Barycentric sweeps keep related branches together without changing edges.
+        for(let pass=0;pass<8;pass++) {
+          const sequence=pass%2 ? [...layers].reverse() : layers;
+          sequence.forEach(ids=>{
+            const score=id=>{const links=(pass%2?graph.out:graph.incoming).get(id);return links.length?links.reduce((sum,k)=>sum+order.get(k),0)/links.length:order.get(id)};
+            ids.sort((a,b)=>score(a)-score(b)||a.localeCompare(b));
+            ids.forEach((id,i)=>order.set(id,i));
           });
+        }
+        const count=graph.nodes.length;
+        width=Math.max(1600,Math.sqrt(count)*720); height=width*.76;
+        const random=randFactory(seed+':settlements');
+        const pos=new Map();
+        // Best-candidate blue-noise sampling: no rows and no repeated spacing.
+        // The same analytic coast constrains both settlement and terrain generation.
+        const ordered=layers.flat();
+        ordered.forEach(id=>{
+          let best=null, bestScore=-Infinity;
+          for(let attempt=0;attempt<700;attempt++) {
+            const x=width*(.08+random()*.84),y=height*(.08+random()*.84);
+            const land=islandField(x,y,width,height,seed);
+            if(land<.38)continue;
+            let distance=Infinity;
+            for(const p of pos.values())distance=Math.min(distance,Math.hypot(x-p.x,(y-p.y)*1.35));
+            const parents=graph.incoming.get(id).map(k=>pos.get(k)).filter(Boolean);
+            const proximity=parents.length?parents.reduce((v,p)=>v+Math.hypot(x-p.x,y-p.y),0)/parents.length:0;
+            const score=(Number.isFinite(distance)?distance:0)-proximity*.12;
+            if(score>bestScore){bestScore=score;best={x,y,rank:rank.get(id)}}
+          }
+          pos.set(id,best || {x:width/2,y:height/2,rank:rank.get(id)});
         });
-        const routes = new Map(); graph.edges.forEach(([a, b]) => { const p = pos.get(a), q = pos.get(b); routes.set(a + '>' + b, terrain && terrain.routeBetween ? terrain.routeBetween(p, q) : [p, q]); });
-        return { pos, layers, maxRank, routes, width, height };
+        const routes=new Map(), overviewEdges=[];
+        const orientation=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
+        const intersects=(a,b,c,d)=>orientation(a,b,c)*orientation(a,b,d)<0 && orientation(c,d,a)*orientation(c,d,b)<0;
+        // All dependencies stay in graph.edges. The overview is a non-crossing subset;
+        // selecting a node shows its complete direct dependency star instead.
+        const sorted=[...graph.edges].sort(([a,b],[c,d])=>Math.hypot(pos.get(a).x-pos.get(b).x,pos.get(a).y-pos.get(b).y)-Math.hypot(pos.get(c).x-pos.get(d).x,pos.get(c).y-pos.get(d).y));
+        sorted.forEach(([a,b])=>{
+          const p=pos.get(a),q=pos.get(b);
+          routes.set(a+'>'+b,[p,q]);
+          const blocked=overviewEdges.some(([c,d])=>a!==c && a!==d && b!==c && b!==d && intersects(p,q,pos.get(c),pos.get(d)));
+          if(!blocked)overviewEdges.push([a,b]);
+        });
+        return {pos,layers,maxRank:layers.length-1,routes,overviewEdges,width,height};
       }
-      function buildTerrain(width, height, detail, seed, requestedCellCount) {
+      // A continuous radial coastline with broad bays and peninsulas, independent of nodes.
+      function islandField(x,y,width,height,seed) {
+        const nx=(x-width*.5)/(width*.43),ny=(y-height*.5)/(height*.42);
+        const angle=Math.atan2(ny,nx), phase=(hashString(seed)%628)/100;
+        const coast=.87+.095*Math.sin(3*angle+phase)+.065*Math.cos(5*angle-phase)+.025*Math.sin(9*angle+.7);
+        return clamp((coast-Math.hypot(nx,ny))*2.5,0,1);
+      }
+      function buildTerrain(width, height, detail, seed, requestedCellCount, anchors = []) {
         const random = randFactory(seed + ':terrain'); const cx = width * .5, cy = height * .5, rx = width * .49, ry = height * .405;
         const gaussian = (x, y, gx, gy, sx, sy, strength) => strength * Math.exp(-(((x - gx) / sx) ** 2 + ((y - gy) / sy) ** 2) * 1.35);
         const segmentInfluence = (x, y, ax, ay, bx, by, width, strength) => { const dx = bx - ax, dy = by - ay, t = clamp(((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy), 0, 1); const px = ax + dx * t, py = ay + dy * t; return strength * Math.exp(-((x - px) ** 2 + (y - py) ** 2) / (width * width)); };
-        const heightAt = (x, y) => { const nx = (x - cx) / rx, ny = (y - cy) / ry; const coastNoise = (noise2(x / 260, y / 230, seed + ':coast-field') - .5) * .25; const coastDistance = Math.pow(Math.abs(nx), 2.25) + Math.pow(Math.abs(ny), 2.25) + coastNoise; const edge = clamp(1 - Math.pow(Math.max(0, coastDistance), .62), 0, 1); const left = gaussian(x, y, width * .22, height * .51, width * .3, height * .31, .45); const core = gaussian(x, y, width * .52, height * .48, width * .36, height * .3, .38); const right = gaussian(x, y, width * .79, height * .53, width * .3, height * .32, .48); const plateauWest = gaussian(x, y, width * .18, height * .3, width * .18, height * .16, .22); const plateauEast = gaussian(x, y, width * .82, height * .68, width * .2, height * .18, .2); const basinCenter = gaussian(x, y, width * .55, height * .56, width * .19, height * .14, .2); const basinSouth = gaussian(x, y, width * .42, height * .78, width * .17, height * .11, .16); const ridgeWest = segmentInfluence(x, y, width * .12, height * .25, width * .42, height * .72, width * .055, .34); const ridgeCentral = segmentInfluence(x, y, width * .35, height * .72, width * .54, height * .18, width * .05, .31); const ridgeEast = segmentInfluence(x, y, width * .56, height * .76, width * .9, height * .27, width * .055, .36); const ridgeNorth = segmentInfluence(x, y, width * .28, height * .24, width * .73, height * .2, width * .045, .2); const troughNorthWest = gaussian(x, y, width * .35, height * .12, width * .18, height * .08, .34); const troughNorthEast = gaussian(x, y, width * .78, height * .2, width * .15, height * .1, .28); const troughSouthWest = gaussian(x, y, width * .24, height * .86, width * .18, height * .09, .3); const troughSouthEast = gaussian(x, y, width * .7, height * .88, width * .22, height * .08, .3); const lowFrequency = noise2(x / 190, y / 190, seed + ':heightmap') * .16 + noise2(x / 72, y / 72, seed + ':detail') * .1; const relief = noise2(x / 28, y / 28, seed + ':relief') * .09; return clamp(edge * (.07 + left + core + right + plateauWest + plateauEast + ridgeWest + ridgeCentral + ridgeEast + ridgeNorth + lowFrequency + relief - basinCenter - basinSouth - troughNorthWest - troughNorthEast - troughSouthWest - troughSouthEast), 0, 1); };
+        const heightAt = (x, y) => { const nx = (x - cx) / rx, ny = (y - cy) / ry; const coastNoise = (noise2(x / 260, y / 230, seed + ':coast-field') - .5) * .25; const coastDistance = Math.pow(Math.abs(nx), 2.25) + Math.pow(Math.abs(ny), 2.25) + coastNoise; const edge = clamp(1 - Math.pow(Math.max(0, coastDistance), .62), 0, 1); const left = gaussian(x, y, width * .22, height * .51, width * .3, height * .31, .45); const core = gaussian(x, y, width * .52, height * .48, width * .36, height * .3, .38); const right = gaussian(x, y, width * .79, height * .53, width * .3, height * .32, .48); const plateauWest = gaussian(x, y, width * .18, height * .3, width * .18, height * .16, .22); const plateauEast = gaussian(x, y, width * .82, height * .68, width * .2, height * .18, .2); const basinCenter = gaussian(x, y, width * .55, height * .56, width * .19, height * .14, .2); const basinSouth = gaussian(x, y, width * .42, height * .78, width * .17, height * .11, .16); const ridgeWest = segmentInfluence(x, y, width * .12, height * .25, width * .42, height * .72, width * .055, .34); const ridgeCentral = segmentInfluence(x, y, width * .35, height * .72, width * .54, height * .18, width * .05, .31); const ridgeEast = segmentInfluence(x, y, width * .56, height * .76, width * .9, height * .27, width * .055, .36); const ridgeNorth = segmentInfluence(x, y, width * .28, height * .24, width * .73, height * .2, width * .045, .2); const troughNorthWest = gaussian(x, y, width * .35, height * .12, width * .18, height * .08, .34); const troughNorthEast = gaussian(x, y, width * .78, height * .2, width * .15, height * .1, .28); const troughSouthWest = gaussian(x, y, width * .24, height * .86, width * .18, height * .09, .3); const troughSouthEast = gaussian(x, y, width * .7, height * .88, width * .22, height * .08, .3); const lowFrequency = noise2(x / 190, y / 190, seed + ':heightmap') * .16 + noise2(x / 72, y / 72, seed + ':detail') * .1; const relief = noise2(x / 28, y / 28, seed + ':relief') * .09; const land = islandField(x,y,width,height,seed); return clamp(land * .62 * (.23 + left + core + right + plateauWest + plateauEast + ridgeWest + ridgeCentral + ridgeEast + ridgeNorth + lowFrequency + relief - basinCenter - basinSouth - troughNorthWest - troughNorthEast - troughSouthWest - troughSouthEast), 0, 1); };
         const isLandPoint = (x, y) => heightAt(x, y) >= .13;
         const moistureAt = (x, y) => clamp(.28 + noise2(x / 210, y / 210, seed + ':moisture') * .5 + noise2(x / 70, y / 70, seed + ':rainfall') * .22 + (1 - Math.abs(y / height - .5) * 1.7) * .12, 0, 1);
         const island = []; const angularLobe = (angle, center, width, strength) => { let d = Math.atan2(Math.sin(angle - center), Math.cos(angle - center)); return strength * Math.exp(-(d * d) / (width * width)); };
@@ -634,7 +672,7 @@
       function generateWorld(graph, cells) {
         const seed = seedInput.value;
         const plan = layoutGraph(graph, state.width, state.height, seed);
-        state.terrain = buildTerrain(plan.width, plan.height, +detailInput.value, seed, cells);
+        state.terrain = buildTerrain(plan.width, plan.height, +detailInput.value, seed, Math.max(cells, 2600));
         state.layout = layoutGraph(graph, state.width, state.height, seed, state.terrain);
         const scale = Math.min(state.dpr, 4096 / Math.max(plan.width, plan.height));
         terrainLayer.width = Math.ceil(plan.width * scale);
@@ -648,7 +686,7 @@
         if (!state.graph || !state.layout || !state.terrain) return;
         // The sea fills the viewport independently of the island's pan and zoom.
         const sea = ctx.createLinearGradient(0, 0, state.width, state.height);
-        sea.addColorStop(0, '#6f91bd'); sea.addColorStop(.5, '#557ba8'); sea.addColorStop(1, '#3e628f');
+        sea.addColorStop(0, '#173e4b'); sea.addColorStop(.5, '#245762'); sea.addColorStop(1, '#102f40');
         ctx.fillStyle = sea; ctx.fillRect(0, 0, state.width, state.height);
         ctx.save(); ctx.translate(state.panX, state.panY); ctx.scale(state.zoom, state.zoom);
         ctx.drawImage(terrainLayer, 0, 0, state.layout.width, state.layout.height); drawRoads(); drawNodes(); ctx.restore();
@@ -657,23 +695,92 @@
       function drawTerrain(ctx, w, h) {
         const { island, detail, seed, isLandPoint } = state.terrain;
         const isLand = site => site.h >= .13 && isLandPoint(site.x, site.y);
-        const colorForSite = site => { const v = site.h, m = site.moisture; if (v < .27) return [63, 125, 114]; if (v > .95) return m > .55 ? [232, 235, 228] : [176, 166, 149]; if (v > .82) return m > .58 ? [193, 187, 143] : [140, 120, 98]; if (v > .66) return m > .58 ? [159, 170, 122] : [132, 113, 91]; if (m > .68) return [78, 156, 125]; if (m < .34) return [169, 143, 96]; return [111, 166, 112]; };
-        ctx.globalAlpha = .96; state.terrain.cells.filter(({ site }) => isLand(site)).forEach(({ site, poly }) => { const c = colorForSite(site); ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`; ctx.beginPath(); poly.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); ctx.closePath(); ctx.fill(); ctx.strokeStyle = 'rgba(40, 98, 91, .1)'; ctx.lineWidth = .42; ctx.stroke(); }); ctx.globalAlpha = 1;
-        ctx.globalCompositeOperation = 'screen'; ctx.strokeStyle = 'rgba(196, 213, 145, .08)'; ctx.lineWidth = 1; for (let k = 0; k < 8 + detail * 3; k++) { const yy = h * (.15 + k / (12 + detail * 2)); ctx.beginPath(); for (let x = -40; x < w + 40; x += 24) { const y = yy + Math.sin(x / 100 + k * 1.9) * 14 + noise2(x / 70, k, seed) * 18; x === -40 ? ctx.moveTo(x, y) : ctx.lineTo(x, y); } ctx.stroke(); } ctx.globalCompositeOperation = 'source-over';
+        const colorForSite = site => {
+          const v=site.h,m=site.moisture;
+          const stops=[[.13,[205,194,151]],[.22,[161,181,135]],[.4,[126,158,121]],[.62,[143,155,126]],[.8,[166,161,143]],[1,[219,218,203]]];
+          const index=Math.max(1,stops.findIndex(([h])=>v<=h));const [lo,a]=stops[index-1],[hi,b]=stops[index];const t=clamp((v-lo)/(hi-lo),0,1);
+          return a.map((n,i)=>Math.round(n+(b[i]-n)*t+(m-.5)*8));
+        };
+        // Political regions use the existing Voronoi land cells. Chapter capitals
+        // are seeds; shared cell edges become country borders, never graph roads.
+        const capitals=state.overview?state.graph.nodes.map(n=>state.layout.pos.get(n.id)):[];
+        const palette=['#e6c779','#a4c98c','#c7a8c8','#8dbfc9','#dca58c','#c6cb87','#9daed2','#d5b784'];
+        const owners=new Map();
+        const borderEdges=new Map();
+        if(capitals.length)state.terrain.cells.forEach(({site,poly})=>{
+          if(!isLand(site))return;
+          let owner=0,best=Infinity;
+          capitals.forEach((p,i)=>{const d=(site.x-p.x)**2+(site.y-p.y)**2;if(d<best){best=d;owner=i}});
+          owners.set(site,owner);
+          poly.forEach((a,i)=>{const b=poly[(i+1)%poly.length];const key=[`${a.x.toFixed(2)},${a.y.toFixed(2)}`,`${b.x.toFixed(2)},${b.y.toFixed(2)}`].sort().join('|');const old=borderEdges.get(key);if(old){old.boundary=old.owner!==owner}else borderEdges.set(key,{a,b,owner,boundary:false})});
+        });
+        const coastline=new Map();
+        state.terrain.cells.forEach(({site,poly})=>{
+          if(!isLand(site))return;
+          poly.forEach((a,i)=>{const b=poly[(i+1)%poly.length];const key=[`${a.x.toFixed(2)},${a.y.toFixed(2)}`,`${b.x.toFixed(2)},${b.y.toFixed(2)}`].sort().join('|');if(coastline.has(key))coastline.delete(key);else coastline.set(key,{a,b})});
+        });
+        const coastPath=new Path2D();coastline.forEach(({a,b})=>{coastPath.moveTo(a.x,a.y);coastPath.lineTo(b.x,b.y)});
+        ctx.lineJoin='round';ctx.lineCap='round';
+        for(const [width,color] of [[35,'rgba(112,179,175,.09)'],[19,'rgba(142,203,188,.16)'],[8,'rgba(193,214,183,.45)']]){ctx.lineWidth=width;ctx.strokeStyle=color;ctx.stroke(coastPath)}
+        ctx.globalAlpha = .96; state.terrain.cells.filter(({ site }) => isLand(site)).forEach(({ site, poly }) => { const c = colorForSite(site); ctx.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`; ctx.beginPath(); poly.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); ctx.closePath(); ctx.fill(); ctx.strokeStyle = 'rgba(110,132,108,.025)'; ctx.lineWidth = .42; ctx.stroke(); }); ctx.globalAlpha = 1;
+        if(capitals.length){
+          ctx.globalAlpha=.18;
+          state.terrain.cells.forEach(({site,poly})=>{if(!owners.has(site))return;ctx.fillStyle=palette[owners.get(site)%palette.length];ctx.beginPath();poly.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();ctx.fill()});
+          ctx.globalAlpha=1;ctx.strokeStyle='rgba(79,83,63,.65)';ctx.lineWidth=2;ctx.setLineDash([9,6]);
+          borderEdges.forEach(edge=>{if(!edge.boundary)return;ctx.beginPath();ctx.moveTo(edge.a.x,edge.a.y);ctx.lineTo(edge.b.x,edge.b.y);ctx.stroke()});ctx.setLineDash([]);
+        }
+        ctx.strokeStyle='rgba(233,220,175,.85)';ctx.lineWidth=2;ctx.stroke(coastPath);
         ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.lineCap = 'round'; state.terrain.rivers.forEach((river, i) => { const major = i % 3 === 0; ctx.strokeStyle = major ? 'rgba(52, 128, 170, .72)' : 'rgba(70, 155, 190, .5)'; ctx.lineWidth = major ? 2.6 : 1.35; ctx.beginPath(); let started = false; river.forEach((p, j) => { if (!isLandPoint(p.x, p.y)) return; if (!started) { ctx.moveTo(p.x, p.y); started = true; } else { const prev = river[j - 1]; ctx.quadraticCurveTo(prev.x, prev.y, (prev.x + p.x) / 2, (prev.y + p.y) / 2); } }); if (started) ctx.stroke(); }); ctx.restore();
       }
       function drawRoads() {
-        const pos = state.layout.pos; const selected = state.selected;
-        state.graph.edges.forEach(([a, b], i) => { const p = pos.get(a), q = pos.get(b), route = state.layout.routes.get(a + '>' + b) || [p, q]; const prior = selected?.ancestors.has(a) && selected.ancestors.has(b); const active = prior || selected?.reachable.has(a) && selected.reachable.has(b); ctx.save(); ctx.lineCap = 'round'; ctx.strokeStyle = active ? 'rgba(193, 118, 53, .62)' : 'rgba(74, 61, 48, .62)'; ctx.lineWidth = active ? 8 : 6; ctx.beginPath(); route.forEach((point, j) => j ? ctx.lineTo(point.x, point.y) : ctx.moveTo(point.x, point.y)); ctx.stroke(); ctx.strokeStyle = prior ? '#80ddff' : active ? 'rgba(247, 205, 102, .95)' : 'rgba(224, 190, 116, .82)'; ctx.lineWidth = active ? 2.4 : 1.8; ctx.setLineDash([10, 8]); ctx.beginPath(); route.forEach((point, j) => j ? ctx.lineTo(point.x, point.y) : ctx.moveTo(point.x, point.y)); ctx.stroke(); ctx.restore(); });
+        const pos=state.layout.pos,selected=state.selected;
+        const edges=selected?state.graph.edges.filter(([a,b])=>a===selected.id||b===selected.id):state.layout.overviewEdges;
+        const cacheKey=selected?.id || '__overview';
+        state.layout.roadCache ||= new Map();
+        if(!state.layout.roadCache.has(cacheKey))state.layout.roadCache.set(cacheKey,MapRoadLayout.build(edges,pos));
+        const roadLayout=state.layout.roadCache.get(cacheKey);
+        edges.forEach(([a,b])=>{
+          const route=roadLayout.routes.get(a+'>'+b);
+          if(!route)return;
+          const prior=selected?.ancestors.has(a)&&selected.ancestors.has(b);
+          ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+          const path=new Path2D();route.forEach((p,i)=>i?path.lineTo(p.x,p.y):path.moveTo(p.x,p.y));
+          ctx.strokeStyle='rgba(53,59,43,.25)';ctx.lineWidth=7;ctx.stroke(path);
+          ctx.strokeStyle=selected?(prior?'#a5e1e6':'#f2ca79'):'#e9d9ae';ctx.lineWidth=selected?3.5:2.5;ctx.stroke(path);
+          ctx.strokeStyle='rgba(91,76,51,.45)';ctx.lineWidth=.8;ctx.setLineDash([3,7]);ctx.stroke(path);ctx.restore();
+        });
       }
       function drawNodes() {
-        const pos = state.layout.pos; state.graph.nodes.forEach(node => { const p = pos.get(node.id); const active = state.selected && state.selected.id === node.id; const near = state.hover && state.hover.node.id === node.id; ctx.save(); ctx.translate(p.x, p.y);
+        const pos = state.layout.pos; const labelBoxes=[]; const roadPoints=[...(state.layout.roadCache?.get(state.selected?.id || '__overview')?.routes.values() || [])].flat(); state.graph.nodes.forEach(node => { const p = pos.get(node.id); const active = state.selected && state.selected.id === node.id; const near = state.hover && state.hover.node.id === node.id; ctx.save(); ctx.translate(p.x, p.y);
+          if(node.type==='章节区域') {
+            ctx.scale(1/state.zoom,1/state.zoom);
+            ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='rgba(16,39,31,.8)';ctx.shadowBlur=6;
+            ctx.font='600 26px Georgia, "Songti SC", serif';ctx.fillStyle='#fff9e6';ctx.fillText(node.label,0,0);
+            ctx.font='600 13px system-ui';ctx.fillStyle='#f5f2db';ctx.fillText(node.description,0,30);
+            ctx.restore();return;
+          }
           if (active || near) { ctx.fillStyle = active ? 'rgba(246, 201, 103, .28)' : 'rgba(244, 250, 246, .2)'; ctx.beginPath(); ctx.arc(0, 0, 13, 0, TAU); ctx.fill(); }
+          ctx.beginPath();ctx.arc(0,0,9,0,TAU);ctx.fillStyle='#f5e9c9';ctx.fill();ctx.strokeStyle='#66765d';ctx.lineWidth=2;ctx.stroke();
           ctx.lineCap = 'round'; ctx.strokeStyle = active ? '#7d4b15' : '#173f39'; ctx.lineWidth = active ? 3.5 : 3;
           ctx.beginPath(); ctx.moveTo(0, 4); ctx.lineTo(0, -27); ctx.stroke();
           ctx.fillStyle = active ? '#f6c967' : near ? '#fff0bf' : '#f4faf6'; ctx.strokeStyle = active ? '#7d4b15' : '#215b51'; ctx.lineWidth = 2;
           ctx.beginPath(); ctx.moveTo(1, -27); ctx.lineTo(20, -21); ctx.lineTo(1, -14); ctx.closePath(); ctx.fill(); ctx.stroke();
-          ctx.font = '600 16px system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top'; ctx.fillStyle = active ? '#ffe7a2' : '#f0ead0'; ctx.shadowColor = 'rgba(0,0,0,.9)'; ctx.shadowBlur = 6; ctx.fillText(node.label, 0, 11); ctx.restore(); });
+          const labelScale=Math.max(1,Math.min(1.7,.55/state.zoom));ctx.scale(labelScale,labelScale);
+          ctx.font='600 16px system-ui, sans-serif';ctx.textAlign='center';ctx.textBaseline='top';
+          const lines=node.label.match(/.{1,10}/gu)||[node.label];
+          const labelWidth=Math.max(...lines.map(line=>ctx.measureText(line).width))+18,labelHeight=lines.length*22+8;
+          const candidates=[{x:-labelWidth/2,y:20},{x:-labelWidth/2,y:-labelHeight-38},{x:28,y:-labelHeight/2},{x:-labelWidth-28,y:-labelHeight/2}];
+          let chosen=candidates[0],best=Infinity;
+          for(const candidate of candidates){
+            const box={x:p.x+candidate.x*labelScale,y:p.y+candidate.y*labelScale,w:labelWidth*labelScale,h:labelHeight*labelScale};
+            let score=roadPoints.filter(q=>q.x>box.x-5&&q.x<box.x+box.w+5&&q.y>box.y-5&&q.y<box.y+box.h+5).length;
+            score+=labelBoxes.filter(q=>box.x<q.x+q.w&&box.x+box.w>q.x&&box.y<q.y+q.h&&box.y+box.h>q.y).length*1000;
+            const sx=box.x*state.zoom+state.panX,sy=box.y*state.zoom+state.panY;
+            if(sx<6||sx+box.w*state.zoom>state.width-6||sy<6||sy+box.h*state.zoom>state.height-6)score+=500;
+            if(score<best){best=score;chosen=candidate}
+          }
+          labelBoxes.push({x:p.x+chosen.x*labelScale,y:p.y+chosen.y*labelScale,w:labelWidth*labelScale,h:labelHeight*labelScale});
+          ctx.shadowBlur=0;ctx.fillStyle='rgba(250,248,237,.94)';ctx.beginPath();ctx.roundRect(chosen.x,chosen.y,labelWidth,labelHeight,6);ctx.fill();ctx.fillStyle='#253f39';lines.forEach((line,i)=>ctx.fillText(line,chosen.x+labelWidth/2,chosen.y+4+i*22)); ctx.restore(); });
       }
       function drawTooltip(x, y, node) { const text = node.label + ' · ' + node.type; ctx.save(); ctx.font = '12px system-ui'; const width = ctx.measureText(text).width + 20; const tx = clamp(x + 14, 8, state.width - width - 8), ty = clamp(y - 40, 8, state.height - 35); ctx.fillStyle = 'rgba(5, 19, 18, .93)'; ctx.strokeStyle = 'rgba(246, 201, 103, .5)'; ctx.beginPath(); ctx.roundRect(tx, ty, width, 27, 7); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#f4dda1'; ctx.textBaseline = 'middle'; ctx.fillText(text, tx + 10, ty + 14); ctx.restore(); }
       function connected(start, links) {
@@ -695,18 +802,67 @@
         info.textContent = node.description + ' · 前置知识点 ' + (ancestors.size - 1) + ' 个（蓝线），后续知识点 ' + (reachable.size - 1) + ' 个（金线） · ' + node.type + ' · 难度 ' + node.difficulty + '/5';
         selectedEl.replaceChildren(title, info);
         [...nodeList.children].forEach(b => b.classList.toggle('active', b.dataset.id === node.id)); draw(); }
-      function fitView() { state.zoom = Math.min(1, state.width / state.layout.width, state.height / state.layout.height); state.panX = (state.width - state.layout.width * state.zoom) / 2; state.panY = (state.height - state.layout.height * state.zoom) / 2; draw(); }
+      function fitView() { state.zoom = state.overview ? Math.min(state.width/state.layout.width,state.height/state.layout.height)*1.15 : Math.max(.8, Math.min(1, state.width / state.layout.width, state.height / state.layout.height)); state.panX = (state.width - state.layout.width * state.zoom) / 2; state.panY = (state.height - state.layout.height * state.zoom) / 2; draw(); }
       function renderNodeList() { nodeList.innerHTML = ''; state.graph.nodes.forEach(n => { const b = document.createElement('button'); b.type = 'button'; b.textContent = n.label; b.dataset.id = n.id; b.addEventListener('click', () => selectNode(n)); nodeList.appendChild(b); }); }
-      function generate() { try { const graph = parseGraph(input.value); const requestedCellCount = clamp(Number(cellCountInput.value) || 1160, 100, 22000); cellCountInput.value = requestedCellCount; cellCountRange.value = clamp(requestedCellCount, +cellCountRange.min, +cellCountRange.max); state.graph = graph; generateWorld(graph, requestedCellCount); state.selected = null; state.hover = null; document.getElementById('nodeCount').textContent = graph.nodes.length; document.getElementById('edgeCount').textContent = graph.edges.length; document.getElementById('layerCount').textContent = state.layout.layers.length; selectedEl.innerHTML = '<strong>选择知识点</strong><p>查看学习目标与关联知识点。</p>'; status.textContent = '生成成功 · ' + requestedCellCount + ' 个 Voronoi 单元已完成。'; status.className = 'status ok'; renderNodeList(); fitView(); } catch (e) { status.textContent = e.message || 'JSON 解析失败。'; status.className = 'status'; } }
+      function generate() { try { const graph = parseGraph(input.value); const requestedCellCount = clamp(Number(cellCountInput.value) || 1160, 100, 22000); cellCountInput.value = requestedCellCount; cellCountRange.value = clamp(requestedCellCount, +cellCountRange.min, +cellCountRange.max); state.graph = graph; generateWorld(graph, requestedCellCount); state.selected = null; state.hover = null; document.getElementById('nodeCount').textContent = graph.nodes.length; document.getElementById('edgeCount').textContent = graph.edges.length; document.getElementById('layerCount').textContent = state.layout.layers.length; selectedEl.innerHTML = '<strong>拖动探索地图 · 滚轮缩放</strong><p>总览仅显示无交叉道路；选择节点查看全部直接前后驱，依赖数据完整保留。</p>'; status.textContent = '生成成功 · ' + requestedCellCount + ' 个 Voronoi 单元已完成。'; status.className = 'status ok'; renderNodeList(); fitView(); } catch (e) { status.textContent = e.message || 'JSON 解析失败。'; status.className = 'status'; } }
 
       canvas.addEventListener('pointerdown', e => { canvas.setPointerCapture(e.pointerId); state.dragging = true; state.moved = false; state.lastX = e.offsetX; state.lastY = e.offsetY; });
-      canvas.addEventListener('pointermove', e => { const dx = e.offsetX - state.lastX, dy = e.offsetY - state.lastY; if (state.dragging) { if (Math.abs(dx) + Math.abs(dy) > 2) state.moved = true; state.panX += dx; state.panY += dy; state.lastX = e.offsetX; state.lastY = e.offsetY; } const wp = worldPoint(e.offsetX, e.offsetY); let found = null; if (state.layout) state.graph.nodes.some(n => { const p = state.layout.pos.get(n.id); if (Math.hypot(wp.x - p.x, wp.y - p.y) < 33) { found = n; return true; } return false; }); state.hover = found ? { node: found, screen: { x: e.offsetX, y: e.offsetY } } : null; canvas.style.cursor = found ? 'pointer' : state.dragging ? 'grabbing' : 'grab'; draw(); });
+      canvas.addEventListener('pointermove', e => { const dx = e.offsetX - state.lastX, dy = e.offsetY - state.lastY; if (state.dragging) { if (Math.abs(dx) + Math.abs(dy) > 2) state.moved = true; state.panX += dx; state.panY += dy; state.lastX = e.offsetX; state.lastY = e.offsetY; } const wp = worldPoint(e.offsetX, e.offsetY); let found = null; if (state.layout) state.graph.nodes.some(n => { const p = state.layout.pos.get(n.id); if (Math.hypot(wp.x - p.x, wp.y - p.y) < (n.type === '章节区域' ? 100/state.zoom : 33)) { found = n; return true; } return false; }); state.hover = found ? { node: found, screen: { x: e.offsetX, y: e.offsetY } } : null; canvas.style.cursor = found ? 'pointer' : state.dragging ? 'grabbing' : 'grab'; draw(); });
       canvas.addEventListener('pointerup', e => { state.dragging = false; if (!state.moved && state.hover) selectNode(state.hover.node); });
       canvas.addEventListener('pointerleave', () => { state.hover = null; if (!state.dragging) draw(); });
       canvas.addEventListener('wheel', e => { e.preventDefault(); const before = worldPoint(e.offsetX, e.offsetY); state.zoom = clamp(state.zoom * (e.deltaY > 0 ? .9 : 1.1), Math.min(.55, state.width / state.layout.width, state.height / state.layout.height), 2.8); state.panX = e.offsetX - before.x * state.zoom; state.panY = e.offsetY - before.y * state.zoom; draw(); }, { passive: false });
+      let subjectWorld=null;
+      function showSubjectView(message) {
+        if(!subjectWorld || subjectWorld.seed!==message.seed){
+          seedInput.value=message.seed;state.overview=true;
+          input.value=JSON.stringify({nodes:message.regions,edges:[]});generate();
+          subjectWorld={seed:message.seed,graph:state.graph,layout:state.layout,terrain:state.terrain,chapters:new Map()};
+        }
+        state.selected=null;state.hover=null;state.terrain=subjectWorld.terrain;
+        if(!message.focusRegion){
+          state.overview=true;state.graph=subjectWorld.graph;state.layout=subjectWorld.layout;fitView();return;
+        }
+        const capital=subjectWorld.layout.pos.get(message.focusRegion);
+        if(!capital)return;
+        if(!subjectWorld.chapters.has(message.focusRegion)){
+          const graph=parseGraph(JSON.stringify(message.graph));
+          const capitals=[...subjectWorld.layout.pos.entries()];
+          const cells=subjectWorld.terrain.cells.filter(({site})=>{
+            if(!subjectWorld.terrain.isLandPoint(site.x,site.y))return false;
+            const nearest=capitals.reduce((best,item)=>Math.hypot(item[1].x-site.x,item[1].y-site.y)<Math.hypot(best[1].x-site.x,best[1].y-site.y)?item:best);
+            return nearest[0]===message.focusRegion;
+          });
+          const positions=new Map();
+          graph.nodes.forEach(node=>{
+            let best=null,score=-Infinity;
+            cells.forEach(({site})=>{
+              const distance=positions.size?Math.min(...[...positions.values()].map(p=>Math.hypot(p.x-site.x,(p.y-site.y)*1.3))):-Math.hypot(site.x-capital.x,site.y-capital.y);
+              if(distance>score){score=distance;best=site}
+            });
+            positions.set(node.id,{x:best?.x??capital.x,y:best?.y??capital.y});
+          });
+          const layout=layoutGraph(graph,state.width,state.height,message.seed+message.focusRegion);
+          layout.pos=positions;layout.width=subjectWorld.layout.width;layout.height=subjectWorld.layout.height;
+          layout.routes=new Map(graph.edges.map(([a,b])=>[a+'>'+b,[positions.get(a),positions.get(b)]]));
+          const cross=(a,b,c,d)=>{const o=(p,q,r)=>(q.x-p.x)*(r.y-p.y)-(q.y-p.y)*(r.x-p.x);return o(a,b,c)*o(a,b,d)<0&&o(c,d,a)*o(c,d,b)<0};
+          layout.overviewEdges=[];
+          graph.edges.forEach(([a,b])=>{if(!layout.overviewEdges.some(([c,d])=>new Set([a,b,c,d]).size===4&&cross(positions.get(a),positions.get(b),positions.get(c),positions.get(d))))layout.overviewEdges.push([a,b])});
+          subjectWorld.chapters.set(message.focusRegion,{graph,layout,cells});
+        }
+        const chapter=subjectWorld.chapters.get(message.focusRegion);
+        state.overview=false;state.graph=chapter.graph;state.layout=chapter.layout;
+        const points=chapter.cells.map(c=>c.site);
+        const left=Math.min(...points.map(p=>p.x)),right=Math.max(...points.map(p=>p.x)),top=Math.min(...points.map(p=>p.y)),bottom=Math.max(...points.map(p=>p.y));
+        state.zoom=Math.min(2,state.width/(right-left+180),state.height/(bottom-top+180));
+        state.panX=state.width/2-(left+right)/2*state.zoom;state.panY=state.height/2-(top+bottom)/2*state.zoom;
+        draw();
+      }
       window.addEventListener('message', event => {
-        if (!event.data || event.data.type !== 'aristotle-knowledge-map') return;
+        if (event.origin !== window.location.origin || event.source !== window.parent || !event.data || event.data.type !== 'aristotle-knowledge-map') return;
+        if(event.data.regions?.length){showSubjectView(event.data);return;}
+        if (typeof event.data.seed === 'string') seedInput.value = event.data.seed;
         document.body.classList.add('embedded');
+        state.overview = !!event.data.overview;
         input.value = JSON.stringify(event.data.graph || sample, null, 2);
         generate();
       });

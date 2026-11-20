@@ -14,7 +14,7 @@ docker compose up -d --wait postgres
 uv sync --locked --python 3.12
 uv run python -m aristotle_backend.migrations
 # 新演示环境才执行；保留旧数据时先走下方的 SQLite 导入流程。
-uv run python -m aristotle_backend.seed --demo --design-flow
+uv run python -m aristotle_backend.seed --demo --design-flow --resource-demo
 uv run uvicorn aristotle_backend.app:create_app --factory --host 127.0.0.1 --port 8018
 ```
 
@@ -40,7 +40,7 @@ uv run uvicorn aristotle_backend.app:create_app --factory --host 127.0.0.1 --por
 
 Swagger 使用方式：先调用 `auth/login`，复制响应中的 `access_token`，点右上角 Authorize 输入令牌，再调用学生或维护者接口。Swagger UI 的静态资源由默认 CDN 加载；离线仍可使用无外部依赖的 `/demo` 和 `/openapi.json`。
 
-演示种子包含 3 个知识点、12 道自编题，题目 `dataset=demo-seed`；审核记录是明确标记的流程夹具，**不表示正式双人标注或独立内容审核已完成**。所有真实新增候选都必须由维护者显式审核。
+基础演示种子包含 3 个旧流程知识点；`--resource-demo` 会在保留学习记录的前提下，将学习中心切换为 resource 中的 203 个知识点、650 道题和 24 个章节范围。资源题仍标记为 `dataset=demo-seed`，仅供本地演示；它们的候选标签和内容尚未完成人工审核。所有真实新增候选都必须由维护者显式审核。
 
 ## 检查
 

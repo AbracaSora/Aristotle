@@ -1,6 +1,7 @@
 """Opt-in local demonstration fixtures; never an automatic production bootstrap."""
 
 import argparse
+import json
 import os
 import time
 from uuid import uuid4
@@ -209,6 +210,9 @@ def main():
     parser.add_argument(
         "--design-flow", action="store_true", help="增量添加设计对齐流程的范围、资料、题目和管理员 mock 夹具"
     )
+    parser.add_argument(
+        "--resource-demo", action="store_true", help="将四科 resource 数据显式发布到本地演示环境"
+    )
     args = parser.parse_args()
     engine, sessions = open_database(database_url())
     created = seed_demo(sessions, os.getenv("ARISTOTLE_DEMO_PASSWORD", "demo-password"))
@@ -216,6 +220,11 @@ def main():
         from .design_seed import seed_design_flow
 
         seed_design_flow(sessions)
+    if args.resource_demo:
+        from .resource_seed import import_resource_demo
+
+        result = import_resource_demo(sessions)
+        print(json.dumps(result, ensure_ascii=False))
     engine.dispose()
     print(
         "已创建 student1 / student2 / editor 演示账号和 12 道演示题。"

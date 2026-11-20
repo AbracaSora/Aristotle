@@ -1,0 +1,14 @@
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { NButton, NRadioGroup, NRadio, NAlert } from 'naive-ui';
+import bank from './demo-questions.json';
+const props=defineProps<{nodeId:string; title:string}>();
+const emit=defineEmits<{back:[];answer:[id:string]}>();
+const questions=computed(()=>(bank as Record<string, typeof bank[keyof typeof bank]>)[props.nodeId] || []);
+const index=ref(0), answers=ref<Record<string,string>>({}), checked=ref<Record<string,boolean>>({});
+const question=computed(()=>questions.value[index.value]);
+function check(){checked.value[question.value.id]=true;emit('answer',question.value.id)}
+</script>
+<template><section class="immersive-question" aria-label="专注答题"><header class="section-heading"><div class="practice-heading"><h1>{{title}}</h1></div><NButton size="small" quaternary @click="emit('back')">返回地图</NButton></header><p class="practice-meta">演示练习 · 题目待审核 · 进度保存在本机</p><div class="question-nav"><NButton v-for="(q,i) in questions" :key="q.id" :type="i===index?'primary':'default'" @click="index=i">{{i+1}}{{checked[q.id]?' ✓':''}}</NButton></div><template v-if="question"><p>{{question.chapter}} · {{index+1}} / {{questions.length}}</p><h2>{{question.stem}}</h2><NRadioGroup v-model:value="answers[question.id]" :disabled="checked[question.id]" class="options"><NRadio v-for="(text,key) in question.options" :key="key" :value="key">{{key}}. {{text}}</NRadio></NRadioGroup><NButton :disabled="!answers[question.id] || checked[question.id]" type="primary" @click="check">检查答案</NButton><NAlert v-if="checked[question.id]" :type="answers[question.id]===question.answer?'success':'warning'">{{answers[question.id]===question.answer?'回答正确':'需要巩固'}} · 答案 {{question.answer}}<p>{{question.explanation}}</p></NAlert><details><summary>题目来源</summary><p>{{question.source_type}} · {{question.review_status}}</p><a v-if="question.source_url" :href="question.source_url" target="_blank" rel="noopener noreferrer">查看原始来源</a></details></template></section></template>
+<style scoped>.immersive-question{padding:16px 0 32px;min-height:calc(100dvh - 130px)}.practice-meta{font-size:12px;color:#7b847d}.options :deep(.n-radio){padding:16px;border:1px solid #dfe6df;border-radius:10px;background:#fbfcfa}.options :deep(.n-radio--checked){border-color:#208064;background:#eff7f2}@media(max-width:600px){.immersive-question{padding:8px 0 24px}.section-heading{align-items:flex-start}.section-heading h1{font-size:22px}}
+.question-nav{display:flex;gap:12px;margin:18px 0 24px;flex-wrap:wrap}.options{display:flex;flex-direction:column;gap:22px;margin:36px 0 40px}h2{line-height:1.85;margin:36px 0}details{margin-top:36px}.section-heading{margin-bottom:16px}.practice-heading h1{font-size:22px;margin:0;line-height:1.4}.practice-meta{margin:10px 0}.immersive-question :deep(.n-alert){margin-top:32px}</style>

@@ -33,7 +33,7 @@ class Node(Input):
 
 class GraphInput(Input):
     version: Identifier
-    nodes: list[Node] = Field(min_length=1, max_length=200)
+    nodes: list[Node] = Field(min_length=1, max_length=250)
 
 
 class QuestionInput(Input):

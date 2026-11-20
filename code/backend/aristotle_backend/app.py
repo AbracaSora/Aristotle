@@ -362,6 +362,20 @@ def create_app(database_url: str | None = None):
             "notice": "这是多题作答的规则摘要，不是学生总体认知等级或经验证的能力测量。",
         }
 
+    @app.get("/api/v1/curriculum-progress", tags=["学习"])
+    def curriculum_progress(user=Depends(student), db=Depends(get_db)):
+        latest = {}
+        for q in db.scalars(select(Question).where(Question.status == "published")):
+            if q.question_id not in latest or q.version > latest[q.question_id].version:
+                latest[q.question_id] = q
+        answered = set(db.scalars(select(Attempt.question_key).where(Attempt.user_id == user.id)))
+        result = {}
+        for q in latest.values():
+            item = result.setdefault(q.knowledge_id, {"total": 0, "completed": 0})
+            item["total"] += 1
+            item["completed"] += int(q.key in answered)
+        return result
+
     @app.post("/api/v1/tasks", status_code=201, response_model=TaskView, tags=["学习"])
     def create_task(body: TaskInput, request: Request, user=Depends(student), db=Depends(get_db)):
         now = request.app.state.clock()

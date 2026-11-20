@@ -1,0 +1,2291 @@
+{
+  "version": "resource-2027-v1",
+  "subjects": [
+    {
+      "id": "DS",
+      "title": "数据结构",
+      "nodes": [
+        {
+          "id": "DS-basics",
+          "title": "数据、逻辑结构与存储结构",
+          "chapter": "基本概念",
+          "chapterNumber": 1
+        },
+        {
+          "id": "DS-adt",
+          "title": "抽象数据类型与基本操作",
+          "chapter": "基本概念",
+          "chapterNumber": 1
+        },
+        {
+          "id": "DS-algorithm",
+          "title": "算法特性与正确性",
+          "chapter": "基本概念",
+          "chapterNumber": 1
+        },
+        {
+          "id": "DS-complexity",
+          "title": "时间与空间复杂度",
+          "chapter": "基本概念",
+          "chapterNumber": 1
+        },
+        {
+          "id": "DS-list",
+          "title": "线性表的逻辑性质",
+          "chapter": "线性表",
+          "chapterNumber": 2
+        },
+        {
+          "id": "DS-seqlist",
+          "title": "顺序表访问与更新",
+          "chapter": "线性表",
+          "chapterNumber": 2
+        },
+        {
+          "id": "DS-singly",
+          "title": "单链表操作",
+          "chapter": "线性表",
+          "chapterNumber": 2
+        },
+        {
+          "id": "DS-linked-variants",
+          "title": "双向、循环与静态链表",
+          "chapter": "线性表",
+          "chapterNumber": 2
+        },
+        {
+          "id": "DS-list-applications",
+          "title": "线性表合并、去重与选择",
+          "chapter": "线性表",
+          "chapterNumber": 2
+        },
+        {
+          "id": "DS-stack",
+          "title": "栈的规则与顺序栈",
+          "chapter": "栈、队列和数组",
+          "chapterNumber": 3
+        },
+        {
+          "id": "DS-linked-stack",
+          "title": "链栈实现",
+          "chapter": "栈、队列和数组",
+          "chapterNumber": 3
+        },
+        {
+          "id": "DS-queue",
+          "title": "队列规则与循环队列",
+          "chapter": "栈、队列和数组",
+          "chapterNumber": 3
+        },
+        {
+          "id": "DS-linked-queue",
+          "title": "链队列实现",
+          "chapter": "栈、队列和数组",
+          "chapterNumber": 3
+        },
+        {
+          "id": "DS-stack-applications",
+          "title": "括号、表达式与递归栈",
+          "chapter": "栈、队列和数组",
+          "chapterNumber": 3
+        },
+        {
+          "id": "DS-queue-applications",
+          "title": "队列调度与层次处理",
+          "chapter": "栈、队列和数组",
+          "chapterNumber": 3
+        },
+        {
+          "id": "DS-array-address",
+          "title": "多维数组地址计算",
+          "chapter": "栈、队列和数组",
+          "chapterNumber": 3
+        },
+        {
+          "id": "DS-matrix-storage",
+          "title": "特殊矩阵压缩存储",
+          "chapter": "栈、队列和数组",
+          "chapterNumber": 3
+        },
+        {
+          "id": "DS-tree",
+          "title": "树的术语与计数",
+          "chapter": "树和二叉树",
+          "chapterNumber": 4
+        },
+        {
+          "id": "DS-binary",
+          "title": "二叉树性质",
+          "chapter": "树和二叉树",
+          "chapterNumber": 4
+        },
+        {
+          "id": "DS-binary-storage",
+          "title": "二叉树顺序与链式存储",
+          "chapter": "树和二叉树",
+          "chapterNumber": 4
+        },
+        {
+          "id": "DS-traversal",
+          "title": "二叉树遍历与重建",
+          "chapter": "树和二叉树",
+          "chapterNumber": 4
+        },
+        {
+          "id": "DS-threaded",
+          "title": "线索二叉树",
+          "chapter": "树和二叉树",
+          "chapterNumber": 4
+        },
+        {
+          "id": "DS-tree-storage",
+          "title": "树的双亲、孩子与兄弟表示",
+          "chapter": "树和二叉树",
+          "chapterNumber": 4
+        },
+        {
+          "id": "DS-forest-conversion",
+          "title": "树森林与二叉树转换",
+          "chapter": "树和二叉树",
+          "chapterNumber": 4
+        },
+        {
+          "id": "DS-forest-traversal",
+          "title": "树与森林遍历",
+          "chapter": "树和二叉树",
+          "chapterNumber": 4
+        },
+        {
+          "id": "DS-huffman",
+          "title": "哈夫曼构造与编码",
+          "chapter": "树和二叉树",
+          "chapterNumber": 4
+        },
+        {
+          "id": "DS-union-find",
+          "title": "并查集与集合合并",
+          "chapter": "树和二叉树",
+          "chapterNumber": 4
+        },
+        {
+          "id": "DS-heap",
+          "title": "堆的性质与优先队列",
+          "chapter": "树和二叉树",
+          "chapterNumber": 4
+        },
+        {
+          "id": "DS-graph",
+          "title": "图的基本性质",
+          "chapter": "图",
+          "chapterNumber": 5
+        },
+        {
+          "id": "DS-adj-matrix",
+          "title": "邻接矩阵",
+          "chapter": "图",
+          "chapterNumber": 5
+        },
+        {
+          "id": "DS-adj-list",
+          "title": "邻接表",
+          "chapter": "图",
+          "chapterNumber": 5
+        },
+        {
+          "id": "DS-cross-multilist",
+          "title": "十字链表与邻接多重表",
+          "chapter": "图",
+          "chapterNumber": 5
+        },
+        {
+          "id": "DS-dfs",
+          "title": "深度优先遍历",
+          "chapter": "图",
+          "chapterNumber": 5
+        },
+        {
+          "id": "DS-bfs",
+          "title": "广度优先遍历",
+          "chapter": "图",
+          "chapterNumber": 5
+        },
+        {
+          "id": "DS-mst",
+          "title": "最小生成树",
+          "chapter": "图",
+          "chapterNumber": 5
+        },
+        {
+          "id": "DS-shortest",
+          "title": "最短路径",
+          "chapter": "图",
+          "chapterNumber": 5
+        },
+        {
+          "id": "DS-topological",
+          "title": "DAG与拓扑排序",
+          "chapter": "图",
+          "chapterNumber": 5
+        },
+        {
+          "id": "DS-critical",
+          "title": "AOE关键路径",
+          "chapter": "图",
+          "chapterNumber": 5
+        },
+        {
+          "id": "DS-search-basics",
+          "title": "查找条件与平均查找长度",
+          "chapter": "查找",
+          "chapterNumber": 6
+        },
+        {
+          "id": "DS-sequential-search",
+          "title": "顺序查找",
+          "chapter": "查找",
+          "chapterNumber": 6
+        },
+        {
+          "id": "DS-block-search",
+          "title": "分块查找",
+          "chapter": "查找",
+          "chapterNumber": 6
+        },
+        {
+          "id": "DS-binary-search",
+          "title": "折半查找",
+          "chapter": "查找",
+          "chapterNumber": 6
+        },
+        {
+          "id": "DS-bst",
+          "title": "二叉搜索树",
+          "chapter": "查找",
+          "chapterNumber": 6
+        },
+        {
+          "id": "DS-avl",
+          "title": "AVL平衡二叉树",
+          "chapter": "查找",
+          "chapterNumber": 6
+        },
+        {
+          "id": "DS-red-black",
+          "title": "红黑树",
+          "chapter": "查找",
+          "chapterNumber": 6
+        },
+        {
+          "id": "DS-b-tree",
+          "title": "B树操作与高度",
+          "chapter": "查找",
+          "chapterNumber": 6
+        },
+        {
+          "id": "DS-b-plus",
+          "title": "B+树结构与范围查询",
+          "chapter": "查找",
+          "chapterNumber": 6
+        },
+        {
+          "id": "DS-hash",
+          "title": "散列与冲突处理",
+          "chapter": "查找",
+          "chapterNumber": 6
+        },
+        {
+          "id": "DS-naive-match",
+          "title": "字符串与朴素模式匹配",
+          "chapter": "查找",
+          "chapterNumber": 6
+        },
+        {
+          "id": "DS-kmp",
+          "title": "KMP与前缀函数",
+          "chapter": "查找",
+          "chapterNumber": 6
+        },
+        {
+          "id": "DS-search-choice",
+          "title": "查找方法分析与选择",
+          "chapter": "查找",
+          "chapterNumber": 6
+        },
+        {
+          "id": "DS-sort-basics",
+          "title": "排序、稳定性与代价",
+          "chapter": "排序",
+          "chapterNumber": 7
+        },
+        {
+          "id": "DS-insertion",
+          "title": "直接插入排序",
+          "chapter": "排序",
+          "chapterNumber": 7
+        },
+        {
+          "id": "DS-binary-insertion",
+          "title": "折半插入排序",
+          "chapter": "排序",
+          "chapterNumber": 7
+        },
+        {
+          "id": "DS-bubble",
+          "title": "冒泡排序",
+          "chapter": "排序",
+          "chapterNumber": 7
+        },
+        {
+          "id": "DS-selection",
+          "title": "简单选择排序",
+          "chapter": "排序",
+          "chapterNumber": 7
+        },
+        {
+          "id": "DS-shell",
+          "title": "希尔排序",
+          "chapter": "排序",
+          "chapterNumber": 7
+        },
+        {
+          "id": "DS-quick",
+          "title": "快速排序",
+          "chapter": "排序",
+          "chapterNumber": 7
+        },
+        {
+          "id": "DS-heap-sort",
+          "title": "堆排序",
+          "chapter": "排序",
+          "chapterNumber": 7
+        },
+        {
+          "id": "DS-merge-sort",
+          "title": "二路归并排序",
+          "chapter": "排序",
+          "chapterNumber": 7
+        },
+        {
+          "id": "DS-radix",
+          "title": "基数排序",
+          "chapter": "排序",
+          "chapterNumber": 7
+        },
+        {
+          "id": "DS-external",
+          "title": "外部归并与I/O代价",
+          "chapter": "排序",
+          "chapterNumber": 7
+        },
+        {
+          "id": "DS-replacement",
+          "title": "置换选择与最佳归并",
+          "chapter": "排序",
+          "chapterNumber": 7
+        },
+        {
+          "id": "DS-sort-choice",
+          "title": "排序算法分析与选择",
+          "chapter": "排序",
+          "chapterNumber": 7
+        }
+      ],
+      "edges": [
+        [
+          "DS-basics",
+          "DS-adt"
+        ],
+        [
+          "DS-basics",
+          "DS-algorithm"
+        ],
+        [
+          "DS-algorithm",
+          "DS-complexity"
+        ],
+        [
+          "DS-basics",
+          "DS-list"
+        ],
+        [
+          "DS-list",
+          "DS-seqlist"
+        ],
+        [
+          "DS-list",
+          "DS-singly"
+        ],
+        [
+          "DS-singly",
+          "DS-linked-variants"
+        ],
+        [
+          "DS-seqlist",
+          "DS-list-applications"
+        ],
+        [
+          "DS-singly",
+          "DS-list-applications"
+        ],
+        [
+          "DS-list",
+          "DS-stack"
+        ],
+        [
+          "DS-stack",
+          "DS-linked-stack"
+        ],
+        [
+          "DS-singly",
+          "DS-linked-stack"
+        ],
+        [
+          "DS-list",
+          "DS-queue"
+        ],
+        [
+          "DS-queue",
+          "DS-linked-queue"
+        ],
+        [
+          "DS-singly",
+          "DS-linked-queue"
+        ],
+        [
+          "DS-stack",
+          "DS-stack-applications"
+        ],
+        [
+          "DS-queue",
+          "DS-queue-applications"
+        ],
+        [
+          "DS-seqlist",
+          "DS-array-address"
+        ],
+        [
+          "DS-array-address",
+          "DS-matrix-storage"
+        ],
+        [
+          "DS-basics",
+          "DS-tree"
+        ],
+        [
+          "DS-tree",
+          "DS-binary"
+        ],
+        [
+          "DS-binary",
+          "DS-binary-storage"
+        ],
+        [
+          "DS-binary-storage",
+          "DS-traversal"
+        ],
+        [
+          "DS-traversal",
+          "DS-threaded"
+        ],
+        [
+          "DS-tree",
+          "DS-tree-storage"
+        ],
+        [
+          "DS-tree-storage",
+          "DS-forest-conversion"
+        ],
+        [
+          "DS-binary",
+          "DS-forest-conversion"
+        ],
+        [
+          "DS-forest-conversion",
+          "DS-forest-traversal"
+        ],
+        [
+          "DS-traversal",
+          "DS-forest-traversal"
+        ],
+        [
+          "DS-binary",
+          "DS-huffman"
+        ],
+        [
+          "DS-tree",
+          "DS-union-find"
+        ],
+        [
+          "DS-binary-storage",
+          "DS-heap"
+        ],
+        [
+          "DS-basics",
+          "DS-graph"
+        ],
+        [
+          "DS-graph",
+          "DS-adj-matrix"
+        ],
+        [
+          "DS-graph",
+          "DS-adj-list"
+        ],
+        [
+          "DS-adj-list",
+          "DS-cross-multilist"
+        ],
+        [
+          "DS-adj-list",
+          "DS-dfs"
+        ],
+        [
+          "DS-adj-list",
+          "DS-bfs"
+        ],
+        [
+          "DS-queue",
+          "DS-bfs"
+        ],
+        [
+          "DS-graph",
+          "DS-mst"
+        ],
+        [
+          "DS-graph",
+          "DS-shortest"
+        ],
+        [
+          "DS-graph",
+          "DS-topological"
+        ],
+        [
+          "DS-topological",
+          "DS-critical"
+        ],
+        [
+          "DS-basics",
+          "DS-search-basics"
+        ],
+        [
+          "DS-search-basics",
+          "DS-sequential-search"
+        ],
+        [
+          "DS-sequential-search",
+          "DS-block-search"
+        ],
+        [
+          "DS-search-basics",
+          "DS-binary-search"
+        ],
+        [
+          "DS-seqlist",
+          "DS-binary-search"
+        ],
+        [
+          "DS-binary",
+          "DS-bst"
+        ],
+        [
+          "DS-search-basics",
+          "DS-bst"
+        ],
+        [
+          "DS-bst",
+          "DS-avl"
+        ],
+        [
+          "DS-bst",
+          "DS-red-black"
+        ],
+        [
+          "DS-tree",
+          "DS-b-tree"
+        ],
+        [
+          "DS-search-basics",
+          "DS-b-tree"
+        ],
+        [
+          "DS-b-tree",
+          "DS-b-plus"
+        ],
+        [
+          "DS-search-basics",
+          "DS-hash"
+        ],
+        [
+          "DS-seqlist",
+          "DS-naive-match"
+        ],
+        [
+          "DS-naive-match",
+          "DS-kmp"
+        ],
+        [
+          "DS-search-basics",
+          "DS-search-choice"
+        ],
+        [
+          "DS-seqlist",
+          "DS-sort-basics"
+        ],
+        [
+          "DS-sort-basics",
+          "DS-insertion"
+        ],
+        [
+          "DS-insertion",
+          "DS-binary-insertion"
+        ],
+        [
+          "DS-binary-search",
+          "DS-binary-insertion"
+        ],
+        [
+          "DS-sort-basics",
+          "DS-bubble"
+        ],
+        [
+          "DS-sort-basics",
+          "DS-selection"
+        ],
+        [
+          "DS-insertion",
+          "DS-shell"
+        ],
+        [
+          "DS-sort-basics",
+          "DS-quick"
+        ],
+        [
+          "DS-heap",
+          "DS-heap-sort"
+        ],
+        [
+          "DS-sort-basics",
+          "DS-heap-sort"
+        ],
+        [
+          "DS-sort-basics",
+          "DS-merge-sort"
+        ],
+        [
+          "DS-sort-basics",
+          "DS-radix"
+        ],
+        [
+          "DS-merge-sort",
+          "DS-external"
+        ],
+        [
+          "DS-external",
+          "DS-replacement"
+        ],
+        [
+          "DS-heap",
+          "DS-replacement"
+        ],
+        [
+          "DS-sort-basics",
+          "DS-sort-choice"
+        ]
+      ]
+    },
+    {
+      "id": "CO",
+      "title": "计算机组成原理",
+      "nodes": [
+        {
+          "id": "CO-system",
+          "title": "计算机层次与存储程序",
+          "chapter": "计算机系统概述",
+          "chapterNumber": 1
+        },
+        {
+          "id": "CO-translation",
+          "title": "编译、汇编、链接与执行",
+          "chapter": "计算机系统概述",
+          "chapterNumber": 1
+        },
+        {
+          "id": "CO-performance",
+          "title": "时钟、CPI与性能评价",
+          "chapter": "计算机系统概述",
+          "chapterNumber": 1
+        },
+        {
+          "id": "CO-radix",
+          "title": "进位制与定点表示",
+          "chapter": "数据的表示和运算",
+          "chapterNumber": 2
+        },
+        {
+          "id": "CO-signed",
+          "title": "有符号与无符号整数",
+          "chapter": "数据的表示和运算",
+          "chapterNumber": 2
+        },
+        {
+          "id": "CO-alu",
+          "title": "加法器与ALU",
+          "chapter": "数据的表示和运算",
+          "chapterNumber": 2
+        },
+        {
+          "id": "CO-addsub",
+          "title": "补码加减与标志位",
+          "chapter": "数据的表示和运算",
+          "chapterNumber": 2
+        },
+        {
+          "id": "CO-muldiv",
+          "title": "整数乘除及实现",
+          "chapter": "数据的表示和运算",
+          "chapterNumber": 2
+        },
+        {
+          "id": "CO-float-format",
+          "title": "IEEE754浮点表示",
+          "chapter": "数据的表示和运算",
+          "chapterNumber": 2
+        },
+        {
+          "id": "CO-float-ops",
+          "title": "浮点加减与舍入",
+          "chapter": "数据的表示和运算",
+          "chapterNumber": 2
+        },
+        {
+          "id": "CO-hierarchy",
+          "title": "存储层次与局部性",
+          "chapter": "存储器层次结构",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CO-semiconductor",
+          "title": "SRAM、DRAM与Flash",
+          "chapter": "存储器层次结构",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CO-capacity",
+          "title": "主存芯片扩展与连接",
+          "chapter": "存储器层次结构",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CO-interleave",
+          "title": "多模块主存",
+          "chapter": "存储器层次结构",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CO-disk",
+          "title": "磁盘结构与访问时间",
+          "chapter": "存储器层次结构",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CO-ssd",
+          "title": "固态存储与擦写粒度",
+          "chapter": "存储器层次结构",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CO-cache-map",
+          "title": "Cache映射与地址划分",
+          "chapter": "存储器层次结构",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CO-cache-policy",
+          "title": "Cache替换与写策略",
+          "chapter": "存储器层次结构",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CO-virtual",
+          "title": "页、段与TLB",
+          "chapter": "存储器层次结构",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CO-instruction",
+          "title": "指令语义与格式",
+          "chapter": "指令系统",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CO-addressing",
+          "title": "指令寻址方式",
+          "chapter": "指令系统",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CO-endian",
+          "title": "字节序与数据对齐",
+          "chapter": "指令系统",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CO-risc",
+          "title": "CISC与RISC",
+          "chapter": "指令系统",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CO-branches",
+          "title": "选择循环的机器表示",
+          "chapter": "指令系统",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CO-calls",
+          "title": "过程调用与栈帧",
+          "chapter": "指令系统",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CO-registers",
+          "title": "CPU寄存器与功能",
+          "chapter": "中央处理器",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CO-cycle",
+          "title": "指令周期与微操作",
+          "chapter": "中央处理器",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CO-datapath",
+          "title": "数据通路与控制信号",
+          "chapter": "中央处理器",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CO-control",
+          "title": "硬布线与微程序控制",
+          "chapter": "中央处理器",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CO-exceptions",
+          "title": "异常、中断与响应",
+          "chapter": "中央处理器",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CO-pipeline",
+          "title": "流水线时序与吞吐",
+          "chapter": "中央处理器",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CO-hazards",
+          "title": "流水线冒险及处理",
+          "chapter": "中央处理器",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CO-superscalar",
+          "title": "多发射与动态调度",
+          "chapter": "中央处理器",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CO-parallel",
+          "title": "多处理器与多线程",
+          "chapter": "中央处理器",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CO-bus",
+          "title": "总线组成与带宽",
+          "chapter": "总线和输入输出系统",
+          "chapterNumber": 6
+        },
+        {
+          "id": "CO-bus-timing",
+          "title": "总线事务与定时",
+          "chapter": "总线和输入输出系统",
+          "chapterNumber": 6
+        },
+        {
+          "id": "CO-io-interface",
+          "title": "I/O接口与端口编址",
+          "chapter": "总线和输入输出系统",
+          "chapterNumber": 6
+        },
+        {
+          "id": "CO-polling",
+          "title": "程序查询I/O",
+          "chapter": "总线和输入输出系统",
+          "chapterNumber": 6
+        },
+        {
+          "id": "CO-interrupt-io",
+          "title": "中断I/O与屏蔽",
+          "chapter": "总线和输入输出系统",
+          "chapterNumber": 6
+        },
+        {
+          "id": "CO-dma",
+          "title": "DMA控制与传送",
+          "chapter": "总线和输入输出系统",
+          "chapterNumber": 6
+        }
+      ],
+      "edges": [
+        [
+          "CO-system",
+          "CO-translation"
+        ],
+        [
+          "CO-system",
+          "CO-performance"
+        ],
+        [
+          "CO-radix",
+          "CO-signed"
+        ],
+        [
+          "CO-radix",
+          "CO-alu"
+        ],
+        [
+          "CO-signed",
+          "CO-addsub"
+        ],
+        [
+          "CO-alu",
+          "CO-addsub"
+        ],
+        [
+          "CO-signed",
+          "CO-muldiv"
+        ],
+        [
+          "CO-alu",
+          "CO-muldiv"
+        ],
+        [
+          "CO-radix",
+          "CO-float-format"
+        ],
+        [
+          "CO-signed",
+          "CO-float-format"
+        ],
+        [
+          "CO-float-format",
+          "CO-float-ops"
+        ],
+        [
+          "CO-addsub",
+          "CO-float-ops"
+        ],
+        [
+          "CO-system",
+          "CO-hierarchy"
+        ],
+        [
+          "CO-hierarchy",
+          "CO-semiconductor"
+        ],
+        [
+          "CO-semiconductor",
+          "CO-capacity"
+        ],
+        [
+          "CO-radix",
+          "CO-capacity"
+        ],
+        [
+          "CO-capacity",
+          "CO-interleave"
+        ],
+        [
+          "CO-hierarchy",
+          "CO-disk"
+        ],
+        [
+          "CO-semiconductor",
+          "CO-ssd"
+        ],
+        [
+          "CO-hierarchy",
+          "CO-cache-map"
+        ],
+        [
+          "CO-radix",
+          "CO-cache-map"
+        ],
+        [
+          "CO-cache-map",
+          "CO-cache-policy"
+        ],
+        [
+          "CO-hierarchy",
+          "CO-virtual"
+        ],
+        [
+          "CO-radix",
+          "CO-virtual"
+        ],
+        [
+          "CO-system",
+          "CO-instruction"
+        ],
+        [
+          "CO-radix",
+          "CO-instruction"
+        ],
+        [
+          "CO-instruction",
+          "CO-addressing"
+        ],
+        [
+          "CO-radix",
+          "CO-endian"
+        ],
+        [
+          "CO-instruction",
+          "CO-risc"
+        ],
+        [
+          "CO-instruction",
+          "CO-branches"
+        ],
+        [
+          "CO-addressing",
+          "CO-branches"
+        ],
+        [
+          "CO-branches",
+          "CO-calls"
+        ],
+        [
+          "CO-system",
+          "CO-registers"
+        ],
+        [
+          "CO-instruction",
+          "CO-registers"
+        ],
+        [
+          "CO-registers",
+          "CO-cycle"
+        ],
+        [
+          "CO-cycle",
+          "CO-datapath"
+        ],
+        [
+          "CO-alu",
+          "CO-datapath"
+        ],
+        [
+          "CO-datapath",
+          "CO-control"
+        ],
+        [
+          "CO-cycle",
+          "CO-exceptions"
+        ],
+        [
+          "CO-cycle",
+          "CO-pipeline"
+        ],
+        [
+          "CO-pipeline",
+          "CO-hazards"
+        ],
+        [
+          "CO-datapath",
+          "CO-hazards"
+        ],
+        [
+          "CO-hazards",
+          "CO-superscalar"
+        ],
+        [
+          "CO-system",
+          "CO-parallel"
+        ],
+        [
+          "CO-system",
+          "CO-bus"
+        ],
+        [
+          "CO-radix",
+          "CO-bus"
+        ],
+        [
+          "CO-bus",
+          "CO-bus-timing"
+        ],
+        [
+          "CO-bus",
+          "CO-io-interface"
+        ],
+        [
+          "CO-addressing",
+          "CO-io-interface"
+        ],
+        [
+          "CO-io-interface",
+          "CO-polling"
+        ],
+        [
+          "CO-io-interface",
+          "CO-interrupt-io"
+        ],
+        [
+          "CO-exceptions",
+          "CO-interrupt-io"
+        ],
+        [
+          "CO-io-interface",
+          "CO-dma"
+        ]
+      ]
+    },
+    {
+      "id": "OS",
+      "title": "操作系统",
+      "nodes": [
+        {
+          "id": "OS-basics",
+          "title": "操作系统目标与功能",
+          "chapter": "操作系统基础",
+          "chapterNumber": 1
+        },
+        {
+          "id": "OS-evolution",
+          "title": "批处理、分时与实时系统",
+          "chapter": "操作系统基础",
+          "chapterNumber": 1
+        },
+        {
+          "id": "OS-privilege",
+          "title": "用户态与内核态",
+          "chapter": "操作系统基础",
+          "chapterNumber": 1
+        },
+        {
+          "id": "OS-traps",
+          "title": "中断异常的内核处理",
+          "chapter": "操作系统基础",
+          "chapterNumber": 1
+        },
+        {
+          "id": "OS-syscall",
+          "title": "系统调用接口",
+          "chapter": "操作系统基础",
+          "chapterNumber": 1
+        },
+        {
+          "id": "OS-loading",
+          "title": "程序链接与装入",
+          "chapter": "操作系统基础",
+          "chapterNumber": 1
+        },
+        {
+          "id": "OS-address-space",
+          "title": "进程地址空间与映像",
+          "chapter": "操作系统基础",
+          "chapterNumber": 1
+        },
+        {
+          "id": "OS-kernel",
+          "title": "内核结构与模块划分",
+          "chapter": "操作系统基础",
+          "chapterNumber": 1
+        },
+        {
+          "id": "OS-boot",
+          "title": "引导与启动过程",
+          "chapter": "操作系统基础",
+          "chapterNumber": 1
+        },
+        {
+          "id": "OS-virtualization",
+          "title": "虚拟机与隔离",
+          "chapter": "操作系统基础",
+          "chapterNumber": 1
+        },
+        {
+          "id": "OS-process",
+          "title": "进程状态与控制",
+          "chapter": "进程管理",
+          "chapterNumber": 2
+        },
+        {
+          "id": "OS-threads",
+          "title": "线程模型与共享",
+          "chapter": "进程管理",
+          "chapterNumber": 2
+        },
+        {
+          "id": "OS-ipc",
+          "title": "共享内存、消息、管道与信号",
+          "chapter": "进程管理",
+          "chapterNumber": 2
+        },
+        {
+          "id": "OS-schedule-metrics",
+          "title": "调度目标与指标",
+          "chapter": "进程管理",
+          "chapterNumber": 2
+        },
+        {
+          "id": "OS-schedule-algorithms",
+          "title": "CPU调度算法与实现",
+          "chapter": "进程管理",
+          "chapterNumber": 2
+        },
+        {
+          "id": "OS-multicpu",
+          "title": "多处理机与线程调度",
+          "chapter": "进程管理",
+          "chapterNumber": 2
+        },
+        {
+          "id": "OS-context",
+          "title": "上下文切换",
+          "chapter": "进程管理",
+          "chapterNumber": 2
+        },
+        {
+          "id": "OS-mutex",
+          "title": "临界区、软件与硬件互斥",
+          "chapter": "进程管理",
+          "chapterNumber": 2
+        },
+        {
+          "id": "OS-semaphore",
+          "title": "信号量同步",
+          "chapter": "进程管理",
+          "chapterNumber": 2
+        },
+        {
+          "id": "OS-condition",
+          "title": "条件变量与管程",
+          "chapter": "进程管理",
+          "chapterNumber": 2
+        },
+        {
+          "id": "OS-classic-sync",
+          "title": "生产消费、读写与哲学家",
+          "chapter": "进程管理",
+          "chapterNumber": 2
+        },
+        {
+          "id": "OS-deadlock",
+          "title": "死锁条件、预防与避免",
+          "chapter": "进程管理",
+          "chapterNumber": 2
+        },
+        {
+          "id": "OS-allocation",
+          "title": "地址转换与连续分配",
+          "chapter": "内存管理",
+          "chapterNumber": 3
+        },
+        {
+          "id": "OS-paging",
+          "title": "页式内存管理",
+          "chapter": "内存管理",
+          "chapterNumber": 3
+        },
+        {
+          "id": "OS-segmentation",
+          "title": "段式与段页式管理",
+          "chapter": "内存管理",
+          "chapterNumber": 3
+        },
+        {
+          "id": "OS-demand",
+          "title": "请求分页与缺页处理",
+          "chapter": "内存管理",
+          "chapterNumber": 3
+        },
+        {
+          "id": "OS-frames",
+          "title": "页框分配与回收",
+          "chapter": "内存管理",
+          "chapterNumber": 3
+        },
+        {
+          "id": "OS-replacement",
+          "title": "页面置换策略",
+          "chapter": "内存管理",
+          "chapterNumber": 3
+        },
+        {
+          "id": "OS-mmap",
+          "title": "内存映射文件",
+          "chapter": "内存管理",
+          "chapterNumber": 3
+        },
+        {
+          "id": "OS-working-set",
+          "title": "工作集、抖动与性能",
+          "chapter": "内存管理",
+          "chapterNumber": 3
+        },
+        {
+          "id": "OS-files",
+          "title": "文件语义与基本操作",
+          "chapter": "文件管理",
+          "chapterNumber": 4
+        },
+        {
+          "id": "OS-inode",
+          "title": "文件元数据与索引结点",
+          "chapter": "文件管理",
+          "chapterNumber": 4
+        },
+        {
+          "id": "OS-file-layout",
+          "title": "文件逻辑与物理结构",
+          "chapter": "文件管理",
+          "chapterNumber": 4
+        },
+        {
+          "id": "OS-protection",
+          "title": "文件保护与权限",
+          "chapter": "文件管理",
+          "chapterNumber": 4
+        },
+        {
+          "id": "OS-directory",
+          "title": "目录路径与链接",
+          "chapter": "文件管理",
+          "chapterNumber": 4
+        },
+        {
+          "id": "OS-filesystem",
+          "title": "文件系统布局、VFS与挂载",
+          "chapter": "文件管理",
+          "chapterNumber": 4
+        },
+        {
+          "id": "OS-free-space",
+          "title": "外存空闲空间管理",
+          "chapter": "文件管理",
+          "chapterNumber": 4
+        },
+        {
+          "id": "OS-devices",
+          "title": "设备分类与接口",
+          "chapter": "输入输出管理",
+          "chapterNumber": 5
+        },
+        {
+          "id": "OS-io-modes",
+          "title": "轮询、中断与DMA方式",
+          "chapter": "输入输出管理",
+          "chapterNumber": 5
+        },
+        {
+          "id": "OS-io-layers",
+          "title": "I/O软件层次",
+          "chapter": "输入输出管理",
+          "chapterNumber": 5
+        },
+        {
+          "id": "OS-io-api",
+          "title": "阻塞、非阻塞与设备API",
+          "chapter": "输入输出管理",
+          "chapterNumber": 5
+        },
+        {
+          "id": "OS-buffer",
+          "title": "缓冲区管理",
+          "chapter": "输入输出管理",
+          "chapterNumber": 5
+        },
+        {
+          "id": "OS-spool",
+          "title": "设备分配与SPOOLing",
+          "chapter": "输入输出管理",
+          "chapterNumber": 5
+        },
+        {
+          "id": "OS-driver",
+          "title": "设备驱动程序接口",
+          "chapter": "输入输出管理",
+          "chapterNumber": 5
+        },
+        {
+          "id": "OS-disk-schedule",
+          "title": "磁盘组织与调度",
+          "chapter": "输入输出管理",
+          "chapterNumber": 5
+        },
+        {
+          "id": "OS-ssd",
+          "title": "SSD特性与磨损均衡",
+          "chapter": "输入输出管理",
+          "chapterNumber": 5
+        }
+      ],
+      "edges": [
+        [
+          "OS-basics",
+          "OS-evolution"
+        ],
+        [
+          "OS-basics",
+          "OS-privilege"
+        ],
+        [
+          "OS-privilege",
+          "OS-traps"
+        ],
+        [
+          "OS-privilege",
+          "OS-syscall"
+        ],
+        [
+          "OS-traps",
+          "OS-syscall"
+        ],
+        [
+          "OS-basics",
+          "OS-loading"
+        ],
+        [
+          "OS-loading",
+          "OS-address-space"
+        ],
+        [
+          "OS-basics",
+          "OS-kernel"
+        ],
+        [
+          "OS-privilege",
+          "OS-kernel"
+        ],
+        [
+          "OS-kernel",
+          "OS-boot"
+        ],
+        [
+          "OS-privilege",
+          "OS-virtualization"
+        ],
+        [
+          "OS-kernel",
+          "OS-virtualization"
+        ],
+        [
+          "OS-address-space",
+          "OS-process"
+        ],
+        [
+          "OS-process",
+          "OS-threads"
+        ],
+        [
+          "OS-process",
+          "OS-ipc"
+        ],
+        [
+          "OS-process",
+          "OS-schedule-metrics"
+        ],
+        [
+          "OS-schedule-metrics",
+          "OS-schedule-algorithms"
+        ],
+        [
+          "OS-threads",
+          "OS-multicpu"
+        ],
+        [
+          "OS-schedule-algorithms",
+          "OS-multicpu"
+        ],
+        [
+          "OS-process",
+          "OS-context"
+        ],
+        [
+          "OS-privilege",
+          "OS-context"
+        ],
+        [
+          "OS-threads",
+          "OS-mutex"
+        ],
+        [
+          "OS-mutex",
+          "OS-semaphore"
+        ],
+        [
+          "OS-mutex",
+          "OS-condition"
+        ],
+        [
+          "OS-semaphore",
+          "OS-classic-sync"
+        ],
+        [
+          "OS-condition",
+          "OS-classic-sync"
+        ],
+        [
+          "OS-process",
+          "OS-deadlock"
+        ],
+        [
+          "OS-mutex",
+          "OS-deadlock"
+        ],
+        [
+          "OS-address-space",
+          "OS-allocation"
+        ],
+        [
+          "OS-allocation",
+          "OS-paging"
+        ],
+        [
+          "OS-allocation",
+          "OS-segmentation"
+        ],
+        [
+          "OS-paging",
+          "OS-segmentation"
+        ],
+        [
+          "OS-paging",
+          "OS-demand"
+        ],
+        [
+          "OS-traps",
+          "OS-demand"
+        ],
+        [
+          "OS-demand",
+          "OS-frames"
+        ],
+        [
+          "OS-frames",
+          "OS-replacement"
+        ],
+        [
+          "OS-demand",
+          "OS-mmap"
+        ],
+        [
+          "OS-replacement",
+          "OS-working-set"
+        ],
+        [
+          "OS-basics",
+          "OS-files"
+        ],
+        [
+          "OS-files",
+          "OS-inode"
+        ],
+        [
+          "OS-files",
+          "OS-file-layout"
+        ],
+        [
+          "OS-inode",
+          "OS-file-layout"
+        ],
+        [
+          "OS-files",
+          "OS-protection"
+        ],
+        [
+          "OS-privilege",
+          "OS-protection"
+        ],
+        [
+          "OS-inode",
+          "OS-directory"
+        ],
+        [
+          "OS-directory",
+          "OS-filesystem"
+        ],
+        [
+          "OS-file-layout",
+          "OS-filesystem"
+        ],
+        [
+          "OS-file-layout",
+          "OS-free-space"
+        ],
+        [
+          "OS-basics",
+          "OS-devices"
+        ],
+        [
+          "OS-devices",
+          "OS-io-modes"
+        ],
+        [
+          "OS-traps",
+          "OS-io-modes"
+        ],
+        [
+          "OS-devices",
+          "OS-io-layers"
+        ],
+        [
+          "OS-kernel",
+          "OS-io-layers"
+        ],
+        [
+          "OS-io-layers",
+          "OS-io-api"
+        ],
+        [
+          "OS-process",
+          "OS-io-api"
+        ],
+        [
+          "OS-io-modes",
+          "OS-buffer"
+        ],
+        [
+          "OS-devices",
+          "OS-spool"
+        ],
+        [
+          "OS-buffer",
+          "OS-spool"
+        ],
+        [
+          "OS-io-layers",
+          "OS-driver"
+        ],
+        [
+          "OS-io-modes",
+          "OS-driver"
+        ],
+        [
+          "OS-devices",
+          "OS-disk-schedule"
+        ],
+        [
+          "OS-devices",
+          "OS-ssd"
+        ]
+      ]
+    },
+    {
+      "id": "CN",
+      "title": "计算机网络",
+      "nodes": [
+        {
+          "id": "CN-basics",
+          "title": "网络组成、功能与分类",
+          "chapter": "计算机网络概述",
+          "chapterNumber": 1
+        },
+        {
+          "id": "CN-performance",
+          "title": "时延、吞吐与带宽",
+          "chapter": "计算机网络概述",
+          "chapterNumber": 1
+        },
+        {
+          "id": "CN-layers",
+          "title": "分层、服务、接口与协议",
+          "chapter": "计算机网络概述",
+          "chapterNumber": 1
+        },
+        {
+          "id": "CN-models",
+          "title": "OSI与TCP/IP模型",
+          "chapter": "计算机网络概述",
+          "chapterNumber": 1
+        },
+        {
+          "id": "CN-signals",
+          "title": "信号、码元与传输速率",
+          "chapter": "物理层",
+          "chapterNumber": 2
+        },
+        {
+          "id": "CN-capacity",
+          "title": "奈奎斯特与香农界限",
+          "chapter": "物理层",
+          "chapterNumber": 2
+        },
+        {
+          "id": "CN-encoding",
+          "title": "编码与调制",
+          "chapter": "物理层",
+          "chapterNumber": 2
+        },
+        {
+          "id": "CN-switching",
+          "title": "交换方式、数据报与虚电路",
+          "chapter": "物理层",
+          "chapterNumber": 2
+        },
+        {
+          "id": "CN-media",
+          "title": "传输介质与物理接口",
+          "chapter": "物理层",
+          "chapterNumber": 2
+        },
+        {
+          "id": "CN-repeaters",
+          "title": "中继器与集线器",
+          "chapter": "物理层",
+          "chapterNumber": 2
+        },
+        {
+          "id": "CN-framing",
+          "title": "链路服务与组帧",
+          "chapter": "数据链路层",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CN-detect",
+          "title": "奇偶与CRC检错",
+          "chapter": "数据链路层",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CN-correct",
+          "title": "码距与纠错编码",
+          "chapter": "数据链路层",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CN-stopwait",
+          "title": "停止等待与可靠传输",
+          "chapter": "数据链路层",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CN-gbn",
+          "title": "后退N帧协议",
+          "chapter": "数据链路层",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CN-sr",
+          "title": "选择重传协议",
+          "chapter": "数据链路层",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CN-multiplex",
+          "title": "信道划分与多路复用",
+          "chapter": "数据链路层",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CN-random-access",
+          "title": "ALOHA与载波侦听",
+          "chapter": "数据链路层",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CN-token",
+          "title": "令牌与轮询接入",
+          "chapter": "数据链路层",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CN-ethernet",
+          "title": "局域网与以太网",
+          "chapter": "数据链路层",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CN-wifi",
+          "title": "无线局域网与CSMA/CA",
+          "chapter": "数据链路层",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CN-vlan",
+          "title": "VLAN划分与标记",
+          "chapter": "数据链路层",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CN-ppp",
+          "title": "广域链路与PPP",
+          "chapter": "数据链路层",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CN-switch",
+          "title": "以太网交换机",
+          "chapter": "数据链路层",
+          "chapterNumber": 3
+        },
+        {
+          "id": "CN-internetwork",
+          "title": "网络互连与网络层",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-forwarding",
+          "title": "路由选择与最长前缀转发",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-sdn",
+          "title": "SDN控制与数据平面",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-congestion",
+          "title": "网络拥塞与控制",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-routing",
+          "title": "静态动态与路由算法",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-ipv4",
+          "title": "IPv4首部与分片",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-ip-address",
+          "title": "IPv4地址与NAT",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-subnet",
+          "title": "子网、CIDR与路由聚合",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-arp",
+          "title": "ARP与邻接地址解析",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-dhcp",
+          "title": "DHCP配置流程",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-icmp",
+          "title": "ICMP差错与诊断",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-ipv6",
+          "title": "IPv6首部与地址",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-rip",
+          "title": "距离向量与RIP",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-ospf",
+          "title": "链路状态与OSPF",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-bgp",
+          "title": "自治系统与BGP",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-multicast",
+          "title": "IP组播与组地址",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-mobile-ip",
+          "title": "移动IP与隧道",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-router",
+          "title": "路由器组成与转发表",
+          "chapter": "网络层",
+          "chapterNumber": 4
+        },
+        {
+          "id": "CN-ports",
+          "title": "传输层服务与端口",
+          "chapter": "传输层",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CN-udp",
+          "title": "UDP报文与校验",
+          "chapter": "传输层",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CN-tcp-stream",
+          "title": "TCP字节流、序号与可靠性",
+          "chapter": "传输层",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CN-tcp-connect",
+          "title": "TCP连接建立与释放",
+          "chapter": "传输层",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CN-tcp-window",
+          "title": "TCP流量控制",
+          "chapter": "传输层",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CN-tcp-congestion",
+          "title": "TCP拥塞控制",
+          "chapter": "传输层",
+          "chapterNumber": 5
+        },
+        {
+          "id": "CN-app-model",
+          "title": "客户服务器与P2P",
+          "chapter": "应用层",
+          "chapterNumber": 6
+        },
+        {
+          "id": "CN-dns",
+          "title": "域名层次、服务器与解析",
+          "chapter": "应用层",
+          "chapterNumber": 6
+        },
+        {
+          "id": "CN-ftp",
+          "title": "FTP控制与数据连接",
+          "chapter": "应用层",
+          "chapterNumber": 6
+        },
+        {
+          "id": "CN-email",
+          "title": "邮件系统、MIME与收发协议",
+          "chapter": "应用层",
+          "chapterNumber": 6
+        },
+        {
+          "id": "CN-web",
+          "title": "WWW、HTTP与缓存",
+          "chapter": "应用层",
+          "chapterNumber": 6
+        }
+      ],
+      "edges": [
+        [
+          "CN-basics",
+          "CN-performance"
+        ],
+        [
+          "CN-basics",
+          "CN-layers"
+        ],
+        [
+          "CN-layers",
+          "CN-models"
+        ],
+        [
+          "CN-performance",
+          "CN-signals"
+        ],
+        [
+          "CN-signals",
+          "CN-capacity"
+        ],
+        [
+          "CN-signals",
+          "CN-encoding"
+        ],
+        [
+          "CN-basics",
+          "CN-switching"
+        ],
+        [
+          "CN-performance",
+          "CN-switching"
+        ],
+        [
+          "CN-signals",
+          "CN-media"
+        ],
+        [
+          "CN-media",
+          "CN-repeaters"
+        ],
+        [
+          "CN-layers",
+          "CN-framing"
+        ],
+        [
+          "CN-encoding",
+          "CN-framing"
+        ],
+        [
+          "CN-framing",
+          "CN-detect"
+        ],
+        [
+          "CN-detect",
+          "CN-correct"
+        ],
+        [
+          "CN-framing",
+          "CN-stopwait"
+        ],
+        [
+          "CN-detect",
+          "CN-stopwait"
+        ],
+        [
+          "CN-stopwait",
+          "CN-gbn"
+        ],
+        [
+          "CN-stopwait",
+          "CN-sr"
+        ],
+        [
+          "CN-signals",
+          "CN-multiplex"
+        ],
+        [
+          "CN-framing",
+          "CN-random-access"
+        ],
+        [
+          "CN-performance",
+          "CN-random-access"
+        ],
+        [
+          "CN-framing",
+          "CN-token"
+        ],
+        [
+          "CN-framing",
+          "CN-ethernet"
+        ],
+        [
+          "CN-random-access",
+          "CN-ethernet"
+        ],
+        [
+          "CN-random-access",
+          "CN-wifi"
+        ],
+        [
+          "CN-ethernet",
+          "CN-vlan"
+        ],
+        [
+          "CN-framing",
+          "CN-ppp"
+        ],
+        [
+          "CN-ethernet",
+          "CN-switch"
+        ],
+        [
+          "CN-layers",
+          "CN-internetwork"
+        ],
+        [
+          "CN-switching",
+          "CN-internetwork"
+        ],
+        [
+          "CN-internetwork",
+          "CN-forwarding"
+        ],
+        [
+          "CN-forwarding",
+          "CN-sdn"
+        ],
+        [
+          "CN-performance",
+          "CN-congestion"
+        ],
+        [
+          "CN-internetwork",
+          "CN-congestion"
+        ],
+        [
+          "CN-internetwork",
+          "CN-routing"
+        ],
+        [
+          "CN-internetwork",
+          "CN-ipv4"
+        ],
+        [
+          "CN-ipv4",
+          "CN-ip-address"
+        ],
+        [
+          "CN-ip-address",
+          "CN-subnet"
+        ],
+        [
+          "CN-ip-address",
+          "CN-arp"
+        ],
+        [
+          "CN-ethernet",
+          "CN-arp"
+        ],
+        [
+          "CN-ip-address",
+          "CN-dhcp"
+        ],
+        [
+          "CN-ipv4",
+          "CN-icmp"
+        ],
+        [
+          "CN-ipv4",
+          "CN-ipv6"
+        ],
+        [
+          "CN-ip-address",
+          "CN-ipv6"
+        ],
+        [
+          "CN-routing",
+          "CN-rip"
+        ],
+        [
+          "CN-routing",
+          "CN-ospf"
+        ],
+        [
+          "CN-routing",
+          "CN-bgp"
+        ],
+        [
+          "CN-ip-address",
+          "CN-multicast"
+        ],
+        [
+          "CN-ip-address",
+          "CN-mobile-ip"
+        ],
+        [
+          "CN-forwarding",
+          "CN-router"
+        ],
+        [
+          "CN-internetwork",
+          "CN-ports"
+        ],
+        [
+          "CN-ports",
+          "CN-udp"
+        ],
+        [
+          "CN-detect",
+          "CN-udp"
+        ],
+        [
+          "CN-ports",
+          "CN-tcp-stream"
+        ],
+        [
+          "CN-stopwait",
+          "CN-tcp-stream"
+        ],
+        [
+          "CN-tcp-stream",
+          "CN-tcp-connect"
+        ],
+        [
+          "CN-tcp-stream",
+          "CN-tcp-window"
+        ],
+        [
+          "CN-tcp-window",
+          "CN-tcp-congestion"
+        ],
+        [
+          "CN-congestion",
+          "CN-tcp-congestion"
+        ],
+        [
+          "CN-ports",
+          "CN-app-model"
+        ],
+        [
+          "CN-app-model",
+          "CN-dns"
+        ],
+        [
+          "CN-udp",
+          "CN-dns"
+        ],
+        [
+          "CN-app-model",
+          "CN-ftp"
+        ],
+        [
+          "CN-tcp-connect",
+          "CN-ftp"
+        ],
+        [
+          "CN-app-model",
+          "CN-email"
+        ],
+        [
+          "CN-tcp-stream",
+          "CN-email"
+        ],
+        [
+          "CN-app-model",
+          "CN-web"
+        ],
+        [
+          "CN-dns",
+          "CN-web"
+        ],
+        [
+          "CN-tcp-stream",
+          "CN-web"
+        ]
+      ]
+    }
+  ]
+}

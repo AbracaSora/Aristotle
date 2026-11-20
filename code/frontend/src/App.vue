@@ -20,8 +20,10 @@ import {
   LogOut,
   RefreshCw,
 } from "lucide-vue-next";
+import HistoryList from "./features/records/HistoryList.vue";
+import CurriculumMap from "./features/map/CurriculumMap.vue";
 import LoginPanel from "./components/LoginPanel.vue";
-import QuizDialog from "./components/QuizDialog.vue";
+import PracticePage from "./features/practice/PracticePage.vue";
 import MaterialDialog from "./components/MaterialDialog.vue";
 import { useLearning } from "./useLearning";
 import { useWorkflow } from "./useWorkflow";
@@ -67,6 +69,8 @@ const {
   mutating,
   pendingSubmission,
 } = learning;
+const demoPracticeOpen = ref(false);
+const immersive = computed(() => quizOpen.value || demoPracticeOpen.value);
 const page = ref("学习中心"),
   quizOpen = ref(false),
   materialOpen = ref(false);
@@ -178,8 +182,8 @@ const date = new Intl.DateTimeFormat("zh-CN", {
         }}</NAlert>
       <LoginPanel :loading="busy" @login="learning.login" />
     </template>
-    <div v-else class="shell">
-      <aside class="sidebar">
+    <div v-else class="shell" :class="{ 'immersive-study': immersive }">
+      <aside v-if="!immersive" class="sidebar">
         <a href="#" class="brand" @click.prevent="page = homePage()"><span class="brand-icon">
             <Layers :size="23" />
           </span><span>Aristotle <span class="brand-number">408</span></span></a>
@@ -219,7 +223,7 @@ const date = new Intl.DateTimeFormat("zh-CN", {
         </div>
       </aside>
       <div class="workspace">
-        <header class="topbar">
+        <header v-if="!immersive" class="topbar">
           <span>学习空间 <span class="separator">/</span> {{ page }}</span>
           <div class="actions">
             <span>● &nbsp;
@@ -232,11 +236,20 @@ const date = new Intl.DateTimeFormat("zh-CN", {
           <NAlert v-if="error" type="warning" class="notice" role="alert">{{
             error
             }}</NAlert>
-          <template v-if="user.role !== 'student'">
+    <PracticePage v-model:show="quizOpen" :task="task" :submitting="submitting" :loading="busy || flowLoading"
+      :error="error" :pending="pendingSubmission" :call="learning.call" @submit="learning.submit"
+      @history="page = '学习记录'" @materials="page = '我的资料'" @next-task="nextStep" @complete="workflow.act('complete')"
+      @rebuild="
+        async () => {
+          quizOpen = false;
+          if (await workflow.rebuild()) quizOpen = true;
+        }
+      " />
+          <template v-if="!quizOpen && user.role !== 'student'">
             <ManagementConsole :key="user.id" :user="user" :call="learning.call" />
           </template>
-          <template v-else>
-            <div v-if="page !== '学习地图'" class="heading">
+          <template v-else-if="!quizOpen">
+            <div v-if="!immersive && page !== '学习地图'" class="heading">
               <div>
                 <p class="eyebrow">
                   {{ date }}
@@ -250,13 +263,14 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                   <RefreshCw :size="15" />
                 </template>刷新学习状态</NButton>
             </div>
-            <NAlert v-if="!state" type="info" class="notice">{{
+            <NAlert v-if="!state && !immersive" type="info" class="notice">{{
               busy
                 ? "正在读取学习数据…"
                 : "尚未取得学习数据，请确认服务可用后刷新。"
             }}</NAlert>
             <template v-if="page === '学习地图' || page === '学习中心'">
-              <KnowledgeMapWorkspace :key="user.id" :details-only="page === '学习中心'" :scopes="scopes" :context="context"
+              <CurriculumMap v-if="page === '学习地图'" :call="learning.call" @start="start" @immersive="demoPracticeOpen = $event" />
+              <KnowledgeMapWorkspace v-else :key="user.id" :details-only="page === '学习中心'" :scopes="scopes" :context="context"
                 :state="state" :loading="flowLoading || busy" :call="learning.call" @choose="chooseScope" @start="start"
                 @details="page = '学习中心'" @materials="page = '我的资料'">
                 <template #task>
@@ -341,75 +355,31 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                   }}<br />处理结论：{{ r.resolution || "等待维护者复核" }}
                 </p>
               </details>
-              <NEmpty v-if="!history.items.length" description="完成第一道题后，记录会出现在这里" class="empty" />
-              <section v-else class="panel">
-                <article v-for="a in history.items" :key="a.id" class="history-row">
-                  <span class="task-icon">
-                    <History :size="20" />
-                  </span>
-                  <div>
-                    <h3>{{ a.question_key }} ·
-                      <NTag type="success">
-                        {{ levelLabels[a.level] }}
-                      </NTag>
-                    </h3>
-                    <p>
-                      {{
-                        new Date(a.created_at * 1000).toLocaleString("zh-CN")
-                      }}
-                      · 题目版本 v{{ a.question_version
-                      }}{{
-                        a.content_status === "retired"
-                          ? " · 已停用，不计入当前诊断"
-                          : ""
-                      }}
-                    </p>
-                    <p v-if="a.retirement_reason">
-                      停用原因：{{ a.retirement_reason }}
-                    </p>
-                    <NButton text size="tiny" @click="reportKey = a.question_key">报告答案 / 解析 / 标签问题</NButton>
-                    <details class="history-details">
-                      <summary>查看本次作答</summary>
-                      <p>
-                        你的选项：{{ a.selected }}<br />正确答案：{{ a.answer
-                        }}<br />{{ a.explanation }}
-                      </p>
-                    </details>
-                  </div>
-                  <NTag :type="a.correct ? 'success' : 'warning'" :bordered="false">{{ a.correct ? "回答正确" : "需要巩固" }}
-                  </NTag>
-                </article>
-                <NButton v-if="history.items.length < history.total" block secondary :loading="busy"
-                  @click="learning.loadMore">加载更多记录</NButton>
-              </section>
+              <HistoryList :history="history" :busy="busy" @report="reportKey = $event" @more="learning.loadMore" />
             </template>
-            <footer>
+            <footer v-if="!immersive">
               <span>ARISTOTLE 408
                 <span class="separator">/</span>
                 学习是一个逐渐清晰的过程。</span><span>联调原型 · 演示题尚非正式审核题库</span>
             </footer>
           </template>
-          <NButton class="mobile-logout" secondary :disabled="busy || submitting || mutating" @click="learning.logout">
+          <NButton v-if="!immersive" class="mobile-logout" secondary :disabled="busy || submitting || mutating" @click="learning.logout">
             退出 / 切换账号
           </NButton>
         </main>
       </div>
     </div>
-    <QuizDialog v-model:show="quizOpen" :task="task" :submitting="submitting" :loading="busy || flowLoading"
-      :error="error" :pending="pendingSubmission" :call="learning.call" @submit="learning.submit"
-      @history="page = '学习记录'" @materials="page = '我的资料'" @next-task="nextStep" @complete="workflow.act('complete')"
-      @rebuild="
-        async () => {
-          quizOpen = false;
-          if (await workflow.rebuild()) quizOpen = true;
-        }
-      " />
     <MaterialDialog v-model:show="materialOpen" :nodes="graph?.nodes || []" :loading="mutating" :error="error"
       @save="add" />
   </NConfigProvider>
 </template>
 
 <style scoped>
+.shell.immersive-study { min-height: 100dvh; background: #f7f8f5; }
+.immersive-study .workspace { margin-left: 0; width: 100%; }
+.immersive-study main { max-width: 1040px; margin: 0 auto; padding: 32px 28px 64px; }
+@media (max-width: 600px) { .immersive-study main { padding: 16px 14px 40px; } }
+
 .brand-number {
   font: inherit;
 }

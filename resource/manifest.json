@@ -95,8 +95,8 @@
   "verify": "python3 resource/scripts/build_resources.py",
   "optional_views": "python3 resource/scripts/build_resources.py --views-dir /tmp/aristotle-review",
   "report": "validation_report.json",
-  "integration_status": "blocked_graph_node_limit",
-  "active_graph_limit": 200,
+  "integration_status": "passed_request_models",
+  "active_graph_limit": 250,
   "field_mapping": {
     "knowledge_point_id": "QuestionInput.knowledge_id",
     "stem": "QuestionInput.prompt",

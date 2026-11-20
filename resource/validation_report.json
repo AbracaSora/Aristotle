@@ -1262,7 +1262,7 @@
     ]
   },
   "integration_checks": {
-    "status": "blocked_graph_node_limit",
+    "status": "passed_request_models",
     "subject_graph_models": "passed",
     "question_models": {
       "status": "passed",
@@ -1277,20 +1277,12 @@
       "nodes": 203
     },
     "merged_graph_model": {
-      "status": "blocked",
-      "max_nodes": 200,
-      "errors": [
-        {
-          "location": [
-            "nodes"
-          ],
-          "type": "too_long",
-          "message": "List should have at most 200 items after validation, not 203"
-        }
-      ]
+      "status": "passed",
+      "max_nodes": 250,
+      "errors": []
     },
     "code_sha256": {
-      "code/backend/aristotle_backend/schemas.py": "4d785d6f223cfe6f4072e91874b0e574e7d8ca1a2c24c60ef840d1fa57d2a968",
+      "code/backend/aristotle_backend/schemas.py": "f0ab1b384b487bd5c804f560457a2ac216c03e2a8c6a36b3a5df6ef7db82385d",
       "code/core_engine/aristotle_core/policy.py": "1b9b629969522223a72f4ecd7f7fff6c2e3329601355810560dd18fb79df51ad"
     },
     "scope": "实际请求模型及图校验；未执行HTTP、数据库或发布操作。"
