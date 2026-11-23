@@ -130,6 +130,15 @@ async function refreshAll() {
       learning.task.value = await learning.call(`/tasks/${task.value.id}`);
   });
 }
+const mapKnowledgeTarget = ref("");
+async function openMapKnowledge(id: string) {
+  const scope = scopes.value.find(s => s.published && s.knowledge_ids.includes(id));
+  if (scope && scope.id !== context.value?.selected_scope?.id) {
+    if (!(await workflow.choose(scope.id))) return;
+  }
+  mapKnowledgeTarget.value = id;
+  page.value = "学习中心";
+}
 async function chooseScope(id: string) {
   if (await workflow.choose(id)) quizOpen.value = false;
 }
@@ -269,8 +278,8 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                 : "尚未取得学习数据，请确认服务可用后刷新。"
             }}</NAlert>
             <template v-if="page === '学习地图' || page === '学习中心'">
-              <CurriculumMap v-if="page === '学习地图'" :call="learning.call" @start="start" @immersive="demoPracticeOpen = $event" />
-              <KnowledgeMapWorkspace v-else :key="user.id" :details-only="page === '学习中心'" :scopes="scopes" :context="context"
+              <CurriculumMap v-if="page === '学习地图'" :call="learning.call" @start="openMapKnowledge" @immersive="demoPracticeOpen = $event" />
+              <KnowledgeMapWorkspace v-else :target-knowledge-id="mapKnowledgeTarget" :key="user.id" :details-only="page === '学习中心'" :scopes="scopes" :context="context"
                 :state="state" :loading="flowLoading || busy" :call="learning.call" @choose="chooseScope" @start="start"
                 @details="page = '学习中心'" @materials="page = '我的资料'">
                 <template #task>

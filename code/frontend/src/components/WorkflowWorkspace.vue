@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { NButton, NTag, NAlert, NSelect } from "naive-ui";
-import type { Scope, LearningContext, TimelineItem } from "../types";
+import type { Scope, LearningContext, TimelineItem, Level } from "../types";
 import { levelLabels, stateLabels } from "../types";
 const props = defineProps<{
   scopes: Scope[];
@@ -24,6 +24,17 @@ const current = computed(() => props.context?.current_task);
 const segment = computed(() =>
   props.context?.diagnostic?.segments.find((s) => s.status !== "completed"),
 );
+const groupedSegments = computed(() => {
+  const groups = new Map<Level, { level: Level; answered: number; questions: number; completed: boolean }>();
+  for (const item of props.context?.diagnostic?.segments ?? []) {
+    const group = groups.get(item.level) ?? { level: item.level, answered: 0, questions: 0, completed: true };
+    group.answered += item.answered;
+    group.questions += item.question_count;
+    group.completed = group.completed && item.status === "completed";
+    groups.set(item.level, group);
+  }
+  return [...groups.values()];
+});
 const encouragement = computed(() => {
   const context = props.context;
   if (!context?.selected_scope) return "先选择一个学习范围，今天只完成一个小步骤。";
@@ -103,11 +114,9 @@ const labels: Record<string, string> = {
           {{ context.diagnostic.segments.length }} 段
         </h3>
         <div class="tags">
-          <NTag v-for="(s, i) in context.diagnostic.segments" :key="s.task_id"
-            :type="s.status === 'completed' ? 'success' : 'default'">{{ i + 1 }} · {{ levelLabels[s.level] }} · {{
-              s.answered }}/{{
-              s.question_count
-            }}</NTag>
+          <NTag v-for="group in groupedSegments" :key="group.level"
+            :type="group.completed ? 'success' : 'default'">{{ levelLabels[group.level] }} · {{
+              group.answered }}/{{ group.questions }}</NTag>
         </div>
         <p class="muted">{{ context.diagnostic.notice }}</p>
         <NButton v-if="segment" type="primary" :loading="loading" @click="emit('open', segment.task_id)">继续诊断 · {{

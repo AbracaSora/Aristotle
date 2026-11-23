@@ -571,7 +571,7 @@
         const data = JSON.parse(raw);
         if (!data || !Array.isArray(data.nodes) || !Array.isArray(data.edges)) throw new Error('需要包含 nodes 和 edges 数组。');
         const ids = new Set();
-        const nodes = data.nodes.map((n, i) => { if (!n || !n.id || ids.has(n.id)) throw new Error('节点 id 必须存在且唯一（第 ' + (i + 1) + ' 个节点有问题）。'); ids.add(n.id); const type = String(n.type || '知识点'); const fallbackDifficulty = type === '终点' ? 5 : type === '主峰' ? 4 : type === '关隘' ? 3 : 2; return { id: String(n.id), label: String(n.label || n.id), type, difficulty: clamp(Number(n.difficulty) || fallbackDifficulty, 1, 5), description: String(n.description || '暂未填写学习目标。') }; });
+        const nodes = data.nodes.map((n, i) => { if (!n || !n.id || ids.has(n.id)) throw new Error('节点 id 必须存在且唯一（第 ' + (i + 1) + ' 个节点有问题）。'); ids.add(n.id); const type = String(n.type || '知识点'); const fallbackDifficulty = type === '终点' ? 5 : type === '主峰' ? 4 : type === '关隘' ? 3 : 2; return { locked: n.locked === true, id: String(n.id), label: String(n.label || n.id), type, difficulty: clamp(Number(n.difficulty) || fallbackDifficulty, 1, 5), description: String(n.description || '暂未填写学习目标。') }; });
         const edges = data.edges.map((e, i) => { if (!Array.isArray(e) || e.length !== 2 || !ids.has(e[0]) || !ids.has(e[1]) || e[0] === e[1]) throw new Error('第 ' + (i + 1) + ' 条边无效。'); return [String(e[0]), String(e[1])]; });
         const indegree = new Map(nodes.map(n => [n.id, 0])); const out = new Map(nodes.map(n => [n.id, []]));
         edges.forEach(([a, b]) => { indegree.set(b, indegree.get(b) + 1); out.get(a).push(b); });
@@ -759,7 +759,8 @@
             ctx.font='600 13px system-ui';ctx.fillStyle='#f5f2db';ctx.fillText(node.description,0,30);
             ctx.restore();return;
           }
-          if (active || near) { ctx.fillStyle = active ? 'rgba(246, 201, 103, .28)' : 'rgba(244, 250, 246, .2)'; ctx.beginPath(); ctx.arc(0, 0, 13, 0, TAU); ctx.fill(); }
+          if (node.locked) { ctx.filter = "grayscale(1)"; ctx.globalAlpha = .55; }
+          if (!node.locked && (active || near)) { ctx.fillStyle = active ? 'rgba(246, 201, 103, .28)' : 'rgba(244, 250, 246, .2)'; ctx.beginPath(); ctx.arc(0, 0, 13, 0, TAU); ctx.fill(); }
           ctx.beginPath();ctx.arc(0,0,9,0,TAU);ctx.fillStyle='#f5e9c9';ctx.fill();ctx.strokeStyle='#66765d';ctx.lineWidth=2;ctx.stroke();
           ctx.lineCap = 'round'; ctx.strokeStyle = active ? '#7d4b15' : '#173f39'; ctx.lineWidth = active ? 3.5 : 3;
           ctx.beginPath(); ctx.moveTo(0, 4); ctx.lineTo(0, -27); ctx.stroke();
@@ -793,6 +794,7 @@
         return found;
       }
       function selectNode(node) {
+        if (node.locked) return;
         const ancestors = connected(node.id, state.graph.incoming);
         const reachable = connected(node.id, state.graph.out);
         state.selected = { ...node, ancestors, reachable };
@@ -803,11 +805,11 @@
         selectedEl.replaceChildren(title, info);
         [...nodeList.children].forEach(b => b.classList.toggle('active', b.dataset.id === node.id)); draw(); }
       function fitView() { state.zoom = state.overview ? Math.min(state.width/state.layout.width,state.height/state.layout.height)*1.15 : Math.max(.8, Math.min(1, state.width / state.layout.width, state.height / state.layout.height)); state.panX = (state.width - state.layout.width * state.zoom) / 2; state.panY = (state.height - state.layout.height * state.zoom) / 2; draw(); }
-      function renderNodeList() { nodeList.innerHTML = ''; state.graph.nodes.forEach(n => { const b = document.createElement('button'); b.type = 'button'; b.textContent = n.label; b.dataset.id = n.id; b.addEventListener('click', () => selectNode(n)); nodeList.appendChild(b); }); }
+      function renderNodeList() { nodeList.innerHTML = ''; state.graph.nodes.forEach(n => { const b = document.createElement('button'); b.type = 'button'; b.textContent = n.label; b.dataset.id = n.id; b.disabled = n.locked; b.addEventListener('click', () => selectNode(n)); nodeList.appendChild(b); }); }
       function generate() { try { const graph = parseGraph(input.value); const requestedCellCount = clamp(Number(cellCountInput.value) || 1160, 100, 22000); cellCountInput.value = requestedCellCount; cellCountRange.value = clamp(requestedCellCount, +cellCountRange.min, +cellCountRange.max); state.graph = graph; generateWorld(graph, requestedCellCount); state.selected = null; state.hover = null; document.getElementById('nodeCount').textContent = graph.nodes.length; document.getElementById('edgeCount').textContent = graph.edges.length; document.getElementById('layerCount').textContent = state.layout.layers.length; selectedEl.innerHTML = '<strong>拖动探索地图 · 滚轮缩放</strong><p>总览仅显示无交叉道路；选择节点查看全部直接前后驱，依赖数据完整保留。</p>'; status.textContent = '生成成功 · ' + requestedCellCount + ' 个 Voronoi 单元已完成。'; status.className = 'status ok'; renderNodeList(); fitView(); } catch (e) { status.textContent = e.message || 'JSON 解析失败。'; status.className = 'status'; } }
 
       canvas.addEventListener('pointerdown', e => { canvas.setPointerCapture(e.pointerId); state.dragging = true; state.moved = false; state.lastX = e.offsetX; state.lastY = e.offsetY; });
-      canvas.addEventListener('pointermove', e => { const dx = e.offsetX - state.lastX, dy = e.offsetY - state.lastY; if (state.dragging) { if (Math.abs(dx) + Math.abs(dy) > 2) state.moved = true; state.panX += dx; state.panY += dy; state.lastX = e.offsetX; state.lastY = e.offsetY; } const wp = worldPoint(e.offsetX, e.offsetY); let found = null; if (state.layout) state.graph.nodes.some(n => { const p = state.layout.pos.get(n.id); if (Math.hypot(wp.x - p.x, wp.y - p.y) < (n.type === '章节区域' ? 100/state.zoom : 33)) { found = n; return true; } return false; }); state.hover = found ? { node: found, screen: { x: e.offsetX, y: e.offsetY } } : null; canvas.style.cursor = found ? 'pointer' : state.dragging ? 'grabbing' : 'grab'; draw(); });
+      canvas.addEventListener('pointermove', e => { const dx = e.offsetX - state.lastX, dy = e.offsetY - state.lastY; if (state.dragging) { if (Math.abs(dx) + Math.abs(dy) > 2) state.moved = true; state.panX += dx; state.panY += dy; state.lastX = e.offsetX; state.lastY = e.offsetY; } const wp = worldPoint(e.offsetX, e.offsetY); let found = null; if (state.layout) state.graph.nodes.some(n => { const p = state.layout.pos.get(n.id); if (Math.hypot(wp.x - p.x, wp.y - p.y) < (n.type === '章节区域' ? 100/state.zoom : 33)) { found = n; return true; } return false; }); state.hover = found ? { node: found, screen: { x: e.offsetX, y: e.offsetY } } : null; canvas.style.cursor = found ? (found.locked ? 'not-allowed' : 'pointer') : state.dragging ? 'grabbing' : 'grab'; draw(); });
       canvas.addEventListener('pointerup', e => { state.dragging = false; if (!state.moved && state.hover) selectNode(state.hover.node); });
       canvas.addEventListener('pointerleave', () => { state.hover = null; if (!state.dragging) draw(); });
       canvas.addEventListener('wheel', e => { e.preventDefault(); const before = worldPoint(e.offsetX, e.offsetY); state.zoom = clamp(state.zoom * (e.deltaY > 0 ? .9 : 1.1), Math.min(.55, state.width / state.layout.width, state.height / state.layout.height), 2.8); state.panX = e.offsetX - before.x * state.zoom; state.panY = e.offsetY - before.y * state.zoom; draw(); }, { passive: false });
@@ -850,6 +852,8 @@
           subjectWorld.chapters.set(message.focusRegion,{graph,layout,cells});
         }
         const chapter=subjectWorld.chapters.get(message.focusRegion);
+        const incomingNodes=new Map(message.graph.nodes.map(n=>[n.id,n]));
+        chapter.graph.nodes.forEach(n=>{n.locked=incomingNodes.get(n.id)?.locked === true;});
         state.overview=false;state.graph=chapter.graph;state.layout=chapter.layout;
         const points=chapter.cells.map(c=>c.site);
         const left=Math.min(...points.map(p=>p.x)),right=Math.max(...points.map(p=>p.x)),top=Math.min(...points.map(p=>p.y)),bottom=Math.max(...points.map(p=>p.y));
