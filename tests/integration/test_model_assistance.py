@@ -420,3 +420,46 @@ def test_identical_queued_requests_share_one_job_and_interrupted_calls_are_not_a
     failed = client.get("/api/v1/jobs/" + a["id"], headers=h).json()
     assert failed["status"] == "failed" and failed["result"]["error_code"] == "interrupted"
     assert not failed["result"]["retryable"] and not models[0]
+
+
+def test_search_rechecks_source_consent_after_query_embedding(client, login, models, app):
+    headers = login()
+    mid = source(client, headers)
+    client.patch(f"/api/v1/materials/{mid}/external-consent", headers=headers, json={"allowed": True})
+    assert index(client, headers)["status"] == "succeeded"
+
+    def revoke_during_query(request):
+        with app.state.sessions() as db:
+            db.get(Material, mid).external_processing_allowed = False
+            db.commit()
+        return models[1](request)
+
+    app.state.model_transport = httpx.MockTransport(revoke_during_query)
+    response = client.post(
+        "/api/v1/retrieval/search",
+        headers=headers,
+        json={"query": "栈", "mode": "hybrid", "knowledge_id": "stack", "allow_external_query": True},
+    )
+    assert response.status_code == 200, response.text
+    hits = response.json()["items"]
+    assert hits and all(hit["material_id"] != mid for hit in hits)
+
+
+@pytest.mark.parametrize(
+    ("status", "error_code", "calls"), [(429, "rate_limited", 2), (403, "request_rejected", 1)]
+)
+def test_provider_terminal_failure_records_attempts(
+    client, login, models, app, monkeypatch, status, error_code, calls
+):
+    monkeypatch.setenv("ARISTOTLE_MODEL_RETRIES", "1")
+    app.state.model_transport = httpx.MockTransport(lambda request: httpx.Response(status))
+    result = index(client, login())
+    assert result["status"] == "failed" and result["result"]["error_code"] == error_code
+    with app.state.sessions() as db:
+        call = db.scalars(select(ModelCall)).one()
+        assert (call.status, call.error_code, call.reserved_requests, call.external_calls) == (
+            "failed",
+            error_code,
+            2,
+            calls,
+        )

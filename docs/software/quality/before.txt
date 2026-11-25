@@ -1,0 +1,188 @@
+Aristotle 408 | Pylint 3.3.8 + Radon 6.0.1
+Scope: code/backend/aristotle_backend + code/core_engine/aristotle_core (24 Python files)
+Bug candidates (Pylint E/F): 101
+Code smells (enabled Pylint R rules): 29
+Duplicate lines (Pylint): 24 (0.45%)
+Functions: 180 | CC mean: 5.17 | max: 36 | CC > 20: 10
+
+Highest cyclomatic complexity (Radon)
+ 36  workflow.py:261  create_recommendation
+ 31  retrieval.py:228  semantic_search
+ 26  providers.py:134  request_model
+ 26  resource_seed.py:60  import_resource_demo
+ 26  policy.py:90  recommend
+ 24  flow_routes.py:413  install_flow_routes.run_job
+ 24  import_sqlite.py:29  import_snapshot
+ 21  model_jobs.py:220  run_job
+ 21  workflow.py:343  create_diagnostic
+ 21  policy.py:36  diagnose
+
+Pylint findings by rule
+  3  duplicate-code
+ 98  no-member
+  3  not-callable
+  4  too-many-branches
+ 17  too-many-locals
+  5  too-many-statements
+
+All Pylint findings
+code/backend/aristotle_backend/app.py:231: R0914 Too many local variables (34/15)
+code/backend/aristotle_backend/app.py:231: R0915 Too many statements (189/50)
+code/backend/aristotle_backend/app.py:380: R0914 Too many local variables (18/15)
+code/backend/aristotle_backend/app.py:513: E1102 func.count is not callable
+code/backend/aristotle_backend/app.py:515: E1102 func.count is not callable
+code/backend/aristotle_backend/assistance_routes.py:46: R0914 Too many local variables (24/15)
+code/backend/aristotle_backend/assistance_routes.py:46: R0915 Too many statements (77/50)
+code/backend/aristotle_backend/design_seed.py:11: R0914 Too many local variables (18/15)
+code/backend/aristotle_backend/flow_routes.py:102: R0914 Too many local variables (45/15)
+code/backend/aristotle_backend/flow_routes.py:102: R0915 Too many statements (221/50)
+code/backend/aristotle_backend/flow_routes.py:413: R0912 Too many branches (14/12)
+code/backend/aristotle_backend/flow_routes.py:413: R0914 Too many local variables (23/15)
+code/backend/aristotle_backend/import_sqlite.py:29: R0912 Too many branches (15/12)
+code/backend/aristotle_backend/import_sqlite.py:29: R0914 Too many local variables (19/15)
+code/backend/aristotle_backend/import_sqlite.py:56: E1102 func.count is not callable
+code/backend/aristotle_backend/migration_scripts/env.py:4: E1101 Module 'alembic.context' has no 'config' member
+code/backend/aristotle_backend/migration_scripts/env.py:6: E1101 Module 'alembic.context' has no 'is_offline_mode' member
+code/backend/aristotle_backend/migration_scripts/env.py:7: E1101 Module 'alembic.context' has no 'configure' member
+code/backend/aristotle_backend/migration_scripts/env.py:21: E1101 Module 'alembic.context' has no 'configure' member
+code/backend/aristotle_backend/migration_scripts/env.py:28: E1101 Module 'alembic.context' has no 'begin_transaction' member
+code/backend/aristotle_backend/migration_scripts/env.py:29: E1101 Module 'alembic.context' has no 'run_migrations' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:14: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:22: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:31: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:40: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:57: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:63: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:72: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:86: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:99: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:119: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:137: E1101 Module 'alembic.op' has no 'create_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:137: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:138: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:152: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:163: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:178: E1101 Module 'alembic.op' has no 'create_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:178: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:179: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:194: E1101 Module 'alembic.op' has no 'create_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:194: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:195: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:210: E1101 Module 'alembic.op' has no 'create_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:210: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:211: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:237: E1101 Module 'alembic.op' has no 'create_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:237: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:238: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:259: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:274: E1101 Module 'alembic.op' has no 'create_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:274: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:275: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:296: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:316: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:317: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:318: E1101 Module 'alembic.op' has no 'drop_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:318: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:319: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:320: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:321: E1101 Module 'alembic.op' has no 'drop_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:321: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:322: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:323: E1101 Module 'alembic.op' has no 'drop_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:323: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:324: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:325: E1101 Module 'alembic.op' has no 'drop_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:325: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:326: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:327: E1101 Module 'alembic.op' has no 'drop_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:327: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:328: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:329: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:330: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:331: E1101 Module 'alembic.op' has no 'drop_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:331: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:332: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:333: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:334: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:335: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:336: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:337: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:338: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:339: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:340: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py:341: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:22: E1101 Module 'alembic.op' has no 'get_context' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:23: E1101 Module 'alembic.op' has no 'execute' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:24: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:45: E1101 Module 'alembic.op' has no 'create_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:45: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:46: E1101 Module 'alembic.op' has no 'create_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:46: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:47: E1101 Module 'alembic.op' has no 'create_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:47: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:48: E1101 Module 'alembic.op' has no 'create_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:84: E1101 Module 'alembic.op' has no 'create_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:85: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:87: E1101 Module 'alembic.op' has no 'create_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:87: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:88: E1101 Module 'alembic.op' has no 'add_column' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:97: E1101 Module 'alembic.op' has no 'drop_column' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:98: E1101 Module 'alembic.op' has no 'drop_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:98: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:99: E1101 Module 'alembic.op' has no 'drop_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:99: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:100: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:101: E1101 Module 'alembic.op' has no 'drop_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:101: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:102: E1101 Module 'alembic.op' has no 'drop_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:102: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:103: E1101 Module 'alembic.op' has no 'drop_index' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:103: E1101 Module 'alembic.op' has no 'f' member
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py:104: E1101 Module 'alembic.op' has no 'drop_table' member
+code/backend/aristotle_backend/providers.py:134: R0912 Too many branches (14/12)
+code/backend/aristotle_backend/providers.py:134: R0914 Too many local variables (20/15)
+code/backend/aristotle_backend/providers.py:134: R0915 Too many statements (52/50)
+code/backend/aristotle_backend/resource_seed.py:60: R0912 Too many branches (15/12)
+code/backend/aristotle_backend/resource_seed.py:60: R0914 Too many local variables (30/15)
+code/backend/aristotle_backend/resource_seed.py:60: R0915 Too many statements (51/50)
+code/backend/aristotle_backend/retrieval.py:46: R0914 Too many local variables (16/15)
+code/backend/aristotle_backend/retrieval.py:145: R0914 Too many local variables (21/15)
+code/backend/aristotle_backend/retrieval.py:228: R0914 Too many local variables (24/15)
+code/backend/aristotle_backend/workflow.py:203: R0914 Too many local variables (17/15)
+code/backend/aristotle_backend/workflow.py:261: R0914 Too many local variables (28/15)
+code/backend/aristotle_backend/workflow.py:343: R0914 Too many local variables (21/15)
+code/core_engine/aristotle_core/policy.py:1: R0801 Similar lines in 2 files
+==aristotle_backend.app:[424:433]
+==aristotle_backend.workflow:[207:216]
+        graph_version=graph.version,
+        decision=decision,
+        evidence_snapshot=states,
+        created_at=now,
+    )
+    db.add(task)
+    db.flush()
+    for i, key in enumerate(decision["question_keys"]):
+        db.add(TaskQuestion(task_id=task.id, question_key=key, position=i))
+code/core_engine/aristotle_core/policy.py:1: R0801 Similar lines in 2 files
+==aristotle_backend.design_seed:[172:180]
+==aristotle_backend.seed:[189:197]
+                    content_verified=True,
+                    created_at=time.time(),
+                )
+            )
+        db.add(
+            Audit(
+                id=str(uuid4()),
+                actor_id="editor",
+code/core_engine/aristotle_core/policy.py:1: R0801 Similar lines in 2 files
+==versions.0001_learning_workflow:[186:193]
+==versions.0002_semantic_learning:[37:44]
+        sa.Column("created_at", sa.Float(), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["user_id"],
+            ["users.id"],
+        ),
+        sa.PrimaryKeyConstraint("id"),
+    )
+code/core_engine/aristotle_core/policy.py:36: R0914 Too many local variables (17/15)
+code/core_engine/aristotle_core/policy.py:90: R0914 Too many local variables (21/15)

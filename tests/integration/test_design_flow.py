@@ -348,3 +348,17 @@ def test_understanding_supported_but_application_evidence_insufficient_recommend
     assert result["target_level"] == "apply" and result["activity"] == "practice"
     assert "理解题已有多题支持" in result["reason"]
     assert len(result["questions"]) == 3
+
+
+def test_explicit_level_takes_precedence_after_understanding_diagnostic(client, login, design):
+    headers = login()
+    choose(client, headers)
+    diagnose_all(client, headers, design, body={"knowledge_id": "linear"})
+    diagnose_all(client, headers, design, body={"knowledge_id": "stack", "target_level": "understand"})
+    payload = {"knowledge_id": "stack", "target_level": "understand"}
+    response = client.post("/api/v1/recommendations", headers=headers, json=payload)
+    assert response.status_code == 201, response.text
+    result = response.json()
+    assert result["activity"] == "practice"
+    assert result["target_level"] == "understand"
+    assert [q["level"] for q in result["questions"]] == ["understand"] * 3

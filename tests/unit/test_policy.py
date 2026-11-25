@@ -107,3 +107,18 @@ def test_unseen_questions_are_preferred_and_four_level_inventory_gap_is_recommen
     decision = recommend(NODES, states, questions, rows)
     assert decision["knowledge_id"] == "child"
     assert decision["target_level"] == "analyze"
+
+
+def test_recommend_sorts_unseen_then_oldest_using_each_questions_latest_attempt():
+    questions = [
+        {"key": key, "question_id": key, "knowledge_id": "root", "level": "remember"}
+        for key in ("seen-twice", "new-b", "seen-once", "new-a")
+    ]
+    rows = [
+        evidence("seen-twice", at=NOW - 1),
+        evidence("seen-once", at=NOW - 2),
+        evidence("seen-twice", at=NOW - 3),
+    ]
+    decision = recommend(NODES, diagnose(NODES, rows, NOW), questions, rows)
+    assert decision["question_keys"] == ["new-a", "new-b", "seen-once"]
+    assert decision["warnings"] == []
