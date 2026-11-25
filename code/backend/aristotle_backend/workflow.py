@@ -258,45 +258,33 @@ def persist_task(db, user, scope, graph, states, decision, now, activity, round_
     return task
 
 
-def create_recommendation(
-    db, user, graph, attempts, states, now, knowledge_id=None, level=None, exclude_keys=()
-):
-    scope = selected_scope(db, user, True)
-    rounds = db.scalars(
-        select(DiagnosticRound).where(
-            DiagnosticRound.user_id == user.id, DiagnosticRound.scope_id == scope.id
-        )
-    ).all()
-    if any(r.status == "active" for r in rounds):
-        reject(409, "请先完成当前诊断")
-    if not any(r.status == "completed" for r in rounds):
-        reject(409, "请先完成所选范围的初始诊断")
-    nodes = scoped_nodes(db, user, graph.nodes)
-    questions = available_questions(db, nodes)
-    candidates = [
-        {"key": q.key, "question_id": q.question_id, "knowledge_id": q.knowledge_id, "level": q.level}
-        for q in questions
-        if q.key not in exclude_keys
-    ]
-    try:
-        decision = recommend(nodes, states, candidates, attempts, knowledge_id, level)
-    except ValueError as exc:
-        reject(409, str(exc))
-    target = decision["knowledge_id"]
-    # The original FR-5.3: adequate understanding + weak application -> application.
-    state = next(s for s in states if s["knowledge_id"] == target)
-    dims = {c["level"]: c for c in state["cognitive"]}
-    if (
-        not level
-        and dims["understand"]["count"] >= 3
-        and (dims["understand"]["correct_rate"] or 0) >= 0.8
-        and any(q.knowledge_id == target and q.level == "apply" for q in questions)
-    ):
-        if dims["apply"]["count"] < 3 or (dims["apply"]["correct_rate"] or 0) < 0.8:
-            decision = recommend(nodes, states, candidates, attempts, target, "apply")
-            decision["reason"] = (
-                f"{state['name']}的理解题已有多题支持，应用证据仍需补足，下一步练习按规则执行操作。"
+def require_completed_diagnostic(db, user, scope):
+    statuses = set(
+        db.scalars(
+            select(DiagnosticRound.status).where(
+                DiagnosticRound.user_id == user.id, DiagnosticRound.scope_id == scope.id
             )
+        )
+    )
+    if "active" in statuses:
+        reject(409, "请先完成当前诊断")
+    if "completed" not in statuses:
+        reject(409, "请先完成所选范围的初始诊断")
+
+
+def needs_application_practice(state, questions):
+    dims = {c["level"]: c for c in state["cognitive"]}
+    understanding, application = dims["understand"], dims["apply"]
+    return (
+        understanding["count"] >= 3
+        and (understanding["correct_rate"] or 0) >= 0.8
+        and (application["count"] < 3 or (application["correct_rate"] or 0) < 0.8)
+        and any(q.knowledge_id == state["knowledge_id"] and q.level == "apply" for q in questions)
+    )
+
+
+def needs_material_review(db, user, target, attempts):
+    """Check the latest answers to two distinct higher-level questions since the last review."""
     recent_review = (
         db.execute(
             select(TaskProgress).join(Task).where(Task.user_id == user.id, TaskProgress.status == "completed")
@@ -318,10 +306,36 @@ def create_recommendation(
         if a["knowledge_id"] == target and a["level"] in ("apply", "analyze") and a["at"] > cutoff:
             latest.setdefault(a["question_id"], a)
     recent = list(latest.values())[:2]
-    review = len(recent) == 2 and all(not a["correct"] for a in recent)
+    return len(recent) == 2 and all(not a["correct"] for a in recent)
+
+
+def create_recommendation(
+    db, user, graph, attempts, states, now, knowledge_id=None, level=None, exclude_keys=()
+):
+    scope = selected_scope(db, user, True)
+    require_completed_diagnostic(db, user, scope)
+    nodes = scoped_nodes(db, user, graph.nodes)
+    questions = available_questions(db, nodes)
+    candidates = [
+        {"key": q.key, "question_id": q.question_id, "knowledge_id": q.knowledge_id, "level": q.level}
+        for q in questions
+        if q.key not in exclude_keys
+    ]
+    try:
+        decision = recommend(nodes, states, candidates, attempts, knowledge_id, level)
+    except ValueError as exc:
+        reject(409, str(exc))
+    target = decision["knowledge_id"]
+    # The original FR-5.3: adequate understanding + weak application -> application.
+    state = next(s for s in states if s["knowledge_id"] == target)
+    if not level and needs_application_practice(state, questions):
+        decision = recommend(nodes, states, candidates, attempts, target, "apply")
+        decision["reason"] = (
+            f"{state['name']}的理解题已有多题支持，应用证据仍需补足，下一步练习按规则执行操作。"
+        )
     refs = source_refs(db, user, target)
     activity, resume = "practice", None
-    if review and refs:
+    if refs and needs_material_review(db, user, target, attempts):
         resume = decision["target_level"]
         decision.update(
             question_keys=[],

@@ -87,6 +87,20 @@ def diagnose(nodes: list[dict], attempts: list[dict], now: float) -> list[dict]:
     return list(states.values())
 
 
+def _eligible_targets(order, state_by_id, knowledge_id):
+    if knowledge_id is None:
+        return [key for key in order if not state_by_id[key]["unmet_prerequisites"]]
+    if knowledge_id not in state_by_id:
+        raise ValueError("目标知识点不存在")
+    if state_by_id[knowledge_id]["unmet_prerequisites"] or knowledge_id not in order:
+        raise ValueError("先修证据不足，请先完成先修知识点的诊断或巩固")
+    return [knowledge_id]
+
+
+def _needs_practice(dimension):
+    return dimension["evidence_status"] == "insufficient" or (dimension["correct_rate"] or 0) < 0.8
+
+
 def recommend(nodes, states, questions, attempts, knowledge_id=None, level=None):
     """Select only prerequisite-eligible nodes and published first-release labels.
 
@@ -94,45 +108,37 @@ def recommend(nodes, states, questions, attempts, knowledge_id=None, level=None)
     Explicit targets can never bypass prerequisite constraints.
     """
     state_by_id = {s["knowledge_id"]: s for s in states}
-    order = validate_graph(nodes)
-    if knowledge_id is not None and knowledge_id not in state_by_id:
-        raise ValueError("目标知识点不存在")
-    eligible = [k for k in order if not state_by_id[k]["unmet_prerequisites"]]
-    if knowledge_id is not None:
-        if knowledge_id not in eligible:
-            raise ValueError("先修证据不足，请先完成先修知识点的诊断或巩固")
-        eligible = [knowledge_id]
+    eligible = _eligible_targets(validate_graph(nodes), state_by_id, knowledge_id)
+    inventory = defaultdict(lambda: defaultdict(list))
+    for question in questions:
+        if question["level"] in LEVELS:
+            inventory[question["knowledge_id"]][question["level"]].append(question)
+
+    recent_by_node, last_seen = {}, {}
+    for attempt in attempts:
+        node, question, at = attempt["knowledge_id"], attempt["question_id"], attempt["at"]
+        recent_by_node[node] = max(at, recent_by_node.get(node, at))
+        last_seen[question] = max(at, last_seen.get(question, 0))
+
     priority = {"needs_review": 0, "insufficient": 1, "provisional": 2}
 
     def rank(key):
-        cognitive = {c["level"]: c for c in state_by_id[key]["cognitive"]}
-        available = {q["level"] for q in questions if q["knowledge_id"] == key and q["level"] in LEVELS}
-        has_gap = any(
-            cognitive[lv]["evidence_status"] == "insufficient" or (cognitive[lv]["correct_rate"] or 0) < 0.8
-            for lv in available
-        )
-        recent = max((a["at"] for a in attempts if a["knowledge_id"] == key), default=-1)
-        return priority[state_by_id[key]["status"]], not has_gap, recent, order.index(key)
+        state = state_by_id[key]
+        has_gap = any(dim["level"] in inventory[key] and _needs_practice(dim) for dim in state["cognitive"])
+        return priority[state["status"]], not has_gap, recent_by_node.get(key, -1)
 
-    eligible.sort(key=rank)
-    target = eligible[0]
-    available = [q for q in questions if q["knowledge_id"] == target and q["level"] in LEVELS]
-    cognitive = {c["level"]: c for c in state_by_id[target]["cognitive"]}
-    available_levels = [lv for lv in LEVELS if any(q["level"] == lv for q in available)]
+    # min keeps the first eligible node in topological order when all rank fields tie.
+    target = min(eligible, key=rank)
+    available = inventory[target]
+    cognitive = {dim["level"]: dim for dim in state_by_id[target]["cognitive"]}
+    available_levels = [lv for lv in LEVELS if lv in available]
     chosen_level = level or next(
-        (
-            lv
-            for lv in available_levels
-            if cognitive[lv]["evidence_status"] == "insufficient"
-            or (cognitive[lv]["correct_rate"] or 0) < 0.8
-        ),
+        (lv for lv in available_levels if _needs_practice(cognitive[lv])),
         available_levels[0] if available_levels else "understand",
     )
-    last_seen = {}
-    for a in attempts:
-        last_seen[a["question_id"]] = max(a["at"], last_seen.get(a["question_id"], 0))
-    candidates = [q for q in available if q["level"] == chosen_level]
-    candidates.sort(key=lambda q: (last_seen.get(q["question_id"], -1), q["key"]))
+    candidates = sorted(
+        available[chosen_level], key=lambda q: (last_seen.get(q["question_id"], -1), q["key"])
+    )
     selected = candidates[:3]
     status_text = {"insufficient": "证据不足", "needs_review": "待巩固", "provisional": "初步掌握"}
     return {

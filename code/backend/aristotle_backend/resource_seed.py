@@ -57,6 +57,77 @@ def _load_bundle(resource_root: Path) -> tuple[dict, list[dict], list[dict], dic
     return graph, points, questions, manifest
 
 
+def _import_point_content(db, points, questions):
+    questions_by_point = defaultdict(list)
+    for question in questions:
+        questions_by_point[question["knowledge_point_id"]].append(question)
+
+    inserted_questions = 0
+    for point in points:
+        point_questions = questions_by_point[point["id"]]
+        if not point_questions:
+            raise ValueError(f"知识点没有题目：{point['id']}")
+        for item in point_questions:
+            key = f"{item['id']}:v{item['version']}"
+            if db.get(Question, key):
+                continue
+            db.add(
+                Question(
+                    key=key,
+                    question_id=item["id"],
+                    version=item["version"],
+                    knowledge_id=point["id"],
+                    prompt=item["stem"],
+                    options=list(item["options"].values()),
+                    answer=item["options"][item["answer"]],
+                    explanation=item["explanation"],
+                    source=(
+                        f"resource 本地演示题；{item['source_type']}；{item['review_status']}，未完成人工审核"
+                    ),
+                    status="published",
+                    level=item["cognitive_level_candidate"],
+                    dataset="demo-seed",
+                )
+            )
+            inserted_questions += 1
+
+        resource_id = "resource-guide-" + point["id"]
+        resource = db.get(LearningResource, resource_id)
+        if not resource:
+            resource = LearningResource(id=resource_id)
+            db.add(resource)
+        resource.knowledge_id = point["id"]
+        resource.title = point["name"] + " · 练习要点"
+        resource.text = "\n\n".join(dict.fromkeys(item["explanation"] for item in point_questions))
+        resource.source = "resource 题目解析汇编；本地演示资料，待人工审核"
+
+    return inserted_questions
+
+
+def _publish_chapter_scopes(db, subjects, points):
+    chapters_by_subject = defaultdict(lambda: defaultdict(list))
+    for point in points:
+        chapters_by_subject[point["subject_code"]][point["chapter_number"]].append(point)
+
+    first_scope_id = None
+    scope_count = 0
+    for subject in subjects:
+        for chapter_number, chapter_points in sorted(chapters_by_subject[subject["subject_code"]].items()):
+            scope_id = f"{RESOURCE_SCOPE_PREFIX}{subject['subject_code']}-{chapter_number}"
+            first_scope_id = first_scope_id or scope_id
+            scope = db.get(LearningScope, scope_id)
+            if not scope:
+                scope = LearningScope(id=scope_id)
+                db.add(scope)
+            scope.title = f"{subject['subject']} · {chapter_points[0]['chapter']}"
+            scope.knowledge_ids = [point["id"] for point in chapter_points]
+            scope.published = True
+            scope.description = "与四科学习地图一致的章节；题目与认知标签为待审核演示内容。"
+            scope_count += 1
+
+    return first_scope_id, scope_count
+
+
 def import_resource_demo(sessions, resource_root: Path | None = None) -> dict[str, int | str]:
     """Load the four-subject resource bundle without deleting learning history."""
 
@@ -65,11 +136,6 @@ def import_resource_demo(sessions, resource_root: Path | None = None) -> dict[st
         "resource-demo-"
         + hashlib.sha256(json.dumps(graph["nodes"], sort_keys=True).encode()).hexdigest()[:12]
     )
-    questions_by_point = defaultdict(list)
-    for question in questions:
-        questions_by_point[question["knowledge_point_id"]].append(question)
-
-    inserted_questions = 0
     with sessions() as db:
         stored_graph = db.scalar(select(Graph).where(Graph.version == graph_version))
         if stored_graph and stored_graph.nodes != graph["nodes"]:
@@ -77,66 +143,8 @@ def import_resource_demo(sessions, resource_root: Path | None = None) -> dict[st
         if not stored_graph:
             db.add(Graph(version=graph_version, nodes=graph["nodes"]))
 
-        for point in points:
-            point_questions = questions_by_point[point["id"]]
-            if not point_questions:
-                raise ValueError(f"知识点没有题目：{point['id']}")
-            for item in point_questions:
-                key = f"{item['id']}:v{item['version']}"
-                if db.get(Question, key):
-                    continue
-                db.add(
-                    Question(
-                        key=key,
-                        question_id=item["id"],
-                        version=item["version"],
-                        knowledge_id=point["id"],
-                        prompt=item["stem"],
-                        options=list(item["options"].values()),
-                        answer=item["options"][item["answer"]],
-                        explanation=item["explanation"],
-                        source=(
-                            f"resource 本地演示题；{item['source_type']}；"
-                            f"{item['review_status']}，未完成人工审核"
-                        ),
-                        status="published",
-                        level=item["cognitive_level_candidate"],
-                        dataset="demo-seed",
-                    )
-                )
-                inserted_questions += 1
-
-            resource_id = "resource-guide-" + point["id"]
-            resource = db.get(LearningResource, resource_id)
-            if not resource:
-                resource = LearningResource(id=resource_id)
-                db.add(resource)
-            resource.knowledge_id = point["id"]
-            resource.title = point["name"] + " · 练习要点"
-            resource.text = "\n\n".join(dict.fromkeys(item["explanation"] for item in point_questions))
-            resource.source = "resource 题目解析汇编；本地演示资料，待人工审核"
-
-        first_scope_id = None
-        scope_count = 0
-        for subject in manifest["subjects"]:
-            subject_points = [point for point in points if point["subject_code"] == subject["subject_code"]]
-            chapter_numbers = sorted({point["chapter_number"] for point in subject_points})
-            for chapter_number in chapter_numbers:
-                chapter_points = [
-                    point for point in subject_points if point["chapter_number"] == chapter_number
-                ]
-                scope_id = f"{RESOURCE_SCOPE_PREFIX}{subject['subject_code']}-{chapter_number}"
-                first_scope_id = first_scope_id or scope_id
-                scope = db.get(LearningScope, scope_id)
-                if not scope:
-                    scope = LearningScope(id=scope_id)
-                    db.add(scope)
-                scope.title = f"{subject['subject']} · {chapter_points[0]['chapter']}"
-                scope.knowledge_ids = [point["id"] for point in chapter_points]
-                scope.published = True
-                scope.description = "与四科学习地图一致的章节；题目与认知标签为待审核演示内容。"
-                scope_count += 1
-
+        inserted_questions = _import_point_content(db, points, questions)
+        first_scope_id, scope_count = _publish_chapter_scopes(db, manifest["subjects"], points)
         for legacy_id in LEGACY_SCOPE_IDS:
             legacy = db.get(LearningScope, legacy_id)
             if legacy:

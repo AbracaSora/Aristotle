@@ -131,6 +131,34 @@ def reserve_call(db, user_id, purpose, cfg, payload):
         return row
 
 
+def _decode_response(response, row, decode):
+    if response.status_code == 429 or response.status_code >= 500:
+        raise ProviderFailure(
+            "rate_limited" if response.status_code == 429 else "unavailable",
+            "模型服务暂时繁忙，请稍后重试。",
+            True,
+        )
+    if not response.is_success:
+        raise ProviderFailure("request_rejected", "模型服务拒绝了请求，请管理员核对模型名、鉴权和接口格式。")
+    if len(response.content) > 4_000_000:
+        raise ProviderFailure("invalid_output", "模型响应超出允许大小，已拒绝使用。")
+    try:
+        body = response.json()
+        if not isinstance(body, dict) or not isinstance(body.get("usage", {}), dict):
+            raise ValueError()
+        raw_usage = body.get("usage", {})
+        row.usage = {
+            k: raw_usage[k]
+            for k in ("prompt_tokens", "completion_tokens", "total_tokens")
+            if isinstance(raw_usage.get(k), int) and not isinstance(raw_usage[k], bool) and raw_usage[k] >= 0
+        }
+        return decode(body)
+    except (ValueError, KeyError, IndexError, TypeError):
+        raise ProviderFailure(
+            "invalid_output", "模型返回格式或内容校验失败，未写入学习或发布状态。"
+        ) from None
+
+
 def request_model(db, user_id, purpose, cfg, payload, decode, transport=None):
     if not cfg.configured:
         raise ProviderFailure("not_configured", "模型服务尚未配置，请管理员填写后端服务地址、模型名和密钥。")
@@ -158,35 +186,7 @@ def request_model(db, user_id, purpose, cfg, payload, decode, transport=None):
                         headers=headers,
                         timeout=min(cfg.timeout, remaining),
                     )
-                    if response.status_code == 429 or response.status_code >= 500:
-                        raise ProviderFailure(
-                            "rate_limited" if response.status_code == 429 else "unavailable",
-                            "模型服务暂时繁忙，请稍后重试。",
-                            True,
-                        )
-                    if not response.is_success:
-                        raise ProviderFailure(
-                            "request_rejected", "模型服务拒绝了请求，请管理员核对模型名、鉴权和接口格式。"
-                        )
-                    if len(response.content) > 4_000_000:
-                        raise ProviderFailure("invalid_output", "模型响应超出允许大小，已拒绝使用。")
-                    try:
-                        body = response.json()
-                        if not isinstance(body, dict) or not isinstance(body.get("usage", {}), dict):
-                            raise ValueError()
-                        raw_usage = body.get("usage", {})
-                        row.usage = {
-                            k: raw_usage[k]
-                            for k in ("prompt_tokens", "completion_tokens", "total_tokens")
-                            if isinstance(raw_usage.get(k), int)
-                            and not isinstance(raw_usage[k], bool)
-                            and raw_usage[k] >= 0
-                        }
-                        value = decode(body)
-                    except (ValueError, KeyError, IndexError, TypeError):
-                        raise ProviderFailure(
-                            "invalid_output", "模型返回格式或内容校验失败，未写入学习或发布状态。"
-                        ) from None
+                    value = _decode_response(response, row, decode)
                     row.status = "succeeded"
                     row.duration_seconds = time.monotonic() - started
                     db.commit()
@@ -198,12 +198,11 @@ def request_model(db, user_id, purpose, cfg, payload, decode, transport=None):
                         "external_calls": row.external_calls,
                     }
                 except (httpx.TimeoutException, httpx.NetworkError):
-                    failure = ProviderFailure("timeout", "无法在时间预算内连接模型服务。", True)
+                    if attempt == cfg.retries:
+                        raise ProviderFailure("timeout", "无法在时间预算内连接模型服务。", True) from None
                 except ProviderFailure as failure:
                     if not failure.retryable or attempt == cfg.retries:
                         raise
-                if attempt == cfg.retries:
-                    raise failure
     except ProviderFailure as exc:
         row.status, row.error_code = "failed", exc.code
         row.duration_seconds = time.monotonic() - started

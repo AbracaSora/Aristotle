@@ -225,6 +225,44 @@ def keyword_search(units, query, limit=6):
     return [{**unit.view(), "score": score} for score, unit in ranked[:limit]]
 
 
+def _vector_scores(db, entries, vector, limit):
+    if db.bind.dialect.name == "postgresql" and entries:
+        distance = SourceEmbedding.vector.op("<=>", return_type=Float())(
+            cast(bindparam("query_vector", type_=Vector()), Vector())
+        ).label("distance")
+        rows = db.execute(
+            select(SourceEmbedding.source_key, distance)
+            .where(SourceEmbedding.id.in_([r.id for r in entries]), SourceEmbedding.dimensions == len(vector))
+            .order_by(distance)
+            .limit(max(limit * 4, 24)),
+            {"query_vector": vector},
+        ).all()
+        return {key: max(0, 1 - float(d)) for key, d in rows if d is not None}
+    # SQLite uses the same cosine metric for the local test suite.
+    norm = math.sqrt(sum(v * v for v in vector))
+    return {
+        row.source_key: max(
+            0,
+            sum(a * b for a, b in zip(row.vector, vector, strict=True))
+            / (math.sqrt(sum(v * v for v in row.vector)) * norm),
+        )
+        for row in entries
+    }
+
+
+def _rank_live_sources(scores, lookup, live, lexical, mode, limit):
+    ranked = []
+    for key, score in scores.items():
+        if key not in live or live[key].content_hash != lookup[key].content_hash:
+            continue
+        if mode == "hybrid":
+            score = 0.8 * score + 0.2 * lexical.get(key, 0)
+        if score >= 0.25:
+            ranked.append((score, live[key]))
+    ranked.sort(key=lambda item: (-item[0], item[1].key))
+    return [{**unit.view(), "score": round(score, 5)} for score, unit in ranked[:limit]]
+
+
 def semantic_search(db, user_id, query, knowledge_id, mode, allow_query, limit=6, transport=None):
     units = source_units(db, user_id, knowledge_id)
     if mode == "keyword":
@@ -259,44 +297,13 @@ def semantic_search(db, user_id, query, knowledge_id, mode, allow_query, limit=6
     vectors, metadata = embed(db, user_id, [query], transport)
     vector = vectors[0]
     entries = [row for row in entries if row.dimensions == len(vector)]
-    if db.bind.dialect.name == "postgresql" and entries:
-        distance = SourceEmbedding.vector.op("<=>", return_type=Float())(
-            cast(bindparam("query_vector", type_=Vector()), Vector())
-        ).label("distance")
-        rows = db.execute(
-            select(SourceEmbedding.source_key, distance)
-            .where(SourceEmbedding.id.in_([r.id for r in entries]), SourceEmbedding.dimensions == len(vector))
-            .order_by(distance)
-            .limit(max(limit * 4, 24)),
-            {"query_vector": vector},
-        ).all()
-        scores = {key: max(0, 1 - float(d)) for key, d in rows if d is not None}
-    else:
-        # Test portability only: production PostgreSQL uses the actual pgvector operator above.
-        norm = math.sqrt(sum(v * v for v in vector))
-        scores = {
-            row.source_key: max(
-                0,
-                sum(a * b for a, b in zip(row.vector, vector, strict=True))
-                / (math.sqrt(sum(v * v for v in row.vector)) * norm),
-            )
-            for row in entries
-        }
+    scores = _vector_scores(db, entries, vector, limit)
     db.expire_all()
     live = {u.key: u for u in source_units(db, user_id, knowledge_id) if u.external_allowed}
-    ranked = []
     lexical = {item["id"]: item["score"] for item in keyword_search(units, query, len(units))}
-    for key, score in scores.items():
-        if key not in live or live[key].content_hash != lookup[key].content_hash:
-            continue
-        if mode == "hybrid":
-            score = 0.8 * score + 0.2 * lexical.get(key, 0)
-        if score >= 0.25:
-            ranked.append((score, live[key]))
-    ranked.sort(key=lambda item: (-item[0], item[1].key))
     return {
         "mode": mode,
-        "items": [{**u.view(), "score": round(score, 5)} for score, u in ranked[:limit]],
+        "items": _rank_live_sources(scores, lookup, live, lexical, mode, limit),
         "missing_index": max(0, len(lookup) - len(entries)),
         "model": cfg.model,
         "call_id": metadata["call_id"],
