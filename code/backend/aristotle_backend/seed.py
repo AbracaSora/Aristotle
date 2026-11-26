@@ -8,7 +8,7 @@ from uuid import uuid4
 
 from sqlalchemy import select
 
-from .config import database_url
+from .config import database_url, require_demo_mode
 from .db import Annotation, Audit, Graph, Question, Review, User, open_database
 from .security import hash_password
 
@@ -133,6 +133,7 @@ BANK = [
 
 
 def seed_demo(sessions, password="demo-password"):
+    require_demo_mode()
     with sessions() as db:
         if db.scalar(select(User.id).limit(1)) or db.scalar(select(Graph.version).limit(1)):
             return False
@@ -159,38 +160,7 @@ def seed_demo(sessions, password="demo-password"):
                 )
             )
             db.flush()
-            candidate_id = str(uuid4())
-            db.add(
-                Annotation(
-                    id=candidate_id,
-                    question_key=key,
-                    payload={
-                        "question_id": qid,
-                        "question_version": 1,
-                        "primary_level": level,
-                        "secondary_levels": [],
-                        "rationale": explanation,
-                        "confidence": 0.5,
-                        "ambiguity_note": "演示标签，正式使用前需独立人工审核",
-                    },
-                    provider="demo-fixture",
-                    rule_version="bloom-0.1",
-                    created_at=time.time(),
-                )
-            )
-            db.flush()
-            db.add(
-                Review(
-                    id=str(uuid4()),
-                    annotation_id=candidate_id,
-                    reviewer_id="editor",
-                    decision="approve",
-                    reason="模拟审核种子，仅用于流程演示；不表示独立人工审核已完成",
-                    final_level=level,
-                    content_verified=True,
-                    created_at=time.time(),
-                )
-            )
+            add_demo_review(db, key, level, explanation)
         db.add(
             Audit(
                 id=str(uuid4()),
@@ -204,6 +174,41 @@ def seed_demo(sessions, password="demo-password"):
         return True
 
 
+def add_demo_review(db, key, level, explanation):
+    candidate_id = str(uuid4())
+    db.add(
+        Annotation(
+            id=candidate_id,
+            question_key=key,
+            payload={
+                "question_id": key.removesuffix(":v1"),
+                "question_version": 1,
+                "primary_level": level,
+                "secondary_levels": [],
+                "rationale": explanation,
+                "confidence": 0.5,
+                "ambiguity_note": "演示标签，正式使用前需独立人工审核",
+            },
+            provider="demo-fixture",
+            rule_version="bloom-0.1",
+            created_at=time.time(),
+        )
+    )
+    db.flush()
+    db.add(
+        Review(
+            id=str(uuid4()),
+            annotation_id=candidate_id,
+            reviewer_id="editor",
+            decision="approve",
+            reason="模拟审核种子，仅用于流程演示；不表示独立人工审核已完成",
+            final_level=level,
+            content_verified=True,
+            created_at=time.time(),
+        )
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(description="创建本地演示账号与模拟审核题库；仅对空库执行")
     parser.add_argument("--demo", action="store_true", required=True)
@@ -214,6 +219,7 @@ def main():
         "--resource-demo", action="store_true", help="将四科 resource 数据显式发布到本地演示环境"
     )
     args = parser.parse_args()
+    require_demo_mode()
     engine, sessions = open_database(database_url())
     created = seed_demo(sessions, os.getenv("ARISTOTLE_DEMO_PASSWORD", "demo-password"))
     if args.design_flow:
