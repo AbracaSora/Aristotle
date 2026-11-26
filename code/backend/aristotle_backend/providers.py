@@ -4,18 +4,21 @@ import hashlib
 import json
 import os
 import time
-from dataclasses import dataclass
-from datetime import datetime, timezone
+from collections.abc import Callable
+from dataclasses import dataclass, replace
+from datetime import datetime
 from threading import Lock
 from urllib.parse import urlparse
 from uuid import uuid4
+from zoneinfo import ZoneInfo
 
 import httpx
 from dotenv import load_dotenv
 from sqlalchemy import func, select, text
+from sqlalchemy.orm import Session
 
 from .config import PROJECT_ROOT
-from .db import ModelCall
+from .db import ModelCall, SystemSetting
 from .vector_type import checked_vector
 
 _budget_lock = Lock()
@@ -32,6 +35,21 @@ def fingerprint(value) -> str:
 
 
 @dataclass(frozen=True)
+class ModelContext:
+    db: Session
+    user_id: str
+    transport: httpx.BaseTransport | None = None
+
+
+@dataclass(frozen=True)
+class GenerationPrompt:
+    purpose: str
+    system: str
+    content: dict
+    max_output_tokens: int = 1600
+
+
+@dataclass(frozen=True)
 class ProviderConfig:
     kind: str
     base_url: str
@@ -41,6 +59,9 @@ class ProviderConfig:
     timeout: float = 30
     retries: int = 0
     daily_limit: int = 200
+    personal_limit: int = 100
+    annotation_limit: int = 200
+    total_budget: float = 65
     proxy: str | None = None
     local: bool = False
     token_field: str = "max_tokens"
@@ -52,6 +73,25 @@ class ProviderConfig:
     @property
     def namespace(self):
         return fingerprint([self.kind, self.base_url, self.model, self.dimensions])
+
+
+def validate_url(base_url):
+    if base_url:
+        url = urlparse(base_url)
+        if (
+            url.scheme not in ("https", "http")
+            or not url.hostname
+            or any((url.username, url.password, url.query, url.fragment))
+        ):
+            raise ValueError()
+
+
+def validate_config(cfg):
+    if not 1 <= cfg.timeout <= 30 or cfg.retries not in (0, 1) or not 1 <= cfg.daily_limit <= 2000:
+        raise ValueError()
+    if not 0 <= cfg.dimensions <= 4096 or cfg.token_field not in ("max_tokens", "max_completion_tokens"):
+        raise ValueError()
+    validate_url(cfg.base_url)
 
 
 def provider_config(kind: str) -> ProviderConfig:
@@ -71,46 +111,49 @@ def provider_config(kind: str) -> ProviderConfig:
             local=os.getenv(prefix + "_LOCAL", "0") == "1",
             token_field=os.getenv("ARISTOTLE_LLM_TOKEN_FIELD", "max_tokens"),
         )
-        if not 1 <= cfg.timeout <= 30 or cfg.retries not in (0, 1) or not 1 <= cfg.daily_limit <= 2000:
-            raise ValueError()
-        if not 0 <= cfg.dimensions <= 4096 or cfg.token_field not in ("max_tokens", "max_completion_tokens"):
-            raise ValueError()
-        if cfg.base_url:
-            url = urlparse(cfg.base_url)
-            if (
-                url.scheme not in ("https", "http")
-                or not url.hostname
-                or url.username
-                or url.password
-                or url.query
-                or url.fragment
-            ):
-                raise ValueError()
+        validate_config(cfg)
         return cfg
     except (ValueError, TypeError):
         raise ProviderFailure("invalid_config", "模型服务配置无效，请管理员检查后端环境变量。") from None
 
 
-def reserve_call(db, user_id, purpose, cfg, payload):
+def check_quota(context, purpose, cfg, midnight):
+    db, user_id = context.db, context.user_id
+    used = db.scalar(
+        select(func.coalesce(func.sum(ModelCall.reserved_requests), 0)).where(
+            ModelCall.created_at >= midnight
+        )
+    )
+    personal = db.scalar(
+        select(func.coalesce(func.sum(ModelCall.reserved_requests), 0)).where(
+            ModelCall.user_id == user_id, ModelCall.created_at >= midnight
+        )
+    )
+    annotation_used = db.scalar(
+        select(func.coalesce(func.sum(ModelCall.reserved_requests), 0)).where(
+            ModelCall.created_at >= midnight, ModelCall.purpose == "annotation"
+        )
+    )
+    reserved = cfg.retries + 1
+    exhausted = used + reserved > cfg.daily_limit or personal + reserved > cfg.personal_limit
+    if exhausted or (purpose == "annotation" and annotation_used + reserved > cfg.annotation_limit):
+        db.rollback()
+        raise ProviderFailure("quota_exceeded", "今日模型调用配额已用尽；已发布内容的学习仍可继续。")
+
+
+def reserve_call(context, purpose, cfg, payload):
+    db, user_id = context.db, context.user_id
     now = time.time()
-    midnight = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
+    midnight = (
+        datetime.fromtimestamp(now, ZoneInfo("Asia/Shanghai"))
+        .replace(hour=0, minute=0, second=0, microsecond=0)
+        .timestamp()
+    )
     with _budget_lock:
         if db.bind.dialect.name == "postgresql":
             lock_id = int(fingerprint(["model-budget", midnight])[:15], 16)
             db.execute(text("SELECT pg_advisory_xact_lock(:id)"), {"id": lock_id})
-        used = db.scalar(
-            select(func.coalesce(func.sum(ModelCall.reserved_requests), 0)).where(
-                ModelCall.created_at >= midnight
-            )
-        )
-        personal = db.scalar(
-            select(func.coalesce(func.sum(ModelCall.reserved_requests), 0)).where(
-                ModelCall.user_id == user_id, ModelCall.created_at >= midnight
-            )
-        )
-        if used + cfg.retries + 1 > cfg.daily_limit or personal + cfg.retries + 1 > min(60, cfg.daily_limit):
-            db.rollback()
-            raise ProviderFailure("quota_exceeded", "今日模型调用配额已用尽；已发布内容的学习仍可继续。")
+        check_quota(context, purpose, cfg, midnight)
         row = ModelCall(
             id=str(uuid4()),
             user_id=user_id,
@@ -131,41 +174,133 @@ def reserve_call(db, user_id, purpose, cfg, payload):
         return row
 
 
-def _decode_response(response, row, decode):
+def start_task_budget(db, created_at):
+    """One deadline shared by all calls in this task, including queue wait."""
+    cfg = effective_config(db, provider_config("generation"))
+    remaining = cfg.total_budget - max(0, time.time() - created_at)
+    if remaining <= 0:
+        raise ProviderFailure("timeout", "任务含排队时间已超过处理预算，未开始新的外部调用。")
+    db.info["model_deadline"] = time.monotonic() + remaining
+
+
+def effective_config(db, cfg):
+    """Apply non-secret admin limits at the lowest adapter boundary."""
+    row = db.get(SystemSetting, "provider")
+    if not row:
+        return cfg
+    settings = row.data
+    if settings.get("mode") == "disabled":
+        raise ProviderFailure("disabled", "管理员已禁用模型调用。")
+    return replace(
+        cfg,
+        timeout=settings.get("timeout_seconds", cfg.timeout),
+        retries=settings.get("retries", cfg.retries),
+        total_budget=settings.get("total_budget_seconds", cfg.total_budget),
+        annotation_limit=settings.get("daily_annotation_limit", cfg.annotation_limit),
+    )
+
+
+def response_body(response):
     if response.status_code == 429 or response.status_code >= 500:
-        raise ProviderFailure(
-            "rate_limited" if response.status_code == 429 else "unavailable",
-            "模型服务暂时繁忙，请稍后重试。",
-            True,
-        )
+        code = "rate_limited" if response.status_code == 429 else "unavailable"
+        raise ProviderFailure(code, "模型服务暂时繁忙，请稍后重试。", True)
     if not response.is_success:
         raise ProviderFailure("request_rejected", "模型服务拒绝了请求，请管理员核对模型名、鉴权和接口格式。")
-    if len(response.content) > 4_000_000:
-        raise ProviderFailure("invalid_output", "模型响应超出允许大小，已拒绝使用。")
-    try:
-        body = response.json()
-        if not isinstance(body, dict) or not isinstance(body.get("usage", {}), dict):
-            raise ValueError()
-        raw_usage = body.get("usage", {})
-        row.usage = {
-            k: raw_usage[k]
-            for k in ("prompt_tokens", "completion_tokens", "total_tokens")
-            if isinstance(raw_usage.get(k), int) and not isinstance(raw_usage[k], bool) and raw_usage[k] >= 0
-        }
-        return decode(body)
-    except (ValueError, KeyError, IndexError, TypeError):
-        raise ProviderFailure(
-            "invalid_output", "模型返回格式或内容校验失败，未写入学习或发布状态。"
-        ) from None
+    body = response.json()
+    if not isinstance(body, dict) or not isinstance(body.get("usage", {}), dict):
+        raise ValueError("Invalid response envelope")
+    return body
 
 
-def request_model(db, user_id, purpose, cfg, payload, decode, transport=None):
-    if not cfg.configured:
-        raise ProviderFailure("not_configured", "模型服务尚未配置，请管理员填写后端服务地址、模型名和密钥。")
-    row = reserve_call(db, user_id, purpose, cfg, payload)
-    started = time.monotonic()
+def model_usage(body):
+    raw = body.get("usage", {})
+    return {
+        key: raw[key]
+        for key in ("prompt_tokens", "completion_tokens", "total_tokens")
+        if isinstance(raw.get(key), int) and not isinstance(raw[key], bool) and raw[key] >= 0
+    }
+
+
+def send_request(client, cfg, payload, remaining):
     endpoint = "/embeddings" if cfg.kind == "embedding" else "/chat/completions"
     headers = {"Authorization": "Bearer " + cfg.api_key} if cfg.api_key else {}
+    # Stream with a cap: an upstream cannot force an unbounded response allocation.
+    deadline = time.monotonic() + remaining
+    with client.stream(
+        "POST",
+        cfg.base_url + endpoint,
+        json={"model": cfg.model, **payload},
+        headers=headers,
+        timeout=min(cfg.timeout, remaining),
+    ) as response:
+        chunks, size = [], 0
+        for chunk in response.iter_bytes():
+            if time.monotonic() > deadline:
+                raise ProviderFailure("timeout", "模型响应读取超过任务预算。", True)
+            size += len(chunk)
+            if size > 4_000_000:
+                raise ProviderFailure("invalid_output", "模型响应超出允许大小，已拒绝使用。")
+            chunks.append(chunk)
+        return httpx.Response(response.status_code, content=b"".join(chunks))
+
+
+@dataclass(frozen=True)
+class ModelRequest:
+    payload: dict
+    decode: Callable
+    validate_sources: Callable | None = None
+
+
+def decode_response(response, request, row, deadline):
+    body = response_body(response)
+    if time.monotonic() > deadline:
+        raise ProviderFailure("timeout", "模型处理超过时间预算，请稍后重试。", True)
+    row.usage = model_usage(body)
+    return request.decode(body)
+
+
+def request_attempts(client, cfg, row, request):
+    started = time.monotonic()
+    for attempt in range(cfg.retries + 1):
+        if request.validate_sources:
+            request.validate_sources()
+        remaining = cfg.total_budget - (time.monotonic() - started)
+        if remaining <= 0:
+            raise ProviderFailure("timeout", "模型处理超过时间预算，请稍后重试。", True)
+        row.external_calls += 1
+        try:
+            return decode_response(
+                send_request(client, cfg, request.payload, remaining),
+                request,
+                row,
+                started + cfg.total_budget,
+            )
+        except (ValueError, KeyError, IndexError, TypeError):
+            raise ProviderFailure(
+                "invalid_output", "模型返回格式或内容校验失败，未写入学习或发布状态。"
+            ) from None
+        except (httpx.TimeoutException, httpx.NetworkError):
+            failure = ProviderFailure("timeout", "无法在时间预算内连接模型服务。", True)
+        except ProviderFailure as exc:
+            failure = exc
+        if not failure.retryable or attempt == cfg.retries:
+            raise failure
+    raise RuntimeError("Unreachable retry state")
+
+
+def request_model(context, purpose, cfg, request):
+    db, transport = context.db, context.transport
+    cfg = effective_config(db, cfg)
+    deadline = db.info.get("model_deadline")
+    if deadline is not None:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise ProviderFailure("timeout", "任务处理预算已用尽，未开始新的外部调用。")
+        cfg = replace(cfg, total_budget=min(cfg.total_budget, remaining))
+    if not cfg.configured:
+        raise ProviderFailure("not_configured", "模型服务尚未配置，请管理员填写后端服务地址、模型名和密钥。")
+    row = reserve_call(context, purpose, cfg, request.payload)
+    started = time.monotonic()
     try:
         with httpx.Client(
             timeout=cfg.timeout,
@@ -174,48 +309,27 @@ def request_model(db, user_id, purpose, cfg, payload, decode, transport=None):
             trust_env=False,
             follow_redirects=False,
         ) as client:
-            for attempt in range(cfg.retries + 1):
-                try:
-                    remaining = 65 - (time.monotonic() - started)
-                    if remaining <= 0:
-                        raise ProviderFailure("timeout", "模型处理超过时间预算，请稍后重试。", True)
-                    row.external_calls += 1
-                    response = client.post(
-                        cfg.base_url + endpoint,
-                        json={"model": cfg.model, **payload},
-                        headers=headers,
-                        timeout=min(cfg.timeout, remaining),
-                    )
-                    value = _decode_response(response, row, decode)
-                    row.status = "succeeded"
-                    row.duration_seconds = time.monotonic() - started
-                    db.commit()
-                    return value, {
-                        "call_id": row.id,
-                        "model": cfg.model,
-                        "namespace": cfg.namespace,
-                        "usage": row.usage,
-                        "external_calls": row.external_calls,
-                    }
-                except (httpx.TimeoutException, httpx.NetworkError):
-                    if attempt == cfg.retries:
-                        raise ProviderFailure("timeout", "无法在时间预算内连接模型服务。", True) from None
-                except ProviderFailure as failure:
-                    if not failure.retryable or attempt == cfg.retries:
-                        raise
+            value = request_attempts(client, cfg, row, request)
+        row.status = "succeeded"
     except ProviderFailure as exc:
         row.status, row.error_code = "failed", exc.code
-        row.duration_seconds = time.monotonic() - started
-        db.commit()
         raise
     except httpx.HTTPError:
         row.status, row.error_code = "failed", "network_error"
+        raise ProviderFailure("network_error", "模型网络连接失败，已保留失败状态。", True) from None
+    finally:
         row.duration_seconds = time.monotonic() - started
         db.commit()
-        raise ProviderFailure("network_error", "模型网络连接失败，已保留失败状态。", True) from None
+    return value, {
+        "call_id": row.id,
+        "model": cfg.model,
+        "namespace": cfg.namespace,
+        "usage": row.usage,
+        "external_calls": row.external_calls,
+    }
 
 
-def embed(db, user_id, texts, transport=None):
+def embed(context, texts, *, validate_sources=None):
     cfg = provider_config("embedding")
 
     def decode(body):
@@ -228,10 +342,10 @@ def embed(db, user_id, texts, transport=None):
         return vectors
 
     payload = {"input": texts, "encoding_format": "float"}
-    return request_model(db, user_id, "embedding", cfg, payload, decode, transport)
+    return request_model(context, "embedding", cfg, ModelRequest(payload, decode, validate_sources))
 
 
-def generate(db, user_id, purpose, system, content, decode, transport=None):
+def generate(context, prompt, decode, *, validate_sources=None):
     cfg = provider_config("generation")
 
     def parse(body):
@@ -243,17 +357,18 @@ def generate(db, user_id, purpose, system, content, decode, transport=None):
         return decode(json.loads(value))
 
     return request_model(
-        db,
-        user_id,
-        purpose,
+        context,
+        prompt.purpose,
         cfg,
-        {
-            "messages": [
-                {"role": "system", "content": system},
-                {"role": "user", "content": json.dumps(content, ensure_ascii=False)},
-            ],
-            cfg.token_field: 1600,
-        },
-        parse,
-        transport,
+        ModelRequest(
+            {
+                "messages": [
+                    {"role": "system", "content": prompt.system},
+                    {"role": "user", "content": json.dumps(prompt.content, ensure_ascii=False)},
+                ],
+                cfg.token_field: prompt.max_output_tokens,
+            },
+            parse,
+            validate_sources,
+        ),
     )
