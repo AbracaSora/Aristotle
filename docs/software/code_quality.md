@@ -1,5 +1,9 @@
 # 后端代码质量检查与重构报告
 
+## SonarCloud 复核
+
+交付提交 `850fc26` 的 GitHub Actions 前后端工作流均成功。独立 SonarCloud 检查中，新增代码安全性为 C、可靠性为 E，要求均为 A。安全告警涉及工作流依赖使用及评审基线的 Git 参数传递。可靠性发现中有 103 条来自对 PostgreSQL 升级快照运行 Oracle PL/SQL 长度规则。迁移证据现以 PostgreSQL 专用的 `.pgsql` 扩展名归档，升降级快照的既有字节摘要保持一致。实际迁移通过 Alembic 执行。另补齐扫描报告表头及截图工具的异步错误处理。[原检查](https://github.com/AbracaSora/Aristotle/runs/139727126028) · [升级快照](quality_evidence/strict_backend/postgres-upgrade.pgsql) · [降级快照](quality_evidence/strict_backend/postgres-downgrade.pgsql) · [原始摘要](quality_evidence/strict_backend/ddl-digests.json)
+
 ## 单提交发布核对
 
 本次发布在远端 `feb760c` 的基础上整合课程扫描、同伴可复核的历史记录与六个新增回归用例。从该基线重新生成 57 个评审补丁，最大一批 389 行。提交钩子对真实父提交逐批重放并校验最终源码，完整覆盖率仍针对累计差异。已提交的版本可用 `uv run python scripts/check_guardrails.py --full --base HEAD^` 重验。[本次发布评审包](../../quality/backend-review.zip)

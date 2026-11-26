@@ -3,6 +3,7 @@
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -228,15 +229,30 @@ def evaluate(config, files, output, commands, base):
     }
 
 
+def resolve_commit(revision):
+    """Resolve one commit expression via Git's batch input protocol."""
+    if not revision or any(char in revision for char in ("\r", "\n", "\0")):
+        raise ValueError("基线必须是单行 Git 提交引用")
+    output = subprocess.check_output(
+        ["git", "cat-file", "--batch-check=%(objectname) %(objecttype)"],
+        input=revision + "^{commit}\n",
+        text=True,
+        cwd=ROOT,
+        timeout=30,
+    )
+    match = re.fullmatch(r"([0-9a-f]{40}|[0-9a-f]{64}) commit\n", output)
+    if not match:
+        raise ValueError("找不到指定的基线提交")
+    return match.group(1)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--full", action="store_true")
     parser.add_argument("--output", type=Path, default=ROOT / ".local/guardrails")
     parser.add_argument("--base", default=os.environ.get("ARISTOTLE_REVIEW_BASE") or "HEAD")
     args = parser.parse_args()
-    base = subprocess.check_output(
-        ["git", "rev-parse", "--verify", "--end-of-options", args.base + "^{commit}"], cwd=ROOT, text=True
-    ).strip()
+    base = resolve_commit(args.base)
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     config = json.loads((ROOT / "quality/guardrails.json").read_text())

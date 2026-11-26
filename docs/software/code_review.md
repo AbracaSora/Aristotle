@@ -7,6 +7,11 @@
 
 本次由 AI 依据仓库的 `code-quality-guard` 进行自审，组员互审和教师签字仍待完成。评审项沿用课程模板。负面措辞的项目填写“是”表示已经排除该问题。[课程评审模板](https://github.com/bettermorn/ACMWDevHubPPT/blob/master/Methodology/CodeReviewTemplate.md) · [本轮门禁与重构对比](code_quality.md)
 
+## SonarCloud 修复复审
+
+- 工作流在锁定依赖后直接使用对应的虚拟环境。基线引用通过 Git 标准输入协议解析，接受单行引用并检查返回的对象类型与完整提交哈希。回归覆盖 HEAD、父提交、完整哈希和无效引用。
+- 逐项核对可靠性发现的来源。PostgreSQL 快照使用对应方言的扩展名并按原摘要复验；三个已有 HTML 报告增加列标题；截图程序记录拒绝原因并设置失败退出码。线上结论以对应提交的独立 SonarCloud 检查为准。
+
 ## 后端接口与补丁复审（2026-11-26）
 
 | 编号 | 核对问题 | 证据与结论 |

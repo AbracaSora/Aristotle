@@ -10,6 +10,8 @@
 
 学生可上传文本型 PDF、按原页确认片段并进行关键词检索。使用私人片段生成解释需要逐份资料授权和本次处理同意。模型反馈、阅读记录、诊断证据与课程掌握状态分别保存。[需求和验收清单](docs/requirements/session_requirements.md) · [本轮质量检查](docs/software/code_quality.md) · [未完成的验收](docs/software/remaining_work_20261126.md)
 
+课堂评审可从[后端工作索引 #9](https://github.com/AbracaSora/Aristotle/issues/9)按功能查看实现与用例，或[直接浏览 57 个评审提交及差异](https://github.com/AbracaSora/Aristotle/compare/feb760c...7b6e1cc)。这些提交是在交付时按依赖拆分的后端源码评审材料。
+
 ## 早期诊断原型（2026-11-08）
 
 主学习界面已改为可拖动、缩放和搜索的先修关系地图，侧栏连接原有诊断、任务、反馈和复测。后端新增 PostgreSQL + pgvector 语义检索、真实模型认知候选标注与有来源的解释；认知候选仍须人工审核，阅读和模型解释不增加学习证据。PDF 抽取、知识点候选关联仍为 mock，正式知识空间模型与质量评测尚未完成。
