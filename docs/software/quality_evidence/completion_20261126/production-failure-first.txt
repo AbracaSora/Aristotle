@@ -1,0 +1,82 @@
+FFF.F                                                                    [100%]
+=================================== FAILURES ===================================
+_ test_production_rejects_development_database_configuration[postgresql://aristotle:aristotle-local@localhost/db] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10de793d0>
+url = 'postgresql://aristotle:aristotle-local@localhost/db'
+
+    @pytest.mark.parametrize(
+        "url",
+        [
+            "postgresql://aristotle:aristotle-local@localhost/db",
+            "postgresql://user@localhost/db",
+            "sqlite:///:memory:",
+        ],
+    )
+    def test_production_rejects_development_database_configuration(monkeypatch, url):
+        monkeypatch.setenv("ARISTOTLE_ENV", "production")
+>       with pytest.raises(ValueError, match="Production"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/integration/test_production_guards.py:20: Failed
+_ test_production_rejects_development_database_configuration[postgresql://user@localhost/db] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10de78f80>
+url = 'postgresql://user@localhost/db'
+
+    @pytest.mark.parametrize(
+        "url",
+        [
+            "postgresql://aristotle:aristotle-local@localhost/db",
+            "postgresql://user@localhost/db",
+            "sqlite:///:memory:",
+        ],
+    )
+    def test_production_rejects_development_database_configuration(monkeypatch, url):
+        monkeypatch.setenv("ARISTOTLE_ENV", "production")
+>       with pytest.raises(ValueError, match="Production"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/integration/test_production_guards.py:20: Failed
+_ test_production_rejects_development_database_configuration[sqlite:///:memory:] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10de79fa0>
+url = 'sqlite:///:memory:'
+
+    @pytest.mark.parametrize(
+        "url",
+        [
+            "postgresql://aristotle:aristotle-local@localhost/db",
+            "postgresql://user@localhost/db",
+            "sqlite:///:memory:",
+        ],
+    )
+    def test_production_rejects_development_database_configuration(monkeypatch, url):
+        monkeypatch.setenv("ARISTOTLE_ENV", "production")
+>       with pytest.raises(ValueError, match="Production"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/integration/test_production_guards.py:20: Failed
+______ test_demo_seed_is_blocked_in_production_without_changing_accounts _______
+
+app = <fastapi.applications.FastAPI object at 0x10df40440>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10e220e60>
+
+    def test_demo_seed_is_blocked_in_production_without_changing_accounts(app, monkeypatch):
+        with app.state.sessions() as db:
+            before = list(db.scalars(select(User.id)))
+        monkeypatch.setenv("ARISTOTLE_ENV", "production")
+>       with pytest.raises(RuntimeError, match="production"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE RuntimeError
+
+tests/integration/test_production_guards.py:34: Failed
+=========================== short test summary info ============================
+FAILED tests/integration/test_production_guards.py::test_production_rejects_development_database_configuration[postgresql://aristotle:aristotle-local@localhost/db]
+FAILED tests/integration/test_production_guards.py::test_production_rejects_development_database_configuration[postgresql://user@localhost/db]
+FAILED tests/integration/test_production_guards.py::test_production_rejects_development_database_configuration[sqlite:///:memory:]
+FAILED tests/integration/test_production_guards.py::test_demo_seed_is_blocked_in_production_without_changing_accounts
+4 failed, 1 passed in 0.58s

@@ -1,0 +1,88 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+__________ test_pdf_upload_extracts_real_pages_requires_confirmation ___________
+
+app = <fastapi.applications.FastAPI object at 0x109769f10>
+client = <starlette.testclient.TestClient object at 0x109b45130>
+login = <function login.<locals>.authenticate at 0x109c1f600>
+
+    def test_pdf_upload_extracts_real_pages_requires_confirmation(app, client, login):
+        seed_design_flow(app.state.sessions)
+        headers = login()
+        client.patch('/api/v1/learning-scope',headers=headers,json={'scope_id':'stack'})
+        result = client.post('/api/v1/material-imports/pdf', headers=headers, files={'file': ('lecture.pdf', pdf_bytes(), 'application/pdf')}, data={'title':'自编 PDF'})
+>       assert result.status_code == 202, result.text
+E       AssertionError: {"error":{"message":"真实 PDF 抽取接口已预留，当前只开放明确标记的 PDF 样例流程"}}
+E       assert 501 == 202
+E        +  where 501 = <Response [501 Not Implemented]>.status_code
+
+tests/integration/test_pdf_import.py:28: AssertionError
+__________ test_pdf_rejects_invalid_encrypted_or_image_only[invalid] ___________
+
+app = <fastapi.applications.FastAPI object at 0x109c925d0>
+client = <starlette.testclient.TestClient object at 0x10976d850>
+login = <function login.<locals>.authenticate at 0x106e63b00>
+payload = b'not a PDF'
+
+    @pytest.mark.parametrize('payload', [b'not a PDF', pdf_bytes(encrypted=True), pdf_bytes(text='')], ids=['invalid','encrypted','image-only'])
+    def test_pdf_rejects_invalid_encrypted_or_image_only(app, client, login, payload):
+        seed_design_flow(app.state.sessions)
+        headers=login()
+        client.patch('/api/v1/learning-scope',headers=headers,json={'scope_id':'stack'})
+        result=client.post('/api/v1/material-imports/pdf', headers=headers, files={'file':('lecture.pdf',payload,'application/pdf')})
+>       assert result.status_code == 422, result.text
+E       AssertionError: {"error":{"message":"真实 PDF 抽取接口已预留，当前只开放明确标记的 PDF 样例流程"}}
+E       assert 501 == 422
+E        +  where 501 = <Response [501 Not Implemented]>.status_code
+
+tests/integration/test_pdf_import.py:42: AssertionError
+_________ test_pdf_rejects_invalid_encrypted_or_image_only[encrypted] __________
+
+app = <fastapi.applications.FastAPI object at 0x109f59340>
+client = <starlette.testclient.TestClient object at 0x10a074a40>
+login = <function login.<locals>.authenticate at 0x10a1b71a0>
+payload = b'%PDF-1.3\n%\xe2\xe3\xcf\xd3\n1 0 obj\n<<\n/Producer <3fbabf022f>\n>>\nendobj\n2 0 obj\n<<\n/Type /Pages\n/Count 1\n/...864> <6561363634306533303133373963653439323631393562373238373139353864> ]\n/Encrypt 7 0 R\n>>\nstartxref\n686\n%%EOF\n'
+
+    @pytest.mark.parametrize('payload', [b'not a PDF', pdf_bytes(encrypted=True), pdf_bytes(text='')], ids=['invalid','encrypted','image-only'])
+    def test_pdf_rejects_invalid_encrypted_or_image_only(app, client, login, payload):
+        seed_design_flow(app.state.sessions)
+        headers=login()
+        client.patch('/api/v1/learning-scope',headers=headers,json={'scope_id':'stack'})
+        result=client.post('/api/v1/material-imports/pdf', headers=headers, files={'file':('lecture.pdf',payload,'application/pdf')})
+>       assert result.status_code == 422, result.text
+E       AssertionError: {"error":{"message":"真实 PDF 抽取接口已预留，当前只开放明确标记的 PDF 样例流程"}}
+E       assert 501 == 422
+E        +  where 501 = <Response [501 Not Implemented]>.status_code
+
+tests/integration/test_pdf_import.py:42: AssertionError
+_________ test_pdf_rejects_invalid_encrypted_or_image_only[image-only] _________
+
+app = <fastapi.applications.FastAPI object at 0x10a27c680>
+client = <starlette.testclient.TestClient object at 0x10a2ca660>
+login = <function login.<locals>.authenticate at 0x10a4c2c00>
+payload = b'%PDF-1.3\n%\xe2\xe3\xcf\xd3\n1 0 obj\n<<\n/Producer (pypdf)\n>>\nendobj\n2 0 obj\n<<\n/Type /Pages\n/Count 1\n/Kids ...n0000000294 00000 n \n0000000364 00000 n \ntrailer\n<<\n/Size 7\n/Root 3 0 R\n/Info 1 0 R\n>>\nstartxref\n445\n%%EOF\n'
+
+    @pytest.mark.parametrize('payload', [b'not a PDF', pdf_bytes(encrypted=True), pdf_bytes(text='')], ids=['invalid','encrypted','image-only'])
+    def test_pdf_rejects_invalid_encrypted_or_image_only(app, client, login, payload):
+        seed_design_flow(app.state.sessions)
+        headers=login()
+        client.patch('/api/v1/learning-scope',headers=headers,json={'scope_id':'stack'})
+        result=client.post('/api/v1/material-imports/pdf', headers=headers, files={'file':('lecture.pdf',payload,'application/pdf')})
+>       assert result.status_code == 422, result.text
+E       AssertionError: {"error":{"message":"真实 PDF 抽取接口已预留，当前只开放明确标记的 PDF 样例流程"}}
+E       assert 501 == 422
+E        +  where 501 = <Response [501 Not Implemented]>.status_code
+
+tests/integration/test_pdf_import.py:42: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/chlorisblack/Documents/Codex/2026-10-27/https-github-com-abracasora-aristotle-https/Aristotle/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_pdf_import.py::test_pdf_upload_extracts_real_pages_requires_confirmation
+FAILED tests/integration/test_pdf_import.py::test_pdf_rejects_invalid_encrypted_or_image_only[invalid]
+FAILED tests/integration/test_pdf_import.py::test_pdf_rejects_invalid_encrypted_or_image_only[encrypted]
+FAILED tests/integration/test_pdf_import.py::test_pdf_rejects_invalid_encrypted_or_image_only[image-only]
+4 failed, 1 warning in 1.45s

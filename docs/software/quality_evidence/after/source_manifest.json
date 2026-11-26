@@ -1,0 +1,106 @@
+{
+  "recorded_at": "2026-11-25T01:39:03.813924+00:00",
+  "scope": [
+    "code/backend/aristotle_backend",
+    "code/core_engine/aristotle_core"
+  ],
+  "head": "c0d8539bfb23796b323b134261031904396821c1",
+  "versions": {
+    "pylint": "4.1.4",
+    "radon": "6.0.1",
+    "bandit": "1.9.4",
+    "coverage": "7.17.5"
+  },
+  "jscpd": "5.4.3",
+  "commands": {
+    "pylint": {
+      "command": [
+        "/Users/chlorisblack/Documents/Codex/2026-10-27/https-github-com-abracasora-aristotle-https/Aristotle/.venv/bin/python",
+        "-m",
+        "pylint",
+        "code/backend/aristotle_backend",
+        "code/core_engine/aristotle_core",
+        "--output-format=json",
+        "--reports=y"
+      ],
+      "exit_code": 28
+    },
+    "complexity": {
+      "command": [
+        "/Users/chlorisblack/Documents/Codex/2026-10-27/https-github-com-abracasora-aristotle-https/Aristotle/.venv/bin/python",
+        "-m",
+        "radon",
+        "cc",
+        "-j",
+        "code/backend/aristotle_backend",
+        "code/core_engine/aristotle_core"
+      ],
+      "exit_code": 0
+    },
+    "bandit": {
+      "command": [
+        "/Users/chlorisblack/Documents/Codex/2026-10-27/https-github-com-abracasora-aristotle-https/Aristotle/.venv/bin/python",
+        "-m",
+        "bandit",
+        "-r",
+        "code/backend/aristotle_backend",
+        "code/core_engine/aristotle_core",
+        "-f",
+        "json"
+      ],
+      "exit_code": 1
+    },
+    "duplication": {
+      "command": [
+        "/Users/chlorisblack/Documents/Codex/2026-10-27/https-github-com-abracasora-aristotle-https/Aristotle/tools/quality/node_modules/.bin/jscpd",
+        "code/backend/aristotle_backend",
+        "code/core_engine/aristotle_core",
+        "--format",
+        "python",
+        "--min-lines",
+        "6",
+        "--min-tokens",
+        "50",
+        "--reporters",
+        "json",
+        "--output",
+        "/Users/chlorisblack/Documents/Codex/2026-10-27/https-github-com-abracasora-aristotle-https/Aristotle/docs/software/quality_evidence/after"
+      ],
+      "exit_code": 0
+    }
+  },
+  "sha256": {
+    "code/backend/aristotle_backend/__init__.py": "a7c21107629e0c965ff5ea418e978c376d37f2b0cc937b30fe1710225e2f90ed",
+    "code/backend/aristotle_backend/annotation_rules.py": "b0c54e013318609327dbe19cf51d993c696034973a093e3089cc8e3e088c4d0d",
+    "code/backend/aristotle_backend/app.py": "0942401569b71bfdf5b426e483be641a9963a07a6713c135020cb70d81d060f3",
+    "code/backend/aristotle_backend/assistance_routes.py": "ba4e442c3142542601df540dea1b37f50d8f40053c2b62a3fe885a9d65b3168a",
+    "code/backend/aristotle_backend/config.py": "804be2ed171d8774b478a414ceecd996578fa59dd4a3f98eba674a142c88a8a4",
+    "code/backend/aristotle_backend/curriculum.py": "52a8519d8ff3b256d3c0e78e2840a4bb40172bb7672c339fbea0a21118a4767f",
+    "code/backend/aristotle_backend/curriculum_publication.py": "eb8f57cf828dd7bfad03f478675be0f1d7e6a09990b0f1dbc8c85e135c6f39dd",
+    "code/backend/aristotle_backend/curriculum_routes.py": "d6606946023f60bbb6e5b303b0cf9212263d434a5a18fa7d8477aea2fc1477d4",
+    "code/backend/aristotle_backend/curriculum_schemas.py": "8473cbc77803b4af5d9e35c220730353612eb0af02fbbd147c202b6c64e770b0",
+    "code/backend/aristotle_backend/db.py": "3689dd820069cd92186bf657a9d4c83f26ce01091c932bf3931b4ec813e3feab",
+    "code/backend/aristotle_backend/design_seed.py": "cd8a56996d1afa7ca71074aa5df1fc1c3e94e6d3dbd39ac1ea94cd8eef6b986b",
+    "code/backend/aristotle_backend/final_tests.py": "94cd5398deba0e373dff92e2bb5d31c7c8345d5a451f8570703337f8e037c8cd",
+    "code/backend/aristotle_backend/flow_routes.py": "0801c4403c08d09861fb5dfff778fb88c743cff576906d1442743118b24dbe4c",
+    "code/backend/aristotle_backend/flow_schemas.py": "57bcd8463f779a5095fb20b3aa30087d51d80275060331e077172b2399fbba81",
+    "code/backend/aristotle_backend/import_sqlite.py": "82828e5b5ddfa67cd71b7f6f1737ed23c488d14cd72d0a89962d4cc76c9966d2",
+    "code/backend/aristotle_backend/material_imports.py": "e73845c58cb03781fb12836d22e3170d648ea4aa54f3982a0c7bb82ae659a1f8",
+    "code/backend/aristotle_backend/migration_scripts/env.py": "08b039665b3169c30a567985764a7546474464437d4d2e1826b3dcd3a013961b",
+    "code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py": "83329e1229f7caba6961ba4232363adb532eb12bcd7e5a1d1f7a0eadd9bb584e",
+    "code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py": "39a024d84e70124855e64affc250923137583a399f43e0e0058e65ff9d7656fe",
+    "code/backend/aristotle_backend/migration_scripts/versions/0003_curriculum_tests.py": "681c16412d78ca750a4765860bab17671b8873bb22005fc9b790d9969476d581",
+    "code/backend/aristotle_backend/migrations.py": "2fe616e46a0bae55d324138261fed25e122737fc36af7def8f96f007d8f3a198",
+    "code/backend/aristotle_backend/model_jobs.py": "621e14bfd19d83d0b60d7ed4cc0f0a152f9ddcc88c202eeed644ce1795b66280",
+    "code/backend/aristotle_backend/providers.py": "75e19268845d8f3c8e7a07a038ee42113737ee3bd50ab7c3d8ef99d28f40f5e8",
+    "code/backend/aristotle_backend/resource_seed.py": "aee9853efcaed4a2ba418ae069830112560ae46533d710366e40972c16cf0156",
+    "code/backend/aristotle_backend/retrieval.py": "62df643e6c8e73b643d267052447769a8d2e00a2bec495d4a6339f0835376a29",
+    "code/backend/aristotle_backend/schemas.py": "6cd2984e117d8bfc530ab86b6a39ccf1637147b477090e6588df1ef40bfb37ed",
+    "code/backend/aristotle_backend/security.py": "05d99a9ce53e2eaba2f90c782b1e53aff65c1f3df6d26b5ceaccdb78765a8348",
+    "code/backend/aristotle_backend/seed.py": "2bf16add5676d7a8ccb4a3a2375991d647d464248d7f955d27e08d58af7eab30",
+    "code/backend/aristotle_backend/vector_type.py": "585aa06aeeff12c4b9d8ef31bb8dbaac3414e195f5c5e303c45ed5644976b247",
+    "code/backend/aristotle_backend/workflow.py": "2f7a13e0b7f172e96c214d2a083cccc41548cf74ff94e01d811cb16a93c1c302",
+    "code/core_engine/aristotle_core/__init__.py": "cd8ab974069dd1690f326720024f9a193233e9fcc7aeceeef0aadf85c83816da",
+    "code/core_engine/aristotle_core/policy.py": "1b9b629969522223a72f4ecd7f7fff6c2e3329601355810560dd18fb79df51ad"
+  }
+}

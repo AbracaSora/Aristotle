@@ -1,0 +1,54 @@
+{
+  "date": "2026-11-25",
+  "before": {
+    "pylint_error_fatal": 1,
+    "pylint_smell_diagnostics": 532,
+    "pylint_types": {
+      "convention": 405,
+      "refactor": 103,
+      "warning": 24,
+      "error": 1
+    },
+    "max_complexity": 87,
+    "mean_complexity": 4.33,
+    "duplication_percent": 0.392,
+    "duplicated_lines": 28,
+    "duplicate_blocks": 3,
+    "coverage_percent": 85.28,
+    "branch_coverage_percent": 71.73,
+    "bandit_findings": 5,
+    "dependency_vulnerabilities": 2,
+    "targets": {
+      "publish_curriculum": 87,
+      "progress_views": 34,
+      "request_model": 26,
+      "semantic_search": 31,
+      "create_recommendation": 36
+    }
+  },
+  "after": {
+    "pylint_error_fatal": 0,
+    "pylint_smell_diagnostics": 554,
+    "pylint_types": {
+      "convention": 436,
+      "refactor": 93,
+      "warning": 25
+    },
+    "max_complexity": 26,
+    "mean_complexity": 3.98,
+    "duplication_percent": 0.371,
+    "duplicated_lines": 28,
+    "duplicate_blocks": 3,
+    "coverage_percent": 85.69,
+    "branch_coverage_percent": 72.18,
+    "bandit_findings": 3,
+    "dependency_vulnerabilities": 0,
+    "targets": {
+      "progress_views": 3,
+      "publish_curriculum": 7,
+      "request_model": 7,
+      "semantic_search": 7,
+      "create_recommendation": 8
+    }
+  }
+}

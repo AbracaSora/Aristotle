@@ -422,6 +422,93 @@ def test_identical_queued_requests_share_one_job_and_interrupted_calls_are_not_a
     assert not failed["result"]["retryable"] and not models[0]
 
 
+def test_expired_queue_budget_does_not_start_paid_request(client, login, models, app, monkeypatch):
+    import time
+
+    monkeypatch.setenv("ARISTOTLE_INLINE_WORKER", "0")
+    response = client.post(
+        "/api/v1/retrieval/index", headers=login(), json={"knowledge_id": "stack", "allow_external": True}
+    )
+    assert response.status_code == 202
+    job_id = response.json()["id"]
+    with app.state.sessions() as db:
+        job = db.get(ServiceJob, job_id)
+        job.created_at = time.time() - 66
+        db.commit()
+    run_job(app.state.sessions, job_id, app.state.model_transport)
+    with app.state.sessions() as db:
+        job = db.get(ServiceJob, job_id)
+        assert job.status == "failed"
+        assert job.result["error_code"] == "timeout"
+    assert models[0] == []
+
+
+@pytest.mark.parametrize("kind", ["index-next-batch", "index-retry", "explanation-retry"])
+def test_no_new_outbound_request_after_private_source_consent_changes(
+    client, login, models, app, monkeypatch, kind
+):
+    h = login()
+    mid = source(client, h, "自编栈讲义。" * (2000 if kind == "index-next-batch" else 10))
+    consent = f"/api/v1/materials/{mid}/external-consent"
+    client.patch(consent, headers=h, json={"allowed": True}).raise_for_status()
+    monkeypatch.setenv("ARISTOTLE_MODEL_RETRIES", "1")
+    calls = []
+
+    def change_consent(request):
+        calls.append(request.url.path)
+        if len(calls) == 1:
+            client.patch(consent, headers=h, json={"allowed": False}).raise_for_status()
+            if kind.endswith("retry"):
+                return httpx.Response(503)
+        return models[1](request)
+
+    app.state.model_transport = httpx.MockTransport(change_consent)
+    if kind.startswith("index"):
+        result = index(client, h)
+    else:
+        result = explain(client, h, [hit for hit in sources(client, h) if hit["material_id"] == mid])
+    assert len(calls) == 1, "撤回后仍有后续请求发往模型"
+    assert result["status"] == ("succeeded" if kind == "index-next-batch" else "failed")
+    with app.state.sessions() as db:
+        assert not db.scalar(select(SourceEmbedding.id).where(SourceEmbedding.material_id == mid))
+        assert db.scalar(select(func.sum(ModelCall.external_calls))) == 1
+
+
+def test_late_annotation_cannot_publish_after_claim_expires(client, login, models, app, monkeypatch):
+    import time
+
+    from aristotle_backend.model_jobs import expire_running
+
+    editor = login("editor")
+    body = {
+        "question_id": "lost_claim",
+        "version": 1,
+        "knowledge_id": "linear",
+        "prompt": "解释次序",
+        "options": ["A", "B"],
+        "answer": "A",
+        "explanation": "根据次序判断",
+        "source": "测试自编",
+    }
+    assert client.post("/api/v1/admin/questions", headers=editor, json=body).status_code == 201
+    monkeypatch.setenv("ARISTOTLE_INLINE_WORKER", "0")
+    key = "lost_claim:v1"
+    queued = client.post(f"/api/v1/admin/questions/{key}/model-annotations", headers=editor)
+    assert queued.status_code == 202
+    job_id = queued.json()["id"]
+
+    def expire_during_call(request):
+        expire_running(app.state.sessions, time.time() + 3600)
+        return models[1](request)
+
+    run_job(app.state.sessions, job_id, httpx.MockTransport(expire_during_call))
+    with app.state.sessions() as db:
+        job = db.get(ServiceJob, job_id)
+        assert (job.status, job.result["error_code"]) == ("failed", "interrupted")
+        assert db.get(Question, key).status == "draft"
+        assert db.scalar(select(Annotation.id).where(Annotation.question_key == key)) is None
+
+
 def test_search_rechecks_source_consent_after_query_embedding(client, login, models, app):
     headers = login()
     mid = source(client, headers)

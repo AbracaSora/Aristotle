@@ -16,16 +16,17 @@ export function createApiClient(
       let response: Response;
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), path === "/retrieval/search" ? 65000 : 15000);
+      const form = body instanceof FormData;
       try {
         response = await fetch(base + path, {
           method,
           headers: {
-            ...(body === undefined
+            ...(body === undefined || form
               ? {}
               : { "Content-Type": "application/json" }),
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
-          ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+          ...(body === undefined ? {} : { body: form ? body : JSON.stringify(body) }),
           signal: controller.signal,
         });
       } catch (reason) {

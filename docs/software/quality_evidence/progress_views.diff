@@ -1,0 +1,76 @@
+--- before/progress_views
++++ after/curriculum.py:185
+@@ -1,69 +1,7 @@
+ def progress_views(db, user_id):
+     points = published_points(db)
+-    attempts = list(db.scalars(select(Attempt).where(Attempt.user_id == user_id)))
+-    by_key = {}
+-    for a in attempts:
+-        by_key.setdefault(a.question_key, []).append(a)
+-    tests = list(
+-        db.scalars(select(FinalTest).where(FinalTest.user_id == user_id).order_by(FinalTest.version))
+-    )
+-    values = {}
+-    for p in points.values():
+-        preset = p.data["preset_set"]
+-        rows = [a for key in preset["question_keys"] for a in by_key.get(key, [])]
+-        total, completed = len(preset["question_keys"]), len({a.question_key for a in rows})
+-        current_tests = [
+-            t
+-            for t in tests
+-            if t.knowledge_id == p.id
+-            and t.preset_set_id == preset["id"]
+-            and t.preset_set_version == preset["version"]
+-        ]
+-        passed = next(
+-            (t for t in reversed(current_tests) if t.status == "submitted" and t.result["passed"]), None
+-        )
+-        covered = total > 0 and completed == total
+-        values[p.id] = {
+-            "knowledge_id": p.id,
+-            "policy_version": POLICY,
+-            "preset_set_id": preset["id"],
+-            "preset_set_version": preset["version"],
+-            "mastery_status": "mastered"
+-            if passed and covered
+-            else "covered"
+-            if covered
+-            else "learning"
+-            if completed
+-            else "new",
+-            "preset_total": total,
+-            "preset_completed": completed,
+-            "completion_rate": completed / total if total else None,
+-            "attempt_count": len(rows),
+-            "correct_attempt_count": sum(a.correct for a in rows),
+-            "accuracy": sum(a.correct for a in rows) / len(rows) if rows else None,
+-            "ai_test": {
+-                "eligible": False,
+-                "latest_test_id": current_tests[-1].id if current_tests else None,
+-                "passed_test_id": passed.id if passed and covered else None,
+-            },
+-            "updated_at": iso(
+-                max(
+-                    [p.updated_at]
+-                    + [a.created_at for a in rows]
+-                    + [t.submitted_at or t.created_at for t in current_tests]
+-                )
+-            ),
+-        }
+-    for p in points.values():
+-        value = values[p.id]
+-        unmet = [
+-            k
+-            for k in p.data["prerequisite_ids"]
+-            if k not in values
+-            or not values[k]["preset_total"]
+-            or values[k]["preset_completed"] != values[k]["preset_total"]
+-        ]
+-        value["unlocked"], value["unmet_prerequisite_ids"] = not unmet, unmet
+-        value["ai_test"]["eligible"] = not unmet and value["mastery_status"] == "covered"
++    attempts, tests = attempt_statistics(db, user_id), test_statistics(db, user_id)
++    values = {point.id: point_progress(point, attempts, tests) for point in points.values()}
++    for point in points.values():
++        apply_unlock(point, values)
+     return values
+-

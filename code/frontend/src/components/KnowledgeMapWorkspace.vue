@@ -8,6 +8,8 @@ import type { KnowledgeGraph, KnowledgeState, LearningContext, LearningState, Sc
 import SourceExplorer from "./SourceExplorer.vue";
 import KnowledgeAiTestEntry from "./KnowledgeAiTestEntry.vue";
 
+import type { CourseProgress } from "../features/map/course";
+const courseProgress = ref<Record<string,CourseProgress>>({});
 interface MapData extends KnowledgeGraph { states: KnowledgeState[]; window_days: number }
 const props = defineProps<{
   detailsOnly?: boolean;
@@ -40,19 +42,20 @@ const stateById = computed(() => new Map(data.value?.states.map((s) => [s.knowle
 const matches = computed(() => data.value?.nodes.filter((n) => n.name.toLowerCase().includes(search.value.toLowerCase())) || []);
 const scopeNodes = computed(() => new Set(props.context?.selected_scope?.knowledge_ids || []));
 const activeNodes = computed(() => new Set([selected.value, ...related.value.ancestors, ...related.value.descendants]));
-const isUnlocked = (id: string) => (data.value?.nodes.find((node) => node.id === id)?.prerequisites || []).every((parent) => stateById.value.get(parent)?.status === "provisional");
+const isUnlocked = (id: string) => courseProgress.value[id]?.unlocked ?? (data.value?.nodes.find((node) => node.id === id)?.prerequisites || []).every((parent) => stateById.value.get(parent)?.status === "provisional");
 function label(id: string) { return data.value?.nodes.find((n) => n.id === id)?.name || id; }
 function sendPrototypeData() {
   if (!data.value || !prototypeFrame.value?.contentWindow) return;
   prototypeFrame.value.contentWindow.postMessage({
     type: "aristotle-knowledge-map",
     graph: {
-      nodes: data.value.nodes.map((node) => ({ id: node.id, label: node.name, type: "知识点", description: "沿先修关系完成本知识点的学习与练习。" })),
-      edges: [],
+      nodes: data.value.nodes.map((node) => ({ id: node.id, label: node.name, type: "知识点", locked: !isUnlocked(node.id), description: "沿先修关系完成本知识点的学习与练习。" })),
+      edges: data.value.nodes.flatMap(node => node.prerequisites.map(parent => [parent, node.id])),
     },
-  }, "*");
+  }, window.location.origin);
 }
 function handlePrototypeSelection(event: MessageEvent<{ type?: string; id?: string }>) {
+  if (event.origin !== window.location.origin || event.source !== prototypeFrame.value?.contentWindow) return;
   if (event.data?.type === "knowledge-map-node-selected" && event.data.id && data.value?.nodes.some((node) => node.id === event.data.id)) { select(event.data.id); emit('details'); }
 }
 function stateLabel(id: string) { const s = stateById.value.get(id); return s ? stateLabels[s.status] : "证据不足"; }
@@ -92,12 +95,13 @@ function edgePath(source: string, target: string) {
 async function load() {
   const ticket = ++generation;
   try {
-    const result = await props.call<MapData>("/knowledge-map");
+    const [result, rows] = await Promise.all([props.call<MapData>("/knowledge-map"),props.call<CourseProgress[]>("/progress")]);
     if (ticket !== generation) return;
+    courseProgress.value = Object.fromEntries(rows.map(row=>[row.knowledge_id,row]));
     layoutKnowledge(result.nodes);
     data.value = result; mapError.value = ""; sourceRevision.value++;
     sendPrototypeData();
-    if (props.targetKnowledgeId && result.nodes.some(n => n.id === props.targetKnowledgeId)) {
+    if (!selected.value && props.targetKnowledgeId && result.nodes.some(n => n.id === props.targetKnowledgeId)) {
       selected.value = props.targetKnowledgeId; detailTab.value = "knowledge";
     } else if (!result.nodes.some((n) => n.id === selected.value)) focusTarget();
   } catch (e) { if (ticket === generation) mapError.value = e instanceof Error ? e.message : "地图暂时无法加载"; }
@@ -149,11 +153,11 @@ onBeforeUnmount(() => { generation++;window.removeEventListener("message", handl
       <aside v-show="detailsOnly" class="map-inspector" aria-label="知识点详情与学习安排">
         <div class="inspector-tabs"><button :class="{active:detailTab==='knowledge'}" @click="detailTab='knowledge'"><Compass :size="16"/>知识点</button><button :class="{active:detailTab==='task'}" @click="detailTab='task'"><Route :size="16"/>当前安排<span v-if="context?.current_task" class="task-dot"/></button></div>
         <template v-if="detailTab === 'knowledge' && current">
-          <div class="inspector-intro"><span class="eyebrow">KNOWLEDGE / {{String(graph.nodes.findIndex(n => n.id===selected)+1).padStart(2,'0')}}</span><h2>{{current.name}}</h2><span :class="['evidence-badge',evidence?.status || 'insufficient']">{{stateLabel(selected)}}</span><p>{{evidence?.evidence_count || 0}} 道不同题目的有效证据<span v-if="evidence?.correct_rate !== null && evidence?.correct_rate !== undefined"> · {{Math.round(evidence.correct_rate*100)}}% 答对</span></p></div>
+          <div class="inspector-intro"><span class="eyebrow">KNOWLEDGE / {{String(graph.nodes.findIndex(n => n.id===selected)+1).padStart(2,'0')}}</span><h2>{{current.name}}</h2><span :class="['evidence-badge',evidence?.status || 'insufficient']">诊断证据 · {{stateLabel(selected)}}</span><p>{{evidence?.evidence_count || 0}} 道不同题目的有效证据<span v-if="evidence?.correct_rate !== null && evidence?.correct_rate !== undefined"> · {{Math.round(evidence.correct_rate*100)}}% 答对</span></p></div>
           <div class="inspector-section"><h3>从认知活动看证据</h3><p class="inspector-note">标签描述任务要求；各维度分别收集证据。</p><div v-for="c in evidence?.cognitive || []" :key="c.level" class="cognitive-evidence"><div><strong>{{levelLabels[c.level]}}</strong><span>{{c.count}} 题 · {{c.evidence_status === 'insufficient' ? '证据不足' : Math.round((c.correct_rate || 0)*100)+'% 答对'}}</span></div><div class="evidence-track"><i :class="{uncertain:c.evidence_status==='insufficient'}" :style="{width: c.count ? `${Math.max(5,(c.correct_rate || 0)*100)}%` : '0%'}"/></div></div></div>
-          <div class="inspector-section relationships"><h3>知识之间的联系</h3><p v-if="!current.prerequisites.length" class="inspector-note">这是当前图中的基础知识点。</p><button v-for="id in current.prerequisites" :key="id" @click="select(id)"><span>先修</span>{{label(id)}}<ArrowRight :size="14"/></button><button v-for="n in data?.nodes.filter(n => n.prerequisites.includes(selected)) || []" :key="n.id" @click="select(n.id)"><span>后续</span>{{n.name}}<ArrowRight :size="14"/></button><p v-if="evidence?.unmet_prerequisites.length" class="prerequisite-note">先修尚未满足：{{evidence.unmet_prerequisites.map(label).join('、')}}。可以补测，后续学习仍遵循先修约束。</p></div>
+          <div class="inspector-section relationships"><h3>知识之间的联系</h3><p v-if="!current.prerequisites.length" class="inspector-note">这是当前图中的基础知识点。</p><button v-for="id in current.prerequisites" :key="id" @click="select(id)"><span>先修</span>{{label(id)}}<ArrowRight :size="14"/></button><button v-for="n in data?.nodes.filter(n => n.prerequisites.includes(selected)) || []" :key="n.id" @click="select(n.id)"><span>后续</span>{{n.name}}<ArrowRight :size="14"/></button><p v-if="evidence?.unmet_prerequisites.length" class="prerequisite-note">诊断建议优先补测：{{evidence.unmet_prerequisites.map(label).join('、')}}。课程解锁按预设题的最近作答单独计算。</p></div>
           <div class="inspector-cta"><NButton type="primary" block :disabled="loading || !context?.selected_scope || !scopeNodes.has(selected)" @click="emit('start',selected); detailTab='task'">{{!context?.diagnostic ? '从诊断了解起点' : context.diagnostic.status === 'active' ? '继续当前诊断' : '安排此知识点的学习'}}<template #icon><ArrowRight :size="15"/></template></NButton><p v-if="!context?.selected_scope">先在上方选择学习范围。</p><p v-else-if="!scopeNodes.has(selected)">该知识点不在当前范围中，请先切换范围。</p></div>
-          <KnowledgeAiTestEntry :key="selected" :knowledge-id="selected" :knowledge-name="current.name" :unlocked="isUnlocked(selected)" :revision="sourceRevision" :call="call"/>
+          <KnowledgeAiTestEntry v-if="courseProgress[selected]" :key="selected" :knowledge-id="selected" :progress="courseProgress[selected]" @materials="emit('materials')" :call="call" @changed="load"/>
           <SourceExplorer :key="selected" :knowledge-id="selected" :knowledge-name="current.name" :revision="sourceRevision" :call="call" @materials="emit('materials')"/>
         </template>
         <div v-else-if="detailTab==='knowledge'" class="inspector-section"><p>选择地图上的知识点，查看证据与下一步。</p></div>

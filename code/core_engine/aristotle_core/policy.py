@@ -1,6 +1,7 @@
 """Versioned rule baseline. All timestamps are UTC Unix seconds."""
 
 from collections import defaultdict
+from typing import Any, NamedTuple
 
 POLICY_VERSION = "baseline-0.1"
 WINDOW_SECONDS = 14 * 24 * 60 * 60
@@ -33,113 +34,131 @@ def validate_graph(nodes: list[dict]) -> list[str]:
     return order
 
 
-def diagnose(nodes: list[dict], attempts: list[dict], now: float) -> list[dict]:
-    """Use the first valid attempt per stable question ID inside the 14-day window.
-
-    New question versions do not create independent evidence for the same question.
-    Callers exclude retired/invalid content. History itself remains immutable.
-    """
-    by_id = {n["id"]: n for n in nodes}
+def independent_evidence(attempts, by_id, now):
     grouped = defaultdict(list)
-    latest_attempts = {}
+    latest = {}
     seen = set()
-    for a in sorted(attempts, key=lambda a: (a["at"], a["id"])):
-        if not now - WINDOW_SECONDS <= a["at"] <= now:
+    for attempt in sorted(attempts, key=lambda a: (a["at"], a["id"])):
+        point = attempt["knowledge_id"]
+        if point not in by_id or not now - WINDOW_SECONDS <= attempt["at"] <= now:
             continue
-        if a["knowledge_id"] in by_id:
-            key = (a["knowledge_id"], a["level"])
-            latest_attempts[key] = max(a["at"], latest_attempts.get(key, a["at"]))
-        if a["question_id"] in seen or a["knowledge_id"] not in by_id:
-            continue
-        seen.add(a["question_id"])
-        grouped[a["knowledge_id"]].append(a)
-    states = {}
+        latest[point, attempt["level"]] = attempt["at"]
+        if attempt["question_id"] not in seen:
+            seen.add(attempt["question_id"])
+            grouped[point].append(attempt)
+    return grouped, latest
+
+
+def correct_rate(rows):
+    return sum(a["correct"] for a in rows) / len(rows) if rows else None
+
+
+def cognitive_evidence(key, evidence, latest):
+    dimensions = []
+    for level in LEVELS:
+        rows = [attempt for attempt in evidence if attempt["level"] == level]
+        dimensions.append(
+            {
+                "level": level,
+                "count": len(rows),
+                "correct_rate": correct_rate(rows),
+                "evidence_status": "sufficient" if len(rows) >= 3 else "insufficient",
+                "last_at": latest.get((key, level)),
+            }
+        )
+    return dimensions
+
+
+def evidence_status(count, rate, missing):
+    if count < 3:
+        return "insufficient"
+    return "provisional" if rate >= 0.8 and not missing else "needs_review"
+
+
+def diagnose(nodes: list[dict], attempts: list[dict], now: float) -> list[dict]:
+    """Use the first valid attempt per stable question ID inside the 14-day window."""
+    by_id = {node["id"]: node for node in nodes}
+    grouped, latest = independent_evidence(attempts, by_id, now)
+    states: dict[str, dict[str, Any]] = {}
     for key in validate_graph(nodes):
         evidence = grouped[key]
-        rate = sum(a["correct"] for a in evidence) / len(evidence) if evidence else None
+        rate = correct_rate(evidence)
         missing = [p for p in by_id[key]["prerequisites"] if states[p]["status"] != "provisional"]
-        status = (
-            "insufficient"
-            if len(evidence) < 3
-            else ("provisional" if rate >= 0.8 and not missing else "needs_review")
-        )
-        cognitive = []
-        for level in LEVELS:
-            rows = [a for a in evidence if a["level"] == level]
-            cognitive.append(
-                {
-                    "level": level,
-                    "count": len(rows),
-                    "correct_rate": sum(a["correct"] for a in rows) / len(rows) if rows else None,
-                    "evidence_status": "sufficient" if len(rows) >= 3 else "insufficient",
-                    "last_at": latest_attempts.get((key, level)),
-                }
-            )
         states[key] = {
             "knowledge_id": key,
             "name": by_id[key]["name"],
-            "status": status,
+            "status": evidence_status(len(evidence), rate, missing),
             "evidence_count": len(evidence),
             "correct_rate": rate,
             "unmet_prerequisites": missing,
-            "cognitive": cognitive,
+            "cognitive": cognitive_evidence(key, evidence, latest),
         }
     return list(states.values())
 
 
-def _eligible_targets(order, state_by_id, knowledge_id):
-    if knowledge_id is None:
-        return [key for key in order if not state_by_id[key]["unmet_prerequisites"]]
-    if knowledge_id not in state_by_id:
+def dimension_needs_evidence(dimension):
+    return dimension["evidence_status"] == "insufficient" or (dimension["correct_rate"] or 0) < 0.8
+
+
+def eligible_targets(order, states, knowledge_id):
+    if knowledge_id is not None and knowledge_id not in states:
         raise ValueError("目标知识点不存在")
-    if state_by_id[knowledge_id]["unmet_prerequisites"] or knowledge_id not in order:
+    eligible = [key for key in order if not states[key]["unmet_prerequisites"]]
+    if knowledge_id is None:
+        return eligible
+    if knowledge_id not in eligible:
         raise ValueError("先修证据不足，请先完成先修知识点的诊断或巩固")
     return [knowledge_id]
 
 
-def _needs_practice(dimension):
-    return dimension["evidence_status"] == "insufficient" or (dimension["correct_rate"] or 0) < 0.8
-
-
-def recommend(nodes, states, questions, attempts, knowledge_id=None, level=None):
-    """Select only prerequisite-eligible nodes and published first-release labels.
-
-    Returns a decision even when content is absent; callers must surface that gap.
-    Explicit targets can never bypass prerequisite constraints.
-    """
-    state_by_id = {s["knowledge_id"]: s for s in states}
-    eligible = _eligible_targets(validate_graph(nodes), state_by_id, knowledge_id)
-    inventory = defaultdict(lambda: defaultdict(list))
-    for question in questions:
-        if question["level"] in LEVELS:
-            inventory[question["knowledge_id"]][question["level"]].append(question)
-
-    recent_by_node, last_seen = {}, {}
-    for attempt in attempts:
-        node, question, at = attempt["knowledge_id"], attempt["question_id"], attempt["at"]
-        recent_by_node[node] = max(at, recent_by_node.get(node, at))
-        last_seen[question] = max(at, last_seen.get(question, 0))
-
+def ranking_key(key, context):
+    states, questions, attempts, order = context
+    cognitive = {item["level"]: item for item in states[key]["cognitive"]}
+    available = {q["level"] for q in questions if q["knowledge_id"] == key and q["level"] in LEVELS}
+    has_gap = any(dimension_needs_evidence(cognitive[level]) for level in available)
+    recent = max((a["at"] for a in attempts if a["knowledge_id"] == key), default=-1)
     priority = {"needs_review": 0, "insufficient": 1, "provisional": 2}
+    return priority[states[key]["status"]], not has_gap, recent, order.index(key)
 
-    def rank(key):
-        state = state_by_id[key]
-        has_gap = any(dim["level"] in inventory[key] and _needs_practice(dim) for dim in state["cognitive"])
-        return priority[state["status"]], not has_gap, recent_by_node.get(key, -1)
 
-    # min keeps the first eligible node in topological order when all rank fields tie.
-    target = min(eligible, key=rank)
-    available = inventory[target]
-    cognitive = {dim["level"]: dim for dim in state_by_id[target]["cognitive"]}
-    available_levels = [lv for lv in LEVELS if lv in available]
-    chosen_level = level or next(
-        (lv for lv in available_levels if _needs_practice(cognitive[lv])),
-        available_levels[0] if available_levels else "understand",
+def choose_level(cognitive, available, explicit):
+    if explicit:
+        return explicit
+    levels = [level for level in LEVELS if any(q["level"] == level for q in available)]
+    return next(
+        (level for level in levels if dimension_needs_evidence(cognitive[level])),
+        levels[0] if levels else "understand",
     )
-    candidates = sorted(
-        available[chosen_level], key=lambda q: (last_seen.get(q["question_id"], -1), q["key"])
-    )
-    selected = candidates[:3]
+
+
+def select_questions(available, chosen_level, attempts):
+    last_seen: dict[str, float] = {}
+    for attempt in attempts:
+        qid = attempt["question_id"]
+        last_seen[qid] = max(attempt["at"], last_seen.get(qid, 0))
+    candidates = [q for q in available if q["level"] == chosen_level]
+    candidates.sort(key=lambda q: (last_seen.get(q["question_id"], -1), q["key"]))
+    return candidates[:3]
+
+
+class RecommendationEvidence(NamedTuple):
+    nodes: list
+    states: list
+    attempts: list
+
+
+def recommend(evidence: RecommendationEvidence, questions, knowledge_id=None, level=None):
+    """Select a recommendation from the supplied versioned evidence."""
+    nodes, states, attempts = evidence
+    state_by_id = {state["knowledge_id"]: state for state in states}
+    order = validate_graph(nodes)
+    eligible = eligible_targets(order, state_by_id, knowledge_id)
+    context = (state_by_id, questions, attempts, order)
+    target = min(eligible, key=lambda key: ranking_key(key, context))
+    available = [q for q in questions if q["knowledge_id"] == target and q["level"] in LEVELS]
+    cognitive = {item["level"]: item for item in state_by_id[target]["cognitive"]}
+    chosen_level = choose_level(cognitive, available, level)
+    selected = select_questions(available, chosen_level, attempts)
     status_text = {"insufficient": "证据不足", "needs_review": "待巩固", "provisional": "初步掌握"}
     return {
         "knowledge_id": target,

@@ -57,7 +57,10 @@ def test_sqlite_import_preserves_all_rows_source_and_next_graph_id(tmp_path, tes
     seed_demo(sessions)
     seed_design_flow(sessions)
     with sessions() as db:
-        db.add(Material(id="private", user_id="student1", title="笔记", text="原文", knowledge_id="stack"))
+        db.add_all(
+            Material(id=f"笔记-{i}", user_id="student1", title="笔记", text=f"原文 {i}", knowledge_id="stack")
+            for i in range(501)
+        )
         db.commit()
     old_engine.dispose()
     before = source.read_bytes()
@@ -65,11 +68,11 @@ def test_sqlite_import_preserves_all_rows_source_and_next_graph_id(tmp_path, tes
     upgrade_database(test_database_url)
     counts = import_snapshot(snapshot, test_database_url)
     assert source.read_bytes() == before
-    assert len(counts) == len(Base.metadata.tables) and counts["users"] == 4 and counts["materials"] == 1
+    assert len(counts) == len(Base.metadata.tables) and counts["users"] == 4 and counts["materials"] == 501
     engine, destination = open_database(test_database_url)
     try:
         with destination() as db:
-            assert db.get(Material, "private").text == "原文"
+            assert db.get(Material, "笔记-500").text == "原文 500"
             last = db.scalar(select(func.max(Graph.sequence)))
             graph = Graph(version="after-import", nodes=[])
             db.add(graph)
@@ -184,3 +187,53 @@ def test_foreign_key_constraints_are_enforced(test_database_url):
                 db.commit()
     finally:
         engine.dispose()
+
+
+def test_curriculum_upgrade_preserves_existing_attempts_and_supports_roundtrip(tmp_path):
+    from aristotle_backend.db import Attempt, Task, TaskQuestion
+    from sqlalchemy.orm import sessionmaker
+
+    url = f"sqlite:///{tmp_path / 'pre-curriculum.db'}"
+    upgrade_database(url, "0002_semantic_learning")
+    engine = create_database_engine(url)
+    sessions = sessionmaker(engine)
+    seed_demo(sessions)
+    with sessions() as db:
+        db.add(
+            Task(
+                id="before",
+                user_id="student1",
+                mode="diagnostic",
+                graph_version="ds-demo-v1",
+                decision={},
+                evidence_snapshot=[],
+                created_at=1,
+            )
+        )
+        db.flush()
+        db.add(TaskQuestion(task_id="before", question_key="l1:v1", position=0))
+        db.add(
+            Attempt(
+                id="before-answer",
+                user_id="student1",
+                task_id="before",
+                question_key="l1:v1",
+                submission_id="before-submission",
+                selected="一对一",
+                correct=True,
+                created_at=1,
+            )
+        )
+        db.commit()
+    upgrade_database(url)
+    with sessions() as db:
+        a = db.get(Attempt, "before-answer")
+        assert a.selected == "一对一" and a.correct and a.created_at == 1
+    with engine.begin() as con:
+        config = migration_config()
+        config.attributes["connection"] = con
+        command.downgrade(config, "0002_semantic_learning")
+    upgrade_database(url)
+    with sessions() as db:
+        assert db.get(Attempt, "before-answer").submission_id == "before-submission"
+    engine.dispose()

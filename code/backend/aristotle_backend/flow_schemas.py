@@ -48,7 +48,7 @@ class ReportResolution(Input):
 
 
 class ProviderSettings(Input):
-    mode: Literal["mock", "disabled"] = "mock"
+    mode: Literal["mock", "live", "disabled"] = "mock"
     model_name: Literal["mock-bloom-v1"] = "mock-bloom-v1"
     timeout_seconds: int = Field(default=30, ge=1, le=30)
     retries: int = Field(default=1, ge=0, le=1)

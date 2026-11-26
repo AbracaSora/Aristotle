@@ -1,5 +1,3 @@
-from pathlib import Path
-
 from sqlalchemy import (
     JSON,
     Boolean,
@@ -10,13 +8,11 @@ from sqlalchemy import (
     String,
     Text,
     UniqueConstraint,
-    create_engine,
-    event,
-    text,
 )
-from sqlalchemy.engine import make_url
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
+from .database_connection import create_database_engine as create_database_engine
+from .database_connection import open_database as open_database
 from .vector_type import Vector
 
 
@@ -107,7 +103,7 @@ class Attempt(Base):
     __tablename__ = "attempts"
     __table_args__ = (
         UniqueConstraint("task_id", "question_key"),
-        UniqueConstraint("user_id", "submission_id"),
+        UniqueConstraint("user_id", "task_id", "submission_id", name="uq_attempt_task_submission"),
     )
     id: Mapped[str] = mapped_column(String, primary_key=True)
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
@@ -263,56 +259,89 @@ class ModelCall(Base):
     created_at: Mapped[float] = mapped_column(Float, index=True)
 
 
-def create_database_engine(url: str):
-    parsed = make_url(url)
-    sqlite = parsed.get_backend_name() == "sqlite"
-    if sqlite and parsed.database and parsed.database != ":memory:":
-        Path(parsed.database).parent.mkdir(parents=True, exist_ok=True)
-    kwargs = (
-        {"connect_args": {"check_same_thread": False, "timeout": 15}}
-        if sqlite
-        else {"connect_args": {"connect_timeout": 5}}
+class CurriculumSubject(Base):
+    __tablename__ = "curriculum_subjects"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    data: Mapped[dict] = mapped_column(JSON)
+
+
+class CurriculumChapter(Base):
+    __tablename__ = "curriculum_chapters"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    subject_id: Mapped[str] = mapped_column(ForeignKey("curriculum_subjects.id"))
+    data: Mapped[dict] = mapped_column(JSON)
+
+
+class CurriculumPoint(Base):
+    __tablename__ = "curriculum_points"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    chapter_id: Mapped[str] = mapped_column(ForeignKey("curriculum_chapters.id"))
+    graph_version: Mapped[str] = mapped_column(String)
+    data: Mapped[dict] = mapped_column(JSON)
+    updated_at: Mapped[float] = mapped_column(Float)
+
+
+class PresetSet(Base):
+    __tablename__ = "preset_sets"
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    version: Mapped[int] = mapped_column(Integer, primary_key=True)
+    knowledge_id: Mapped[str] = mapped_column(ForeignKey("curriculum_points.id"))
+    question_keys: Mapped[list] = mapped_column(JSON)
+
+
+class StandardQuestion(Base):
+    __tablename__ = "standard_questions"
+    key: Mapped[str] = mapped_column(ForeignKey("questions.key"), primary_key=True)
+    data: Mapped[dict] = mapped_column(JSON)
+
+
+class PresetTask(Base):
+    __tablename__ = "preset_tasks"
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    preset_set_id: Mapped[str] = mapped_column(String, primary_key=True)
+    preset_set_version: Mapped[int] = mapped_column(Integer, primary_key=True)
+    task_id: Mapped[str] = mapped_column(ForeignKey("tasks.id"), unique=True)
+
+
+class FinalTest(Base):
+    __tablename__ = "final_tests"
+    __table_args__ = (
+        UniqueConstraint("user_id", "knowledge_id", "version"),
+        UniqueConstraint("user_id", "request_id"),
+        CheckConstraint("version > 0", name="positive_test_version"),
+        CheckConstraint(
+            "status IN ('generating','ready','generation_failed','submitted')", name="test_status"
+        ),
     )
-    engine = create_engine(url, pool_pre_ping=True, **kwargs)
-    if sqlite:
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    knowledge_id: Mapped[str] = mapped_column(ForeignKey("curriculum_points.id"))
+    version: Mapped[int] = mapped_column(Integer)
+    request_id: Mapped[str] = mapped_column(String)
+    preset_set_id: Mapped[str] = mapped_column(String)
+    preset_set_version: Mapped[int] = mapped_column(Integer)
+    status: Mapped[str] = mapped_column(String)
+    rules: Mapped[dict] = mapped_column(JSON)
+    generation_context: Mapped[dict] = mapped_column(JSON)
+    questions: Mapped[list] = mapped_column(JSON)
+    result: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    error: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    submission_id: Mapped[str | None] = mapped_column(String, nullable=True)
+    submission_hash: Mapped[str | None] = mapped_column(String, nullable=True)
+    client_context: Mapped[dict] = mapped_column(JSON)
+    created_at: Mapped[float] = mapped_column(Float)
+    started_at: Mapped[float | None] = mapped_column(Float, nullable=True)
+    submitted_at: Mapped[float | None] = mapped_column(Float, nullable=True)
 
-        @event.listens_for(engine, "connect")
-        def configure_sqlite(connection, _):
-            connection.execute("PRAGMA foreign_keys=ON")
-            connection.execute("PRAGMA busy_timeout=15000")
 
-    return engine
+# A unique partial index protects against different request IDs racing to create sheets.
+from sqlalchemy import Index  # noqa: E402
 
-
-def open_database(url: str):
-    from .migrations import schema_head
-
-    engine = create_database_engine(url)
-    try:
-        with engine.connect() as connection:
-            # Startup never creates or changes tables. Deploy migrations explicitly.
-            from sqlalchemy import inspect
-
-            schema = (
-                connection.exec_driver_sql("SELECT current_schema()").scalar_one()
-                if connection.dialect.name == "postgresql"
-                else None
-            )
-            version_table = (
-                connection.dialect.identifier_preparer.quote(schema) + ".alembic_version"
-                if schema
-                else "alembic_version"
-            )
-            if not inspect(connection).has_table("alembic_version", schema=schema):
-                raise RuntimeError(
-                    "Database is not migrated; run: uv run python -m aristotle_backend.migrations"
-                )
-            revisions = set(connection.execute(text(f"SELECT version_num FROM {version_table}")).scalars())
-            if revisions != {schema_head()}:
-                raise RuntimeError(
-                    "Database schema is out of date; run: uv run python -m aristotle_backend.migrations"
-                )
-    except Exception:
-        engine.dispose()
-        raise
-    return engine, sessionmaker(engine, expire_on_commit=False)
+Index(
+    "uq_final_test_active",
+    FinalTest.user_id,
+    FinalTest.knowledge_id,
+    unique=True,
+    postgresql_where=FinalTest.status.in_(("generating", "ready")),
+    sqlite_where=FinalTest.status.in_(("generating", "ready")),
+)

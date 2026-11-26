@@ -1,0 +1,12 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_late_annotation_cannot_publish_after_claim_expires ____________
+tests/integration/test_model_assistance.py:456: in test_late_annotation_cannot_publish_after_claim_expires
+    assert db.get(Question, key).status == "draft"
+E   AssertionError: assert 'pending_review' == 'draft'
+E     
+E     - draft
+E     + pending_review
+=========================== short test summary info ============================
+FAILED tests/integration/test_model_assistance.py::test_late_annotation_cannot_publish_after_claim_expires
+1 failed, 15 deselected in 1.76s

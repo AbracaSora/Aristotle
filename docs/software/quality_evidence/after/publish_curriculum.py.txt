@@ -1,0 +1,27 @@
+def publish_curriculum(db, body: CurriculumPublication, *, demo=False, now=None):
+    """Validate the full graph and frozen versions before changing persistent content."""
+    now = time.time() if now is None else now
+    db.execute(
+        update(SystemSetting).where(SystemSetting.key == "curriculum-tags").values(key=SystemSetting.key)
+    )
+    if db.bind.dialect.name == "postgresql":
+        db.execute(text("SELECT pg_advisory_xact_lock(:id)"), {"id": 408202611})
+    catalog = catalog_of(body)
+    validate_chapters(catalog)
+    preset_ids = set()
+    for point in catalog.points.values():
+        validate_point(point, catalog)
+        if point.preset_set.id in preset_ids:
+            raise ValueError("不同知识点不能共用预设集合 ID")
+        preset_ids.add(point.preset_set.id)
+        validate_preset_revision(db, point)
+        validate_preset_questions(point, catalog)
+    validate_graph(
+        [{"id": p.id, "name": p.name, "prerequisites": p.prerequisite_ids} for p in catalog.points.values()]
+    )
+    for question in catalog.questions.values():
+        validate_question(db, question, catalog, demo)
+    persist_graph(db, body, catalog)
+    persist_hierarchy(db, catalog)
+    persist_points(db, body, catalog, now)
+    persist_snapshots(db, body, catalog)

@@ -2,7 +2,7 @@
 
 Python 3.12 + FastAPI + Pydantic 2 + SQLAlchemy 2.0 + PostgreSQL（psycopg 3），使用 Alembic 迁移。SQLite 保留作测试和旧库导入。依赖在仓库根目录的 `pyproject.toml` / `uv.lock` 管理。
 
-这是可运行的后端设计原型：支持学生账号隔离、版本化知识图、分阶段诊断、规则推荐、任务作答与持久化、文字资料确认/删除，以及题目候选标注与人工审核。Vue 学习端已对接这些学生接口；新增真实模型候选标注、有来源解释、pgvector 检索与持久化模型任务；PDF 抽取、正式知识空间模型和备份轮换尚未实现。新能力与验证边界见 [学习空间实现](../../docs/software/learning_space_implementation.md)。
+这是可运行的后端设计原型：支持学生账号隔离、版本化知识图、分阶段诊断、规则推荐、任务作答与持久化、文字资料确认/删除，以及题目候选标注与人工审核。Vue 学习端已对接这些学生接口；新增真实模型候选标注、有来源解释、pgvector 检索与持久化模型任务；已补充文本型 PDF 抽取、规范化课程与最终小测；真实 PostgreSQL 0003 迁移、性能验收和备份轮换仍待验证。新能力与验证边界见 [学习空间实现](../../docs/software/learning_space_implementation.md)。
 
 ## 启动
 
@@ -68,3 +68,16 @@ PostgreSQL 备份使用 `pg_dump` 等工具；应另行制定备份权限、保�
 ## 设计对齐原型（2026-10-28）
 
 新增范围与分段诊断、任务生命周期、资料复习与独立复测、导入片段确认、mock 标注任务与人工审核、纠错和系统管理。使用 `--design-flow` 显式增量初始化。管理员 admin 使用演示初始化密码。实现及 mock/501 边界、端到端运行步骤见 [原设计对齐流程](../../docs/software/design_aligned_workflow.md)。
+
+
+## 408 预设题与最终小测（2026-11-23）
+
+后端新增固定四科课程、完整预设任务、完成/解锁状态和持久化 AI 最终小测。接口、响应兼容和前端接入边界见 [实现对照](../../docs/software/apifox_api_408_implementation_check.md)。升级先运行 migrations；已有资源演示环境还需显式运行 `uv run python scripts/import_resource_demo.py --demo` 填充标准课程表。迁移不自动发布题库。
+
+小测后台请求复用已配置的 OpenAI 兼容生成服务。需要恢复尚未领取的队列时运行 `uv run python -m aristotle_backend.final_tests`；已领取但中断的调用不自动重放。题数 1–20、通过比例 0–1 随试卷保存，前端不能在提交时改规则。
+
+本轮后端契约与验证边界见 [2026-11-25 对齐记录](../../docs/software/backend_alignment_20261125.md)，课堂交付见 [代码质量](../../docs/software/code_quality.md) 与 [代码评审](../../docs/software/code_review.md)。
+
+开发修改前读取根 `AGENTS.md` 和 `quality/code-quality-guard/SKILL.md`。本地安装护栏：`uv run pre-commit install`；完整检查：`uv run python scripts/check_guardrails.py --full`。克隆不会自动安装Git hook，需每位开发者执行安装。当前严格门禁失败与遗漏核查见 [护栏落实记录](../../docs/software/guardrail_gap_audit_20261126.md)。
+
+资料自动导入worker：`uv run python -m aristotle_backend.import_worker`（一次执行可加`--once`）；统一启动脚本现包含资料、模型和小测worker。API/worker私有轮转日志在`.local/logs/`。正式部署显式设`ARISTOTLE_ENV=production`，默认数据库口令/SQLite/演示导入会被拒绝，已有默认口令演示账户也阻止API启动。实现边界见 [worker与日志](../../docs/software/worker_and_logs_20261126.md)。

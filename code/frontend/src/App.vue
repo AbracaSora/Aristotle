@@ -69,11 +69,10 @@ const {
   mutating,
   pendingSubmission,
 } = learning;
-const demoPracticeOpen = ref(false);
-const immersive = computed(() => quizOpen.value || demoPracticeOpen.value);
 const page = ref("学习中心"),
   quizOpen = ref(false),
   materialOpen = ref(false);
+const immersive = quizOpen;
 function homePage() {
   return user.value?.role === "admin"
     ? "系统管理"
@@ -278,7 +277,7 @@ const date = new Intl.DateTimeFormat("zh-CN", {
                 : "尚未取得学习数据，请确认服务可用后刷新。"
             }}</NAlert>
             <template v-if="page === '学习地图' || page === '学习中心'">
-              <CurriculumMap v-if="page === '学习地图'" :call="learning.call" @start="openMapKnowledge" @immersive="demoPracticeOpen = $event" />
+              <CurriculumMap v-if="page === '学习地图'" :call="learning.call" @start="openMapKnowledge" :key="user.id" />
               <KnowledgeMapWorkspace v-else :target-knowledge-id="mapKnowledgeTarget" :key="user.id" :details-only="page === '学习中心'" :scopes="scopes" :context="context"
                 :state="state" :loading="flowLoading || busy" :call="learning.call" @choose="chooseScope" @start="start"
                 @details="page = '学习中心'" @materials="page = '我的资料'">

@@ -115,6 +115,16 @@ def main():
         health = wait_http(api_url + "/health", api, True)
         if health.get("database") != "postgresql" or health.get("schema_revision") != schema_head():
             raise RuntimeError("The running backend did not report PostgreSQL and the current schema")
+        workers = {}
+        for module in ("import_worker", "model_jobs", "final_tests"):
+            worker = start(
+                [sys.executable, "-m", "aristotle_backend." + module],
+                module,
+                PROJECT_ROOT,
+            )
+            if worker.poll() is not None:
+                raise RuntimeError(f"{module} stopped during startup; inspect its .local log")
+            workers[module] = worker
         web = start(
             [
                 "npm",
@@ -153,6 +163,7 @@ def main():
                     "proxy_verified": True,
                     "backend_pid": api.pid,
                     "frontend_pid": web.pid,
+                    "worker_pids": {name: worker.pid for name, worker in workers.items()},
                 },
                 indent=2,
             )
@@ -161,7 +172,7 @@ def main():
         print(
             "\nLearning space is ready: "
             + web_url
-            + "\nKeep this terminal open; Ctrl-C stops these two services and preserves the database.",
+            + "\nKeep this terminal open; Ctrl-C stops these child services and preserves the database.",
             flush=True,
         )
         while all(child.poll() is None for child in children):

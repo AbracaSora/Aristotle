@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch, onBeforeUnmount } from "vue";
 import { NButton, NInput, NSelect, NAlert, NTag } from "naive-ui";
 import type { Job, KnowledgeNode, Material, SourceChunk } from "../types";
 const props = defineProps<{
@@ -12,7 +12,7 @@ const emit = defineEmits<{ refresh: [] }>();
 const title = ref("我的学习讲义"),
   text = ref(""),
   source = ref("text"),
-  scenario = ref("normal"),
+  file = ref<File | null>(null),
   job = ref<Job | null>(null),
   error = ref(""),
   busy = ref(false),
@@ -36,20 +36,37 @@ async function run(operation: () => Promise<void>) {
 }
 async function create() {
   await run(async () => {
-    job.value = await props.call<Job>("/material-imports", "POST", {
-      source_type: source.value,
-      title: title.value,
-      text: text.value,
-      scenario: source.value === "text" ? "normal" : scenario.value,
-    });
+    if (source.value === "pdf") {
+      if (!file.value || file.value.size > 20 * 1024 * 1024) throw new Error("请选择不超过 20 MB 的文本型 PDF。");
+      const form = new FormData();
+      form.set("file",file.value); form.set("title",title.value);
+      job.value = await props.call<Job>("/material-imports/pdf", "POST", form);
+    } else {
+      job.value = await props.call<Job>("/material-imports", "POST", {
+        source_type:"text", title:title.value, text:text.value, scenario:"normal",
+      });
+    }
   });
 }
-async function execute() {
-  await run(async () => {
-    job.value = await props.call<Job>(`/jobs/${job.value!.id}/run`, "POST");
-    emit("refresh");
-  });
+let timer: ReturnType<typeof setTimeout> | undefined;
+let ticket = 0;
+function stopPolling() { ++ticket; clearTimeout(timer); }
+async function poll(id: string, current: number) {
+  try {
+    const row = await props.call<Job>('/jobs/' + id);
+    if (current !== ticket) return;
+    job.value = row;
+    if (row.status === 'succeeded' || row.status === 'failed') { emit('refresh'); await loadJobs(); }
+    else timer = setTimeout(()=>poll(id,current), 1200);
+  } catch (e) {
+    if (current === ticket) error.value = e instanceof Error ? e.message : '任务状态读取失败';
+  }
 }
+watch(()=>job.value?.id, id=>{
+  stopPolling();
+  if (id && ['queued','running'].includes(job.value!.status)) void poll(id,ticket);
+});
+onBeforeUnmount(stopPolling);
 async function retry() {
   await run(async () => {
     job.value = await props.call<Job>(`/jobs/${job.value!.id}/retry`, "POST");
@@ -75,8 +92,7 @@ async function chunk(
     <span class="eyebrow">FROM MATERIAL TO LEARNING</span>
     <h2>导入 → 预览 → 确认知识关联</h2>
     <NAlert type="info" class="notice"
-      >文字按段落保留原文；知识关联使用 mock 候选，确认后才参与任务。PDF
-      使用固定样例模拟流程，真实文件解析接口尚未实现。</NAlert
+      >文字保留段落，文本型 PDF 保留页码（最多 20 MB、100 页）。请核对并确认知识点关联后再使用；扫描件和加密文件无法抽取正文。</NAlert
     >
     <NAlert v-if="error" type="warning" class="notice" role="alert">{{ error }}</NAlert>
     <div class="scope-bar">
@@ -85,10 +101,10 @@ async function chunk(
         v-model:value="source"
         :options="[
           { label: '文字讲义', value: 'text' },
-          { label: 'PDF 样例（mock）', value: 'pdf_mock' },
+          { label: '文本型 PDF', value: 'pdf' },
         ]"
       /><NInput
-        aria-label="讲义标题"
+        :input-props="{'aria-label':'讲义标题'}"
         v-model:value="title"
         placeholder="讲义标题"
       />
@@ -99,37 +115,18 @@ async function chunk(
       type="textarea"
       :rows="4"
       placeholder="粘贴正文，空行分段"
-      aria-label="讲义正文"
-    /><NSelect
-      v-else
-      aria-label="PDF 模拟情形"
-      v-model:value="scenario"
-      :options="[
-        { label: '正常样例（固定两页）', value: 'normal' },
-        { label: '扫描件无文本', value: 'scanned' },
-        { label: '加密文件', value: 'encrypted' },
-        { label: '超出大小/页数', value: 'oversize' },
-        { label: '处理超时', value: 'timeout' },
-      ]"
-    />
+      :input-props="{'aria-label':'讲义正文'}"
+    /><input v-else type="file" aria-label="文本型 PDF" accept=".pdf,application/pdf"
+      @change="file=($event.target as HTMLInputElement).files?.[0] ?? null"/>
     <div class="actions">
       <NButton
         type="primary"
         :loading="busy"
         :disabled="
-          disabled || !title.trim() || (source === 'text' && !text.trim())
+          disabled || !title.trim() || (source === 'text' ? !text.trim() : !file)
         "
         @click="create"
         >建立导入任务</NButton
-      ><NButton
-        text
-        :disabled="busy"
-        @click="
-          run(async () => {
-            await call('/material-imports/pdf', 'POST');
-          })
-        "
-        >真实 PDF：查看接口占位</NButton
       >
     </div>
     <div v-if="job" class="flow-focus">
@@ -138,13 +135,11 @@ async function chunk(
         {{
           job.result.notice ||
           job.result.error ||
-          "任务已入队，运行后预览结果。"
+          "任务已入队，正在等待后台处理。"
         }}
       </p>
       <p class="muted">{{ job.notice }}</p>
-      <NButton v-if="job.status === 'queued'" :loading="busy" @click="execute"
-        >运行导入任务</NButton
-      ><NButton
+      <NButton v-if="['queued','running'].includes(job.status)" :loading="busy" @click="stopPolling(); poll(job.id,ticket)">刷新导入状态</NButton      ><NButton
         v-if="job.status === 'failed' && job.result.retryable"
         :loading="busy"
         @click="retry"

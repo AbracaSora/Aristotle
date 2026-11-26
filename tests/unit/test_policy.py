@@ -1,5 +1,5 @@
 import pytest
-from aristotle_core.policy import WINDOW_SECONDS, diagnose, recommend, validate_graph
+from aristotle_core.policy import WINDOW_SECONDS, RecommendationEvidence, diagnose, recommend, validate_graph
 
 NOW = 2_000_000_000
 NODES = [
@@ -87,9 +87,9 @@ def test_mastery_requires_eighty_percent():
 def test_recommendation_cannot_bypass_prerequisites_or_silently_change_label():
     states = diagnose(NODES, [], NOW)
     with pytest.raises(ValueError):
-        recommend(NODES, states, [], [], knowledge_id="child")
+        recommend(RecommendationEvidence(NODES, states, []), [], knowledge_id="child")
     questions = [{"key": "a:v1", "question_id": "a", "knowledge_id": "root", "level": "remember"}]
-    decision = recommend(NODES, states, questions, [], level="analyze")
+    decision = recommend(RecommendationEvidence(NODES, states, []), questions, level="analyze")
     assert decision["target_level"] == "analyze"
     assert decision["question_keys"] == []
     assert decision["warnings"]
@@ -104,7 +104,7 @@ def test_unseen_questions_are_preferred_and_four_level_inventory_gap_is_recommen
         {"key": "new:v1", "question_id": "new", "knowledge_id": "child", "level": "analyze"},
         {"key": "0:v1", "question_id": "0", "knowledge_id": "root", "level": "remember"},
     ]
-    decision = recommend(NODES, states, questions, rows)
+    decision = recommend(RecommendationEvidence(NODES, states, rows), questions)
     assert decision["knowledge_id"] == "child"
     assert decision["target_level"] == "analyze"
 
@@ -119,6 +119,6 @@ def test_recommend_sorts_unseen_then_oldest_using_each_questions_latest_attempt(
         evidence("seen-once", at=NOW - 2),
         evidence("seen-twice", at=NOW - 3),
     ]
-    decision = recommend(NODES, diagnose(NODES, rows, NOW), questions, rows)
+    decision = recommend(RecommendationEvidence(NODES, diagnose(NODES, rows, NOW), rows), questions)
     assert decision["question_keys"] == ["new-a", "new-b", "seen-once"]
     assert decision["warnings"] == []

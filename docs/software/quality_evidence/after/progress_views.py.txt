@@ -1,0 +1,7 @@
+def progress_views(db, user_id):
+    points = published_points(db)
+    attempts, tests = attempt_statistics(db, user_id), test_statistics(db, user_id)
+    values = {point.id: point_progress(point, attempts, tests) for point in points.values()}
+    for point in points.values():
+        apply_unlock(point, values)
+    return values

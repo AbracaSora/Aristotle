@@ -1,0 +1,24 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+___________ test_log_redacts_credentials_and_has_private_permissions ___________
+
+tmp_path = PosixPath('/private/var/folders/qh/hvzx_jhd22sg082vyd3v1tt80000gn/T/pytest-of-chlorisblack/pytest-102/test_log_redacts_credentials_a0')
+
+    def test_log_redacts_credentials_and_has_private_permissions(tmp_path):
+>       from aristotle_backend.runtime_logging import configure_logging
+E       ModuleNotFoundError: No module named 'aristotle_backend.runtime_logging'
+
+tests/unit/test_runtime_logging.py:8: ModuleNotFoundError
+________________ test_log_retention_removes_only_old_owned_logs ________________
+
+tmp_path = PosixPath('/private/var/folders/qh/hvzx_jhd22sg082vyd3v1tt80000gn/T/pytest-of-chlorisblack/pytest-102/test_log_retention_removes_onl0')
+
+    def test_log_retention_removes_only_old_owned_logs(tmp_path):
+>       from aristotle_backend.runtime_logging import configure_logging
+E       ModuleNotFoundError: No module named 'aristotle_backend.runtime_logging'
+
+tests/unit/test_runtime_logging.py:23: ModuleNotFoundError
+=========================== short test summary info ============================
+FAILED tests/unit/test_runtime_logging.py::test_log_redacts_credentials_and_has_private_permissions
+FAILED tests/unit/test_runtime_logging.py::test_log_retention_removes_only_old_owned_logs
+2 failed in 0.07s

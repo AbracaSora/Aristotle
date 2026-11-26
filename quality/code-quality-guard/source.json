@@ -1,0 +1,18 @@
+{
+  "guard": {
+    "url": "https://github.com/bettermorn/ACMWDevHubPPT/blob/master/Methodology/CodeQualitySkill.md",
+    "sha256": "1a3e79d33986bbb77c63dbd2deeb5f801daa9912de5356456e1e01ef771ef158"
+  },
+  "guardusage": {
+    "url": "https://github.com/bettermorn/ACMWDevHubPPT/blob/master/Methodology/CodeQualitySkill-%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.md",
+    "sha256": "b08f36bbb3e5292c77c7e85e4596b3baf39d001310d20064ac4c570a5cb674be"
+  },
+  "course": {
+    "url": "https://github.com/bettermorn/IntelligentSWEPractice/blob/main/courseware/pages/part3develop.md",
+    "sha256": "fa832062e1cfdeda2cbc978dd9e92d2992541426ff99079ccf2c43c2d7e5f4cb"
+  },
+  "template": {
+    "url": "https://github.com/bettermorn/ACMWDevHubPPT/blob/master/Methodology/CodeReviewTemplate.md",
+    "sha256": "e8965c8d79681e0757a5a1aa43bba28e2612de49a1e08b7fb19a3ad49de788bc"
+  }
+}

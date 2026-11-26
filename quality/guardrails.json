@@ -1,0 +1,7 @@
+{
+  "strictness": "strict",
+  "limits": {"TH-01": 40, "TH-02": 10, "TH-03": 15, "TH-04": 3, "TH-05": 4, "TH-06": 400, "TH-07": 3},
+  "sources": ["code/backend/aristotle_backend", "code/core_engine/aristotle_core"],
+  "core_coverage": ["code/core_engine/aristotle_core/policy.py", "code/backend/aristotle_backend/curriculum.py", "code/backend/aristotle_backend/curriculum_publication.py", "code/backend/aristotle_backend/final_tests.py", "code/backend/aristotle_backend/final_generation.py", "code/backend/aristotle_backend/final_papers.py", "code/backend/aristotle_backend/providers.py"],
+  "diff_limit": 400
+}

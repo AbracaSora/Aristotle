@@ -19,8 +19,18 @@ depends_on = None
 
 
 def upgrade():
+    enable_vector()
+    create_model_calls()
+    create_source_embeddings()
+    index_and_authorize_sources()
+
+
+def enable_vector():
     if op.get_context().dialect.name == "postgresql":
         op.execute("CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA public")
+
+
+def create_model_calls():
     op.create_table(
         "model_calls",
         sa.Column("id", sa.String(), nullable=False),
@@ -36,15 +46,15 @@ def upgrade():
         sa.Column("error_code", sa.String(), nullable=False),
         sa.Column("duration_seconds", sa.Float(), nullable=False),
         sa.Column("created_at", sa.Float(), nullable=False),
-        sa.ForeignKeyConstraint(
-            ["user_id"],
-            ["users.id"],
-        ),
+        sa.ForeignKeyConstraint(["user_id"], ["users.id"]),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_model_calls_created_at"), "model_calls", ["created_at"], unique=False)
     op.create_index(op.f("ix_model_calls_purpose"), "model_calls", ["purpose"], unique=False)
     op.create_index(op.f("ix_model_calls_user_id"), "model_calls", ["user_id"], unique=False)
+
+
+def create_source_embeddings():
     op.create_table(
         "source_embeddings",
         sa.Column("id", sa.String(), nullable=False),
@@ -62,25 +72,16 @@ def upgrade():
             "(resource_id IS NOT NULL AND material_id IS NULL AND owner_id IS NULL AND chunk_id IS NULL) OR (resource_id IS NULL AND material_id IS NOT NULL AND owner_id IS NOT NULL)",
             name="embedding_source_owner",
         ),
-        sa.ForeignKeyConstraint(
-            ["chunk_id"],
-            ["source_chunks.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["material_id"],
-            ["materials.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["owner_id"],
-            ["users.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["resource_id"],
-            ["learning_resources.id"],
-        ),
+        sa.ForeignKeyConstraint(["chunk_id"], ["source_chunks.id"]),
+        sa.ForeignKeyConstraint(["material_id"], ["materials.id"]),
+        sa.ForeignKeyConstraint(["owner_id"], ["users.id"]),
+        sa.ForeignKeyConstraint(["resource_id"], ["learning_resources.id"]),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("source_key", "namespace"),
     )
+
+
+def index_and_authorize_sources():
     op.create_index(
         op.f("ix_source_embeddings_material_id"), "source_embeddings", ["material_id"], unique=False
     )

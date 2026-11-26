@@ -1,0 +1,11 @@
+两次运行旧护栏时，pytest 子命令实测触发 subprocess.TimeoutExpired（300 秒），未写出相应轮次的 guardrails.json。
+
+受控超时复现，修改前
+FAILED tests/unit/test_guardrails.py::test_timed_out_tools_report_failure_and_keep_command_output
+1 failed, 8 deselected in 0.16s
+
+修改后运行 tests/unit/test_guardrails.py
+.........                                                                [100%]
+9 passed in 0.17s
+
+故障注入验证汇总路径：两个合成子进程按测试时限 0.1 秒真实超时，输出目录预置无法解析的旧结果。完整入口返回 1，两个命令均为 124；guardrails.json 已写出，coverage.status=not_run、security.status=scan_failed、duplicate_blocks=null。正式时限仍为 300 秒。

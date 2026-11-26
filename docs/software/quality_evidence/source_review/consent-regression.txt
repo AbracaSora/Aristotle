@@ -1,0 +1,11 @@
+修复前，同一模拟服务记录请求次数，三个场景各预期 1 次。
+E       assert 2 == 1
+E       assert 2 == 1
+E       assert 2 == 1
+FAILED tests/integration/test_model_assistance.py::test_no_new_outbound_request_after_private_source_consent_changes[index-next-batch]
+FAILED tests/integration/test_model_assistance.py::test_no_new_outbound_request_after_private_source_consent_changes[index-retry]
+FAILED tests/integration/test_model_assistance.py::test_no_new_outbound_request_after_private_source_consent_changes[explanation-retry]
+3 failed, 16 deselected in 1.30s
+
+修复后，完整模型辅助集成测试模块
+19 passed in 7.41s

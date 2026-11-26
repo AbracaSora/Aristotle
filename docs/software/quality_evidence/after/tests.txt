@@ -1,0 +1,45 @@
+........................................................................ [ 59%]
+................................s.................                       [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/chlorisblack/Documents/Codex/2026-10-27/https-github-com-abracasora-aristotle-https/Aristotle/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+______________ coverage: platform darwin, python 3.12.13-final-0 _______________
+
+Name                                                       Stmts   Miss Branch BrPart  Cover
+--------------------------------------------------------------------------------------------
+code/backend/aristotle_backend/__init__.py                     0      0      0      0   100%
+code/backend/aristotle_backend/annotation_rules.py             2      0      0      0   100%
+code/backend/aristotle_backend/app.py                        399     47    106     21    85%
+code/backend/aristotle_backend/assistance_routes.py          149     29     32      6    76%
+code/backend/aristotle_backend/config.py                      14      1      4      1    89%
+code/backend/aristotle_backend/curriculum.py                 119      2     28      2    97%
+code/backend/aristotle_backend/curriculum_publication.py     162     19     90     19    85%
+code/backend/aristotle_backend/curriculum_routes.py           77      6     10      0    91%
+code/backend/aristotle_backend/curriculum_schemas.py         231      8     18      6    94%
+code/backend/aristotle_backend/db.py                         278      0      8      2    99%
+code/backend/aristotle_backend/design_seed.py                 32      2     16      5    85%
+code/backend/aristotle_backend/final_tests.py                254     33     84     20    83%
+code/backend/aristotle_backend/flow_routes.py                352     48    112     33    83%
+code/backend/aristotle_backend/flow_schemas.py                38      0      0      0   100%
+code/backend/aristotle_backend/import_sqlite.py               86     23     32      8    70%
+code/backend/aristotle_backend/material_imports.py            55      4     22      3    91%
+code/backend/aristotle_backend/migrations.py                  35     11      6      2    63%
+code/backend/aristotle_backend/model_jobs.py                 170     37     64     17    73%
+code/backend/aristotle_backend/providers.py                  190     24     52     18    83%
+code/backend/aristotle_backend/resource_seed.py              134     11     62     12    88%
+code/backend/aristotle_backend/retrieval.py                  155     15     62     14    85%
+code/backend/aristotle_backend/schemas.py                    182      3     10      3    97%
+code/backend/aristotle_backend/security.py                    14      0      0      0   100%
+code/backend/aristotle_backend/seed.py                        49     17     12      1    64%
+code/backend/aristotle_backend/vector_type.py                 21      5      6      2    74%
+code/backend/aristotle_backend/workflow.py                   206     24     88     12    85%
+code/core_engine/aristotle_core/__init__.py                    0      0      0      0   100%
+code/core_engine/aristotle_core/policy.py                     83      1     32      1    98%
+--------------------------------------------------------------------------------------------
+TOTAL                                                       3487    370    956    208    86%
+Coverage JSON written to file docs/software/quality_evidence/after/coverage.json
+121 passed, 1 skipped, 1 warning in 78.46s (0:01:18)

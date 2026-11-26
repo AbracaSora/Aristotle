@@ -1,0 +1,77 @@
+--- before/semantic_search
++++ after/retrieval.py:302
+@@ -2,26 +2,9 @@
+     units = source_units(db, user_id, knowledge_id)
+     if mode == "keyword":
+         return {"mode": "keyword", "items": keyword_search(units, query, limit), "missing_index": 0}
+-    if not allow_query:
+-        raise ProviderFailure(
+-            "consent_required", "语义查询需要将本次查询发送给配置的 embedding 服务，请先确认。"
+-        )
+-    cfg = provider_config("embedding")
+-    if not cfg.configured:
+-        raise ProviderFailure("not_configured", "embedding 服务尚未配置；可先使用明确标记的关键词检索。")
+-    lookup = {u.key: u for u in units if u.external_allowed}
+-    entries = [
+-        row
+-        for row in db.scalars(
+-            select(SourceEmbedding).where(
+-                SourceEmbedding.namespace == cfg.namespace,
+-                or_(SourceEmbedding.owner_id.is_(None), SourceEmbedding.owner_id == user_id),
+-            )
+-        )
+-        if row.owner_id in (None, user_id)
+-        and row.source_key in lookup
+-        and row.source_hash == lookup[row.source_key].content_hash
+-    ]
++    cfg = semantic_config(allow_query)
++    lookup = outbound_sources(units)
++    entries = valid_entries(db, user_id, cfg, lookup)
+     if not entries:
+         return {
+             "mode": mode,
+@@ -32,41 +15,11 @@
+     vectors, metadata = embed(db, user_id, [query], transport)
+     vector = vectors[0]
+     entries = [row for row in entries if row.dimensions == len(vector)]
+-    if db.bind.dialect.name == "postgresql" and entries:
+-        distance = SourceEmbedding.vector.op("<=>", return_type=Float())(
+-            cast(bindparam("query_vector", type_=Vector()), Vector())
+-        ).label("distance")
+-        rows = db.execute(
+-            select(SourceEmbedding.source_key, distance)
+-            .where(SourceEmbedding.id.in_([r.id for r in entries]), SourceEmbedding.dimensions == len(vector))
+-            .order_by(distance)
+-            .limit(max(limit * 4, 24)),
+-            {"query_vector": vector},
+-        ).all()
+-        scores = {key: max(0, 1 - float(d)) for key, d in rows if d is not None}
+-    else:
+-        # Test portability only: production PostgreSQL uses the actual pgvector operator above.
+-        norm = math.sqrt(sum(v * v for v in vector))
+-        scores = {
+-            row.source_key: max(
+-                0,
+-                sum(a * b for a, b in zip(row.vector, vector, strict=True))
+-                / (math.sqrt(sum(v * v for v in row.vector)) * norm),
+-            )
+-            for row in entries
+-        }
++    scores = vector_scores(db, entries, vector, limit)
+     db.expire_all()
+-    live = {u.key: u for u in source_units(db, user_id, knowledge_id) if u.external_allowed}
+-    ranked = []
++    live = outbound_sources(source_units(db, user_id, knowledge_id))
+     lexical = {item["id"]: item["score"] for item in keyword_search(units, query, len(units))}
+-    for key, score in scores.items():
+-        if key not in live or live[key].content_hash != lookup[key].content_hash:
+-            continue
+-        if mode == "hybrid":
+-            score = 0.8 * score + 0.2 * lexical.get(key, 0)
+-        if score >= 0.25:
+-            ranked.append((score, live[key]))
+-    ranked.sort(key=lambda item: (-item[0], item[1].key))
++    ranked = rank_results(scores, live, lookup, lexical, mode)
+     return {
+         "mode": mode,
+         "items": [{**u.view(), "score": round(score, 5)} for score, u in ranked[:limit]],

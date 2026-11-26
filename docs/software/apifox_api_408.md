@@ -1,6 +1,6 @@
 # 408 学习系统 API 接口文档
 
-> ApiFox 风格接口需求文档 v0.1
+> 历史 ApiFox 需求草案 v0.1。2026-11-23 后端按 [对象交接 v1.5](backend_handoff_objects_408.md) 实现，见 [实现对照](apifox_api_408_implementation_check.md)。本页的外层包装、单数 ai-test 路径和 OCR 范围已被新契约替代；联调请导入运行时 /openapi.json。
 
 ## 公共说明
 

@@ -1,0 +1,147 @@
+{
+  "duplicates": [
+    {
+      "firstFile": {
+        "end": 465,
+        "endLoc": {
+          "column": 79,
+          "line": 465,
+          "position": 16900
+        },
+        "name": "app.py",
+        "start": 456,
+        "startLoc": {
+          "column": 26,
+          "line": 456,
+          "position": 16571
+        }
+      },
+      "format": "python",
+      "fragment": "            mode=body.mode,\n            graph_version=graph.version,\n            decision=decision,\n            evidence_snapshot=states,\n            created_at=now,\n        )\n        db.add(task)\n        db.flush()\n        for i, key in enumerate(decision[\"question_keys\"]):\n            db.add(TaskQuestion(task_id=task.id, question_key=key, position=i))",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 10,
+      "secondFile": {
+        "end": 216,
+        "endLoc": {
+          "column": 75,
+          "line": 216,
+          "position": 7640
+        },
+        "name": "workflow.py",
+        "start": 207,
+        "startLoc": {
+          "column": 69,
+          "line": 207,
+          "position": 7347
+        }
+      },
+      "tokens": 65
+    },
+    {
+      "firstFile": {
+        "end": 194,
+        "endLoc": {
+          "column": 25,
+          "line": 194,
+          "position": 7445
+        },
+        "name": "migration_scripts/versions/0001_learning_workflow.py",
+        "start": 186,
+        "startLoc": {
+          "column": 26,
+          "line": 186,
+          "position": 7189
+        }
+      },
+      "format": "python",
+      "fragment": "        sa.Column(\"result\", sa.JSON(), nullable=False),\n        sa.Column(\"created_at\", sa.Float(), nullable=False),\n        sa.ForeignKeyConstraint(\n            [\"user_id\"],\n            [\"users.id\"],\n        ),\n        sa.PrimaryKeyConstraint(\"id\"),\n    )\n    op.create_index(op.f(\"ix_service_jobs_user_id\"), \"service_jobs\", [\"user_id\"], unique=False)",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 9,
+      "secondFile": {
+        "end": 210,
+        "endLoc": {
+          "column": 25,
+          "line": 210,
+          "position": 8139
+        },
+        "name": "migration_scripts/versions/0001_learning_workflow.py",
+        "start": 202,
+        "startLoc": {
+          "column": 37,
+          "line": 202,
+          "position": 7883
+        }
+      },
+      "tokens": 59
+    },
+    {
+      "firstFile": {
+        "end": 194,
+        "endLoc": {
+          "column": 25,
+          "line": 194,
+          "position": 7445
+        },
+        "name": "migration_scripts/versions/0001_learning_workflow.py",
+        "start": 186,
+        "startLoc": {
+          "column": 35,
+          "line": 186,
+          "position": 7198
+        }
+      },
+      "format": "python",
+      "fragment": "        sa.Column(\"result\", sa.JSON(), nullable=False),\n        sa.Column(\"created_at\", sa.Float(), nullable=False),\n        sa.ForeignKeyConstraint(\n            [\"user_id\"],\n            [\"users.id\"],\n        ),\n        sa.PrimaryKeyConstraint(\"id\"),\n    )\n    op.create_index(op.f(\"ix_service_jobs_user_id\"), \"service_jobs\", [\"user_id\"], unique=False)",
+      "isNew": false,
+      "kind": "exact",
+      "lines": 9,
+      "secondFile": {
+        "end": 45,
+        "endLoc": {
+          "column": 25,
+          "line": 45,
+          "position": 1576
+        },
+        "name": "migration_scripts/versions/0002_semantic_learning.py",
+        "start": 37,
+        "startLoc": {
+          "column": 46,
+          "line": 37,
+          "position": 1329
+        }
+      },
+      "tokens": 55
+    }
+  ],
+  "statistics": {
+    "detectionDate": "2026-11-25T01:39:03.805Z",
+    "formats": {
+      "python": {
+        "clones": 3,
+        "duplicatedLines": 28,
+        "duplicatedTokens": 179,
+        "lines": 7550,
+        "newClones": 0,
+        "newDuplicatedLines": 0,
+        "percentage": 0.3708609271523179,
+        "percentageTokens": 0.3492614778248229,
+        "sources": 29,
+        "tokens": 51251
+      }
+    },
+    "total": {
+      "clones": 3,
+      "duplicatedLines": 28,
+      "duplicatedTokens": 179,
+      "lines": 7550,
+      "newClones": 0,
+      "newDuplicatedLines": 0,
+      "percentage": 0.3708609271523179,
+      "percentageTokens": 0.3492614778248229,
+      "sources": 29,
+      "tokens": 51251
+    }
+  }
+}

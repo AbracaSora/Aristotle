@@ -1,0 +1,5263 @@
+{
+  "structure": {
+    "measurements": [
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 89,
+        "name": "fail",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 93,
+        "name": "get_db",
+        "TH-01": 3,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 98,
+        "name": "current_user",
+        "TH-01": 11,
+        "TH-02": 5,
+        "TH-03": 4,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 111,
+        "name": "maintainer",
+        "TH-01": 4,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 117,
+        "name": "student",
+        "TH-01": 4,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 123,
+        "name": "active_graph",
+        "TH-01": 5,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 130,
+        "name": "owned",
+        "TH-01": 5,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 137,
+        "name": "audit",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 5,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 141,
+        "name": "history_rows",
+        "TH-01": 17,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 160,
+        "name": "learning_state",
+        "TH-01": 4,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 166,
+        "name": "question_view",
+        "TH-01": 12,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 181,
+        "name": "attempt_view",
+        "TH-01": 17,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 200,
+        "name": "material_view",
+        "TH-01": 11,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 213,
+        "name": "task_view",
+        "TH-01": 39,
+        "TH-02": 11,
+        "TH-03": 6,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 5
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 254,
+        "name": "create_app",
+        "TH-01": 77,
+        "TH-02": 3,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 268,
+        "name": "lifespan",
+        "TH-01": 7,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 299,
+        "name": "http_error",
+        "TH-01": 15,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 316,
+        "name": "validation_error",
+        "TH-01": 3,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 322,
+        "name": "conflict_error",
+        "TH-01": 4,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 328,
+        "name": "health",
+        "TH-01": 17,
+        "TH-02": 4,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 349,
+        "name": "demo",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 0,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 353,
+        "name": "login",
+        "TH-01": 16,
+        "TH-02": 4,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 372,
+        "name": "me",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 376,
+        "name": "logout",
+        "TH-01": 8,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 386,
+        "name": "knowledge",
+        "TH-01": 3,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 391,
+        "name": "state",
+        "TH-01": 9,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 402,
+        "name": "curriculum_progress",
+        "TH-01": 17,
+        "TH-02": 7,
+        "TH-03": 6,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 421,
+        "name": "create_task",
+        "TH-01": 64,
+        "TH-02": 15,
+        "TH-03": 15,
+        "TH-04": 2,
+        "TH-05": 5,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 488,
+        "name": "get_task",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 494,
+        "name": "submit",
+        "TH-01": 46,
+        "TH-02": 17,
+        "TH-03": 17,
+        "TH-04": 2,
+        "TH-05": 5,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 583,
+        "name": "history",
+        "TH-01": 25,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 610,
+        "name": "materials",
+        "TH-01": 5,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 617,
+        "name": "add_material",
+        "TH-01": 7,
+        "TH-02": 3,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 626,
+        "name": "update_material",
+        "TH-01": 19,
+        "TH-02": 7,
+        "TH-03": 6,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 649,
+        "name": "delete_material",
+        "TH-01": 5,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 656,
+        "name": "publish_graph",
+        "TH-01": 18,
+        "TH-02": 6,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 676,
+        "name": "list_questions",
+        "TH-01": 7,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 685,
+        "name": "create_question",
+        "TH-01": 11,
+        "TH-02": 5,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 698,
+        "name": "add_candidate",
+        "TH-01": 34,
+        "TH-02": 4,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 5,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 734,
+        "name": "list_candidates",
+        "TH-01": 29,
+        "TH-02": 5,
+        "TH-03": 3,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 765,
+        "name": "review",
+        "TH-01": 36,
+        "TH-02": 8,
+        "TH-03": 8,
+        "TH-04": 2,
+        "TH-05": 5,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 805,
+        "name": "retire",
+        "TH-01": 20,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 827,
+        "name": "audit_log",
+        "TH-01": 10,
+        "TH-02": 3,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 509,
+        "name": "result_view",
+        "TH-01": 15,
+        "TH-02": 3,
+        "TH-03": 3,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 525,
+        "name": "existing_result",
+        "TH-01": 21,
+        "TH-02": 8,
+        "TH-03": 6,
+        "TH-04": 1,
+        "TH-05": 0,
+        "TH-07": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 46,
+        "name": "install_assistance_routes",
+        "TH-01": 14,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 6,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 50,
+        "name": "provider_error",
+        "TH-01": 10,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 61,
+        "name": "check_knowledge",
+        "TH-01": 3,
+        "TH-02": 4,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 65,
+        "name": "dispatch",
+        "TH-01": 8,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 74,
+        "name": "view",
+        "TH-01": 10,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 86,
+        "name": "knowledge_map",
+        "TH-01": 15,
+        "TH-02": 3,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 103,
+        "name": "model_status",
+        "TH-01": 19,
+        "TH-02": 6,
+        "TH-03": 7,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 124,
+        "name": "sources",
+        "TH-01": 4,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 130,
+        "name": "search",
+        "TH-01": 7,
+        "TH-02": 3,
+        "TH-03": 3,
+        "TH-04": 2,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 139,
+        "name": "index",
+        "TH-01": 16,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 5,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 157,
+        "name": "consent",
+        "TH-01": 22,
+        "TH-02": 5,
+        "TH-03": 4,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 181,
+        "name": "explanation",
+        "TH-01": 32,
+        "TH-02": 12,
+        "TH-03": 8,
+        "TH-04": 2,
+        "TH-05": 5,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 215,
+        "name": "annotate",
+        "TH-01": 19,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 5,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 236,
+        "name": "dispatch_queued",
+        "TH-01": 15,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 5,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 253,
+        "name": "calls",
+        "TH-01": 20,
+        "TH-02": 3,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 275,
+        "name": "retry",
+        "TH-01": 23,
+        "TH-02": 6,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 5,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/config.py",
+        "line": 15,
+        "name": "deployment_mode",
+        "TH-01": 6,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 0,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/config.py",
+        "line": 23,
+        "name": "require_demo_mode",
+        "TH-01": 3,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 0,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/config.py",
+        "line": 28,
+        "name": "validate_production_database",
+        "TH-01": 11,
+        "TH-02": 6,
+        "TH-03": 4,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/config.py",
+        "line": 41,
+        "name": "database_url",
+        "TH-01": 9,
+        "TH-02": 5,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/content_routes.py",
+        "line": 27,
+        "name": "install",
+        "TH-01": 14,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/content_routes.py",
+        "line": 36,
+        "name": "annotation_job",
+        "TH-01": 36,
+        "TH-02": 6,
+        "TH-03": 4,
+        "TH-04": 2,
+        "TH-05": 5,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/content_routes.py",
+        "line": 74,
+        "name": "public_jobs",
+        "TH-01": 12,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/content_routes.py",
+        "line": 88,
+        "name": "report",
+        "TH-01": 18,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/content_routes.py",
+        "line": 107,
+        "name": "report_view",
+        "TH-01": 10,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/content_routes.py",
+        "line": 119,
+        "name": "own_reports",
+        "TH-01": 7,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/content_routes.py",
+        "line": 128,
+        "name": "content_reports",
+        "TH-01": 7,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/content_routes.py",
+        "line": 137,
+        "name": "resolve_report",
+        "TH-01": 20,
+        "TH-02": 5,
+        "TH-03": 6,
+        "TH-04": 2,
+        "TH-05": 5,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 34,
+        "name": "iso",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 38,
+        "name": "fail",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 42,
+        "name": "lock_user",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 47,
+        "name": "attempt_timestamp",
+        "TH-01": 8,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 0,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 57,
+        "name": "published_points",
+        "TH-01": 12,
+        "TH-02": 9,
+        "TH-03": 2,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 71,
+        "name": "point_or_404",
+        "TH-01": 5,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 78,
+        "name": "subjects_view",
+        "TH-01": 22,
+        "TH-02": 8,
+        "TH-03": 9,
+        "TH-04": 3,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 106,
+        "name": "attempt_statistics",
+        "TH-01": 19,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 127,
+        "name": "test_statistics",
+        "TH-01": 24,
+        "TH-02": 4,
+        "TH-03": 4,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 153,
+        "name": "mastery_status",
+        "TH-01": 4,
+        "TH-02": 5,
+        "TH-03": 5,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 159,
+        "name": "prerequisite_counts",
+        "TH-01": 7,
+        "TH-02": 3,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 168,
+        "name": "point_progress",
+        "TH-01": 30,
+        "TH-02": 10,
+        "TH-03": 3,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 200,
+        "name": "apply_unlock",
+        "TH-01": 9,
+        "TH-02": 5,
+        "TH-03": 2,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 211,
+        "name": "progress_views",
+        "TH-01": 9,
+        "TH-02": 4,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 222,
+        "name": "recommendation_states",
+        "TH-01": 8,
+        "TH-02": 3,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 232,
+        "name": "locked_course_points",
+        "TH-01": 2,
+        "TH-02": 3,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 236,
+        "name": "summary",
+        "TH-01": 18,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 256,
+        "name": "assert_unlocked",
+        "TH-01": 5,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 263,
+        "name": "public_question",
+        "TH-01": 22,
+        "TH-02": 3,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 287,
+        "name": "preset_questions",
+        "TH-01": 8,
+        "TH-02": 5,
+        "TH-03": 4,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 297,
+        "name": "feedback",
+        "TH-01": 13,
+        "TH-02": 3,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 312,
+        "name": "preset_task_view",
+        "TH-01": 17,
+        "TH-02": 6,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 331,
+        "name": "create_preset_task",
+        "TH-01": 9,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 342,
+        "name": "allocate_preset_task",
+        "TH-01": 25,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 369,
+        "name": "retry_preset",
+        "TH-01": 21,
+        "TH-02": 8,
+        "TH-03": 6,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "line": 83,
+        "name": "order",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "line": 34,
+        "name": "catalog_of",
+        "TH-01": 20,
+        "TH-02": 9,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "line": 56,
+        "name": "validate_chapters",
+        "TH-01": 7,
+        "TH-02": 5,
+        "TH-03": 6,
+        "TH-04": 2,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "line": 65,
+        "name": "validate_point",
+        "TH-01": 12,
+        "TH-02": 11,
+        "TH-03": 9,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "line": 79,
+        "name": "validate_preset_revision",
+        "TH-01": 19,
+        "TH-02": 11,
+        "TH-03": 11,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "line": 100,
+        "name": "validate_preset_questions",
+        "TH-01": 6,
+        "TH-02": 5,
+        "TH-03": 4,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "line": 108,
+        "name": "validate_question",
+        "TH-01": 29,
+        "TH-02": 17,
+        "TH-03": 12,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "line": 140,
+        "name": "persist_graph",
+        "TH-01": 9,
+        "TH-02": 7,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "line": 151,
+        "name": "persist_hierarchy",
+        "TH-01": 16,
+        "TH-02": 7,
+        "TH-03": 14,
+        "TH-04": 3,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "line": 169,
+        "name": "persist_points",
+        "TH-01": 16,
+        "TH-02": 6,
+        "TH-03": 8,
+        "TH-04": 2,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "line": 187,
+        "name": "persist_snapshots",
+        "TH-01": 22,
+        "TH-02": 7,
+        "TH-03": 7,
+        "TH-04": 2,
+        "TH-05": 3,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "line": 211,
+        "name": "publish_curriculum",
+        "TH-01": 27,
+        "TH-02": 7,
+        "TH-03": 6,
+        "TH-04": 2,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 50,
+        "name": "install_curriculum_routes",
+        "TH-01": 42,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 57,
+        "name": "repeat",
+        "TH-01": 5,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 5,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 64,
+        "name": "subjects",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 68,
+        "name": "tags",
+        "TH-01": 3,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 73,
+        "name": "publish",
+        "TH-01": 16,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 95,
+        "name": "question_full",
+        "TH-01": 5,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 106,
+        "name": "questions",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 114,
+        "name": "progress",
+        "TH-01": 3,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 123,
+        "name": "progress_detail",
+        "TH-01": 3,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 128,
+        "name": "all_progress",
+        "TH-01": 14,
+        "TH-02": 9,
+        "TH-03": 5,
+        "TH-04": 2,
+        "TH-05": 3,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 149,
+        "name": "new_test",
+        "TH-01": 19,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 6,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 172,
+        "name": "tests",
+        "TH-01": 18,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 5,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 192,
+        "name": "detail",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 196,
+        "name": "submit",
+        "TH-01": 10,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 5,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_schemas.py",
+        "line": 46,
+        "name": "coherent",
+        "TH-01": 15,
+        "TH-02": 12,
+        "TH-03": 10,
+        "TH-04": 2,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_schemas.py",
+        "line": 75,
+        "name": "utc_timestamp",
+        "TH-01": 8,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_schemas.py",
+        "line": 85,
+        "name": "valid_answer",
+        "TH-01": 4,
+        "TH-02": 3,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_schemas.py",
+        "line": 97,
+        "name": "unique_keys",
+        "TH-01": 4,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/db.py",
+        "line": 268,
+        "name": "create_database_engine",
+        "TH-01": 14,
+        "TH-02": 6,
+        "TH-03": 4,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/db.py",
+        "line": 289,
+        "name": "open_database",
+        "TH-01": 25,
+        "TH-02": 5,
+        "TH-03": 4,
+        "TH-04": 3,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/db.py",
+        "line": 282,
+        "name": "configure_sqlite",
+        "TH-01": 3,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/deployment.py",
+        "line": 10,
+        "name": "validate_accounts",
+        "TH-01": 7,
+        "TH-02": 4,
+        "TH-03": 2,
+        "TH-04": 2,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/design_seed.py",
+        "line": 12,
+        "name": "seed_design_flow",
+        "TH-01": 177,
+        "TH-02": 10,
+        "TH-03": 12,
+        "TH-04": 3,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/diagnostic.py",
+        "line": 10,
+        "name": "build_blueprint",
+        "TH-01": 19,
+        "TH-02": 8,
+        "TH-03": 7,
+        "TH-04": 3,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/diagnostic.py",
+        "line": 31,
+        "name": "segment_decision",
+        "TH-01": 16,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/diagnostic.py",
+        "line": 49,
+        "name": "diagnostic_view",
+        "TH-01": 31,
+        "TH-02": 4,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 38,
+        "name": "service_ready",
+        "TH-01": 9,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 2,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 49,
+        "name": "create_test",
+        "TH-01": 69,
+        "TH-02": 12,
+        "TH-03": 11,
+        "TH-04": 2,
+        "TH-05": 5,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 120,
+        "name": "created_view",
+        "TH-01": 8,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 130,
+        "name": "test_summary",
+        "TH-01": 7,
+        "TH-02": 4,
+        "TH-03": 3,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 139,
+        "name": "detail_view",
+        "TH-01": 9,
+        "TH-02": 6,
+        "TH-03": 4,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 150,
+        "name": "own_test",
+        "TH-01": 5,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 157,
+        "name": "run_generation",
+        "TH-01": 72,
+        "TH-02": 15,
+        "TH-03": 19,
+        "TH-04": 3,
+        "TH-05": 3,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 257,
+        "name": "expire_generating",
+        "TH-01": 12,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 271,
+        "name": "submit_test",
+        "TH-01": 82,
+        "TH-02": 23,
+        "TH-03": 17,
+        "TH-04": 2,
+        "TH-05": 5,
+        "TH-07": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 357,
+        "name": "recent_history",
+        "TH-01": 40,
+        "TH-02": 4,
+        "TH-03": 3,
+        "TH-04": 2,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 399,
+        "name": "enrich_feedback",
+        "TH-01": 69,
+        "TH-02": 12,
+        "TH-03": 11,
+        "TH-04": 3,
+        "TH-05": 3,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 471,
+        "name": "recover_feedback",
+        "TH-01": 29,
+        "TH-02": 6,
+        "TH-03": 6,
+        "TH-04": 4,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 502,
+        "name": "main",
+        "TH-01": 22,
+        "TH-02": 4,
+        "TH-03": 5,
+        "TH-04": 3,
+        "TH-05": 0,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 190,
+        "name": "decode",
+        "TH-01": 24,
+        "TH-02": 8,
+        "TH-03": 4,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/flow_routes.py",
+        "line": 15,
+        "name": "install_flow_routes",
+        "TH-01": 13,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 6,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/flow_routes.py",
+        "line": 16,
+        "name": "administrator",
+        "TH-01": 4,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/flow_routes.py",
+        "line": 21,
+        "name": "content_role",
+        "TH-01": 4,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/flow_support.py",
+        "line": 13,
+        "name": "provider_settings",
+        "TH-01": 3,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/flow_support.py",
+        "line": 18,
+        "name": "chunks_view",
+        "TH-01": 12,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/flow_support.py",
+        "line": 32,
+        "name": "erase_material",
+        "TH-01": 4,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/flow_support.py",
+        "line": 38,
+        "name": "purge_material_derivatives",
+        "TH-01": 13,
+        "TH-02": 4,
+        "TH-03": 4,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/flow_support.py",
+        "line": 54,
+        "name": "job_view",
+        "TH-01": 18,
+        "TH-02": 4,
+        "TH-03": 4,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_jobs.py",
+        "line": 27,
+        "name": "enqueue_context",
+        "TH-01": 6,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_jobs.py",
+        "line": 35,
+        "name": "claim_import",
+        "TH-01": 28,
+        "TH-02": 6,
+        "TH-03": 5,
+        "TH-04": 2,
+        "TH-05": 3,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_jobs.py",
+        "line": 65,
+        "name": "prepare_import",
+        "TH-01": 15,
+        "TH-02": 12,
+        "TH-03": 7,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_jobs.py",
+        "line": 82,
+        "name": "check_scenario",
+        "TH-01": 11,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_jobs.py",
+        "line": 95,
+        "name": "clear_pdf",
+        "TH-01": 3,
+        "TH-02": 4,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_jobs.py",
+        "line": 100,
+        "name": "record_failure",
+        "TH-01": 29,
+        "TH-02": 10,
+        "TH-03": 9,
+        "TH-04": 2,
+        "TH-05": 3,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_jobs.py",
+        "line": 131,
+        "name": "finish_import",
+        "TH-01": 12,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 2,
+        "TH-05": 4,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_jobs.py",
+        "line": 145,
+        "name": "run_import",
+        "TH-01": 13,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 2,
+        "TH-05": 3,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_jobs.py",
+        "line": 161,
+        "name": "expire_imports",
+        "TH-01": 32,
+        "TH-02": 5,
+        "TH-03": 6,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_jobs.py",
+        "line": 22,
+        "name": "__init__",
+        "TH-01": 3,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_sqlite.py",
+        "line": 17,
+        "name": "snapshot_sqlite",
+        "TH-01": 10,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_sqlite.py",
+        "line": 30,
+        "name": "inspect_source",
+        "TH-01": 12,
+        "TH-02": 5,
+        "TH-03": 4,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_sqlite.py",
+        "line": 44,
+        "name": "require_empty_target",
+        "TH-01": 8,
+        "TH-02": 5,
+        "TH-03": 4,
+        "TH-04": 2,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_sqlite.py",
+        "line": 54,
+        "name": "copy_table",
+        "TH-01": 14,
+        "TH-02": 9,
+        "TH-03": 4,
+        "TH-04": 2,
+        "TH-05": 4,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_sqlite.py",
+        "line": 70,
+        "name": "verify_table",
+        "TH-01": 14,
+        "TH-02": 9,
+        "TH-03": 4,
+        "TH-04": 3,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_sqlite.py",
+        "line": 87,
+        "name": "copy_snapshot",
+        "TH-01": 15,
+        "TH-02": 4,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_sqlite.py",
+        "line": 104,
+        "name": "import_snapshot",
+        "TH-01": 14,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 3,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_sqlite.py",
+        "line": 120,
+        "name": "main",
+        "TH-01": 14,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 0,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_worker.py",
+        "line": 11,
+        "name": "main",
+        "TH-01": 17,
+        "TH-02": 4,
+        "TH-03": 5,
+        "TH-04": 3,
+        "TH-05": 0,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 29,
+        "name": "install",
+        "TH-01": 16,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 35,
+        "name": "scope_view",
+        "TH-01": 8,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 45,
+        "name": "capabilities",
+        "TH-01": 20,
+        "TH-02": 4,
+        "TH-03": 3,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 74,
+        "name": "scopes",
+        "TH-01": 2,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 78,
+        "name": "choose_scope",
+        "TH-01": 14,
+        "TH-02": 7,
+        "TH-03": 6,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 94,
+        "name": "context",
+        "TH-01": 48,
+        "TH-02": 14,
+        "TH-03": 9,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 144,
+        "name": "start_diagnostic",
+        "TH-01": 7,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 153,
+        "name": "get_diagnostic",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 157,
+        "name": "restart_diagnostic",
+        "TH-01": 24,
+        "TH-02": 6,
+        "TH-03": 6,
+        "TH-04": 2,
+        "TH-05": 4,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 183,
+        "name": "recommendation",
+        "TH-01": 43,
+        "TH-02": 5,
+        "TH-03": 5,
+        "TH-04": 2,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 228,
+        "name": "task_action",
+        "TH-01": 51,
+        "TH-02": 18,
+        "TH-03": 21,
+        "TH-04": 3,
+        "TH-05": 5,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 281,
+        "name": "explanation_placeholder",
+        "TH-01": 3,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 286,
+        "name": "timeline",
+        "TH-01": 24,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 48,
+        "name": "configured",
+        "TH-01": 5,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_imports.py",
+        "line": 20,
+        "name": "extract_pdf",
+        "TH-01": 24,
+        "TH-02": 10,
+        "TH-03": 11,
+        "TH-04": 3,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_imports.py",
+        "line": 46,
+        "name": "import_segments",
+        "TH-01": 16,
+        "TH-02": 6,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_imports.py",
+        "line": 64,
+        "name": "associate",
+        "TH-01": 5,
+        "TH-02": 4,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_imports.py",
+        "line": 71,
+        "name": "save_import",
+        "TH-01": 3,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_imports.py",
+        "line": 76,
+        "name": "persist_import",
+        "TH-01": 37,
+        "TH-02": 4,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_routes.py",
+        "line": 29,
+        "name": "install",
+        "TH-01": 12,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_routes.py",
+        "line": 36,
+        "name": "create_import",
+        "TH-01": 16,
+        "TH-02": 4,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_routes.py",
+        "line": 54,
+        "name": "import_pdf",
+        "TH-01": 34,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 5,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_routes.py",
+        "line": 90,
+        "name": "own_jobs",
+        "TH-01": 15,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_routes.py",
+        "line": 107,
+        "name": "get_job",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_routes.py",
+        "line": 111,
+        "name": "run_job",
+        "TH-01": 81,
+        "TH-02": 12,
+        "TH-03": 12,
+        "TH-04": 3,
+        "TH-05": 4,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_routes.py",
+        "line": 194,
+        "name": "retry_job",
+        "TH-01": 28,
+        "TH-02": 8,
+        "TH-03": 6,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_routes.py",
+        "line": 225,
+        "name": "confirm_chunk",
+        "TH-01": 20,
+        "TH-02": 8,
+        "TH-03": 4,
+        "TH-04": 1,
+        "TH-05": 5,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py",
+        "line": 12,
+        "name": "upgrade",
+        "TH-01": 298,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 0,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py",
+        "line": 314,
+        "name": "downgrade",
+        "TH-01": 27,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 0,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py",
+        "line": 21,
+        "name": "upgrade",
+        "TH-01": 71,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 0,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py",
+        "line": 95,
+        "name": "downgrade",
+        "TH-01": 9,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 0,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py",
+        "line": 11,
+        "name": "get_col_spec",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/migration_scripts/versions/0003_curriculum_tests.py",
+        "line": 12,
+        "name": "upgrade",
+        "TH-01": 129,
+        "TH-02": 2,
+        "TH-03": 2,
+        "TH-04": 2,
+        "TH-05": 0,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/migration_scripts/versions/0003_curriculum_tests.py",
+        "line": 144,
+        "name": "downgrade",
+        "TH-01": 23,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 0,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/migrations.py",
+        "line": 13,
+        "name": "upgrade_database",
+        "TH-01": 18,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 3,
+        "TH-05": 2,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/migrations.py",
+        "line": 33,
+        "name": "main",
+        "TH-01": 13,
+        "TH-02": 2,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 0,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 31,
+        "name": "ensure_enabled",
+        "TH-01": 4,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 37,
+        "name": "create_job",
+        "TH-01": 28,
+        "TH-02": 10,
+        "TH-03": 10,
+        "TH-04": 3,
+        "TH-05": 4,
+        "TH-07": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 68,
+        "name": "_insert_job",
+        "TH-01": 19,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 6,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 89,
+        "name": "_question_content",
+        "TH-01": 12,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 103,
+        "name": "_annotate",
+        "TH-01": 55,
+        "TH-02": 7,
+        "TH-03": 4,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 167,
+        "name": "_explain",
+        "TH-01": 42,
+        "TH-02": 15,
+        "TH-03": 10,
+        "TH-04": 2,
+        "TH-05": 3,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 222,
+        "name": "run_job",
+        "TH-01": 71,
+        "TH-02": 21,
+        "TH-03": 24,
+        "TH-04": 4,
+        "TH-05": 3,
+        "TH-07": 5
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 296,
+        "name": "main",
+        "TH-01": 19,
+        "TH-02": 5,
+        "TH-03": 7,
+        "TH-04": 3,
+        "TH-05": 0,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 318,
+        "name": "expire_running",
+        "TH-01": 17,
+        "TH-02": 4,
+        "TH-03": 4,
+        "TH-04": 3,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 113,
+        "name": "decode",
+        "TH-01": 5,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 189,
+        "name": "decode",
+        "TH-01": 9,
+        "TH-02": 6,
+        "TH-03": 4,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/pdf_extract_worker.py",
+        "line": 8,
+        "name": "resource_limits",
+        "TH-01": 4,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 0,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/pdf_extract_worker.py",
+        "line": 15,
+        "name": "main",
+        "TH-01": 12,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 0,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/pdf_process.py",
+        "line": 13,
+        "name": "extract_isolated",
+        "TH-01": 24,
+        "TH-02": 7,
+        "TH-03": 6,
+        "TH-04": 2,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 32,
+        "name": "fingerprint",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 62,
+        "name": "provider_config",
+        "TH-01": 35,
+        "TH-02": 17,
+        "TH-03": 12,
+        "TH-04": 3,
+        "TH-05": 1,
+        "TH-07": 6
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 99,
+        "name": "reserve_call",
+        "TH-01": 49,
+        "TH-02": 6,
+        "TH-03": 5,
+        "TH-04": 2,
+        "TH-05": 5,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 150,
+        "name": "start_task_budget",
+        "TH-01": 7,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 159,
+        "name": "effective_config",
+        "TH-01": 15,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 176,
+        "name": "response_body",
+        "TH-01": 10,
+        "TH-02": 7,
+        "TH-03": 7,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 188,
+        "name": "model_usage",
+        "TH-01": 7,
+        "TH-02": 5,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 197,
+        "name": "send_request",
+        "TH-01": 20,
+        "TH-02": 6,
+        "TH-03": 7,
+        "TH-04": 3,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 227,
+        "name": "request_attempts",
+        "TH-01": 26,
+        "TH-02": 10,
+        "TH-03": 16,
+        "TH-04": 3,
+        "TH-05": 4,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 255,
+        "name": "request_model",
+        "TH-01": 38,
+        "TH-02": 7,
+        "TH-03": 7,
+        "TH-04": 2,
+        "TH-05": 8,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 295,
+        "name": "embed",
+        "TH-01": 6,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 5,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 313,
+        "name": "generate",
+        "TH-01": 29,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 9,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 27,
+        "name": "__init__",
+        "TH-01": 3,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 54,
+        "name": "configured",
+        "TH-01": 2,
+        "TH-02": 4,
+        "TH-03": 2,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 58,
+        "name": "namespace",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 298,
+        "name": "decode",
+        "TH-01": 8,
+        "TH-02": 9,
+        "TH-03": 5,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 327,
+        "name": "parse",
+        "TH-01": 7,
+        "TH-02": 5,
+        "TH-03": 4,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/resource_seed.py",
+        "line": 22,
+        "name": "_json_lines",
+        "TH-01": 2,
+        "TH-02": 3,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/resource_seed.py",
+        "line": 26,
+        "name": "_load_bundle",
+        "TH-01": 32,
+        "TH-02": 15,
+        "TH-03": 18,
+        "TH-04": 2,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/resource_seed.py",
+        "line": 60,
+        "name": "import_resource_demo",
+        "TH-01": 92,
+        "TH-02": 26,
+        "TH-03": 28,
+        "TH-04": 4,
+        "TH-05": 2,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/resource_seed.py",
+        "line": 161,
+        "name": "publish_resource_catalog",
+        "TH-01": 99,
+        "TH-02": 19,
+        "TH-03": 13,
+        "TH-04": 3,
+        "TH-05": 6,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/retrieval.py",
+        "line": 19,
+        "name": "invalidate_material_index",
+        "TH-01": 13,
+        "TH-02": 3,
+        "TH-03": 3,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/retrieval.py",
+        "line": 36,
+        "name": "pending_sources",
+        "TH-01": 10,
+        "TH-02": 3,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/retrieval.py",
+        "line": 48,
+        "name": "index_sources",
+        "TH-01": 31,
+        "TH-02": 9,
+        "TH-03": 4,
+        "TH-04": 2,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/retrieval.py",
+        "line": 81,
+        "name": "save_batch",
+        "TH-01": 9,
+        "TH-02": 3,
+        "TH-03": 3,
+        "TH-04": 2,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/retrieval.py",
+        "line": 92,
+        "name": "upsert_vector",
+        "TH-01": 26,
+        "TH-02": 3,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/retrieval.py",
+        "line": 121,
+        "name": "tokens",
+        "TH-01": 3,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/retrieval.py",
+        "line": 126,
+        "name": "keyword_search",
+        "TH-01": 10,
+        "TH-02": 7,
+        "TH-03": 4,
+        "TH-04": 2,
+        "TH-05": 3,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/retrieval.py",
+        "line": 138,
+        "name": "valid_entries",
+        "TH-01": 14,
+        "TH-02": 5,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/retrieval.py",
+        "line": 154,
+        "name": "vector_scores",
+        "TH-01": 17,
+        "TH-02": 7,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/retrieval.py",
+        "line": 174,
+        "name": "cosine_score",
+        "TH-01": 3,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/retrieval.py",
+        "line": 179,
+        "name": "rank_results",
+        "TH-01": 11,
+        "TH-02": 5,
+        "TH-03": 7,
+        "TH-04": 2,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/retrieval.py",
+        "line": 192,
+        "name": "semantic_config",
+        "TH-01": 9,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/retrieval.py",
+        "line": 203,
+        "name": "outbound_sources",
+        "TH-01": 3,
+        "TH-02": 3,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/retrieval.py",
+        "line": 208,
+        "name": "semantic_search",
+        "TH-01": 35,
+        "TH-02": 8,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/runtime_logging.py",
+        "line": 17,
+        "name": "redact",
+        "TH-01": 4,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/runtime_logging.py",
+        "line": 34,
+        "name": "expire_logs",
+        "TH-01": 7,
+        "TH-02": 6,
+        "TH-03": 7,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/runtime_logging.py",
+        "line": 43,
+        "name": "configure_logging",
+        "TH-01": 19,
+        "TH-02": 5,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/runtime_logging.py",
+        "line": 24,
+        "name": "format",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/runtime_logging.py",
+        "line": 29,
+        "name": "_open",
+        "TH-01": 3,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/schema_contract.py",
+        "line": 9,
+        "name": "migration_config",
+        "TH-01": 4,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 0,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/schema_contract.py",
+        "line": 15,
+        "name": "schema_head",
+        "TH-01": 5,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 0,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/schemas.py",
+        "line": 50,
+        "name": "valid_options",
+        "TH-01": 4,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/schemas.py",
+        "line": 66,
+        "name": "valid_secondary",
+        "TH-01": 6,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/schemas.py",
+        "line": 81,
+        "name": "require_content_review",
+        "TH-01": 4,
+        "TH-02": 4,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/schemas.py",
+        "line": 100,
+        "name": "require_selection",
+        "TH-01": 6,
+        "TH-02": 5,
+        "TH-03": 4,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/security.py",
+        "line": 8,
+        "name": "hash_password",
+        "TH-01": 4,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/security.py",
+        "line": 14,
+        "name": "verify_password",
+        "TH-01": 4,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/security.py",
+        "line": 20,
+        "name": "token_hash",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/seed.py",
+        "line": 135,
+        "name": "seed_demo",
+        "TH-01": 71,
+        "TH-02": 5,
+        "TH-03": 4,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/seed.py",
+        "line": 208,
+        "name": "main",
+        "TH-01": 26,
+        "TH-02": 4,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 0,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/source_units.py",
+        "line": 43,
+        "name": "public_sources",
+        "TH-01": 8,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/source_units.py",
+        "line": 53,
+        "name": "private_sources",
+        "TH-01": 22,
+        "TH-02": 4,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/source_units.py",
+        "line": 78,
+        "name": "private_unit",
+        "TH-01": 24,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/source_units.py",
+        "line": 104,
+        "name": "segments",
+        "TH-01": 13,
+        "TH-02": 4,
+        "TH-03": 5,
+        "TH-04": 2,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/source_units.py",
+        "line": 119,
+        "name": "source_units",
+        "TH-01": 3,
+        "TH-02": 3,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/source_units.py",
+        "line": 144,
+        "name": "unchanged",
+        "TH-01": 3,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/source_units.py",
+        "line": 27,
+        "name": "content_hash",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/source_units.py",
+        "line": 30,
+        "name": "view",
+        "TH-01": 11,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/source_units.py",
+        "line": 130,
+        "name": "authorized",
+        "TH-01": 7,
+        "TH-02": 3,
+        "TH-03": 0,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/source_units.py",
+        "line": 138,
+        "name": "require_current",
+        "TH-01": 4,
+        "TH-02": 3,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/system_routes.py",
+        "line": 21,
+        "name": "install",
+        "TH-01": 9,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/system_routes.py",
+        "line": 27,
+        "name": "get_settings",
+        "TH-01": 6,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/system_routes.py",
+        "line": 35,
+        "name": "set_settings",
+        "TH-01": 12,
+        "TH-02": 2,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/system_routes.py",
+        "line": 49,
+        "name": "live_provider_status",
+        "TH-01": 11,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/system_routes.py",
+        "line": 63,
+        "name": "users",
+        "TH-01": 4,
+        "TH-02": 2,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/system_routes.py",
+        "line": 69,
+        "name": "change_role",
+        "TH-01": 14,
+        "TH-02": 4,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 5,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/task_sources.py",
+        "line": 8,
+        "name": "owned_materials",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/task_sources.py",
+        "line": 12,
+        "name": "confirmed_chunks",
+        "TH-01": 6,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/task_sources.py",
+        "line": 20,
+        "name": "source_refs",
+        "TH-01": 15,
+        "TH-02": 4,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/task_sources.py",
+        "line": 37,
+        "name": "referenced_materials",
+        "TH-01": 9,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/task_sources.py",
+        "line": 48,
+        "name": "resolve_sources",
+        "TH-01": 35,
+        "TH-02": 7,
+        "TH-03": 4,
+        "TH-04": 1,
+        "TH-05": 4,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/task_storage.py",
+        "line": 6,
+        "name": "store_task",
+        "TH-01": 5,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/vector_type.py",
+        "line": 10,
+        "name": "checked_vector",
+        "TH-01": 8,
+        "TH-02": 9,
+        "TH-03": 5,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/vector_type.py",
+        "line": 23,
+        "name": "get_col_spec",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/vector_type.py",
+        "line": 26,
+        "name": "bind_processor",
+        "TH-01": 2,
+        "TH-02": 2,
+        "TH-03": 2,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/vector_type.py",
+        "line": 29,
+        "name": "result_processor",
+        "TH-01": 2,
+        "TH-02": 2,
+        "TH-03": 2,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 35,
+        "name": "reject",
+        "TH-01": 2,
+        "TH-02": 1,
+        "TH-03": 0,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 39,
+        "name": "selected_scope",
+        "TH-01": 6,
+        "TH-02": 5,
+        "TH-03": 4,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 47,
+        "name": "scoped_nodes",
+        "TH-01": 5,
+        "TH-02": 4,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 54,
+        "name": "round_evidence",
+        "TH-01": 11,
+        "TH-02": 5,
+        "TH-03": 3,
+        "TH-04": 2,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 67,
+        "name": "available_questions",
+        "TH-01": 10,
+        "TH-02": 5,
+        "TH-03": 4,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 79,
+        "name": "flow_view",
+        "TH-01": 19,
+        "TH-02": 2,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 2,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 100,
+        "name": "assert_task_actionable",
+        "TH-01": 10,
+        "TH-02": 6,
+        "TH-03": 8,
+        "TH-04": 2,
+        "TH-05": 2,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 112,
+        "name": "evidence_facts",
+        "TH-01": 9,
+        "TH-02": 4,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 123,
+        "name": "learning_plan",
+        "TH-01": 13,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 0,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 138,
+        "name": "persist_task",
+        "TH-01": 35,
+        "TH-02": 4,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 10,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 175,
+        "name": "require_completed_diagnostic",
+        "TH-01": 10,
+        "TH-02": 5,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 187,
+        "name": "needs_material_review",
+        "TH-01": 23,
+        "TH-02": 10,
+        "TH-03": 6,
+        "TH-04": 2,
+        "TH-05": 4,
+        "TH-07": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 212,
+        "name": "needs_application",
+        "TH-01": 7,
+        "TH-02": 10,
+        "TH-03": 6,
+        "TH-04": 0,
+        "TH-05": 4,
+        "TH-07": 0
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 221,
+        "name": "recommendation_activity",
+        "TH-01": 18,
+        "TH-02": 7,
+        "TH-03": 7,
+        "TH-04": 2,
+        "TH-05": 4,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 241,
+        "name": "create_recommendation",
+        "TH-01": 30,
+        "TH-02": 8,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 9,
+        "TH-07": 1
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 274,
+        "name": "create_diagnostic",
+        "TH-01": 33,
+        "TH-02": 10,
+        "TH-03": 7,
+        "TH-04": 1,
+        "TH-05": 8,
+        "TH-07": 2
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 309,
+        "name": "finish_task",
+        "TH-01": 39,
+        "TH-02": 15,
+        "TH-03": 12,
+        "TH-04": 2,
+        "TH-05": 5,
+        "TH-07": 2
+      },
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "line": 11,
+        "name": "validate_graph",
+        "TH-01": 9,
+        "TH-02": 5,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 2
+      },
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "line": 37,
+        "name": "independent_evidence",
+        "TH-01": 13,
+        "TH-02": 5,
+        "TH-03": 6,
+        "TH-04": 2,
+        "TH-05": 3,
+        "TH-07": 2
+      },
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "line": 52,
+        "name": "correct_rate",
+        "TH-01": 2,
+        "TH-02": 3,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "line": 56,
+        "name": "cognitive_evidence",
+        "TH-01": 14,
+        "TH-02": 5,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "line": 72,
+        "name": "evidence_status",
+        "TH-01": 4,
+        "TH-02": 4,
+        "TH-03": 3,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 1
+      },
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "line": 78,
+        "name": "diagnose",
+        "TH-01": 19,
+        "TH-02": 5,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "line": 99,
+        "name": "dimension_needs_evidence",
+        "TH-01": 2,
+        "TH-02": 3,
+        "TH-03": 2,
+        "TH-04": 0,
+        "TH-05": 1,
+        "TH-07": 0
+      },
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "line": 103,
+        "name": "eligible_targets",
+        "TH-01": 9,
+        "TH-02": 7,
+        "TH-03": 4,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 2
+      },
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "line": 114,
+        "name": "ranking_key",
+        "TH-01": 8,
+        "TH-02": 8,
+        "TH-03": 1,
+        "TH-04": 0,
+        "TH-05": 2,
+        "TH-07": 0
+      },
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "line": 124,
+        "name": "choose_level",
+        "TH-01": 8,
+        "TH-02": 8,
+        "TH-03": 2,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 1
+      },
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "line": 134,
+        "name": "select_questions",
+        "TH-01": 8,
+        "TH-02": 4,
+        "TH-03": 1,
+        "TH-04": 1,
+        "TH-05": 3,
+        "TH-07": 0
+      },
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "line": 144,
+        "name": "recommend",
+        "TH-01": 23,
+        "TH-02": 8,
+        "TH-03": 2,
+        "TH-04": 0,
+        "TH-05": 6,
+        "TH-07": 0
+      },
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "line": 18,
+        "name": "visit",
+        "TH-01": 13,
+        "TH-02": 5,
+        "TH-03": 5,
+        "TH-04": 1,
+        "TH-05": 1,
+        "TH-07": 1
+      }
+    ],
+    "findings": [
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 137,
+        "name": "audit",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 213,
+        "name": "task_view",
+        "rule": "TH-02",
+        "actual": 11,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 213,
+        "name": "task_view",
+        "rule": "TH-07",
+        "actual": 5,
+        "limit": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 254,
+        "name": "create_app",
+        "rule": "TH-01",
+        "actual": 77,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 421,
+        "name": "create_task",
+        "rule": "TH-01",
+        "actual": 64,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 421,
+        "name": "create_task",
+        "rule": "TH-02",
+        "actual": 15,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 421,
+        "name": "create_task",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 494,
+        "name": "submit",
+        "rule": "TH-01",
+        "actual": 46,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 494,
+        "name": "submit",
+        "rule": "TH-02",
+        "actual": 17,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 494,
+        "name": "submit",
+        "rule": "TH-03",
+        "actual": 17,
+        "limit": 15
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 494,
+        "name": "submit",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 698,
+        "name": "add_candidate",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 765,
+        "name": "review",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 525,
+        "name": "existing_result",
+        "rule": "TH-07",
+        "actual": 4,
+        "limit": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/app.py",
+        "line": 1,
+        "rule": "TH-06",
+        "actual": 856,
+        "limit": 400
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 46,
+        "name": "install_assistance_routes",
+        "rule": "TH-05",
+        "actual": 6,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 139,
+        "name": "index",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 181,
+        "name": "explanation",
+        "rule": "TH-02",
+        "actual": 12,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 181,
+        "name": "explanation",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 215,
+        "name": "annotate",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 236,
+        "name": "dispatch_queued",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/assistance_routes.py",
+        "line": 275,
+        "name": "retry",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/content_routes.py",
+        "line": 36,
+        "name": "annotation_job",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/content_routes.py",
+        "line": 137,
+        "name": "resolve_report",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "line": 65,
+        "name": "validate_point",
+        "rule": "TH-02",
+        "actual": 11,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "line": 79,
+        "name": "validate_preset_revision",
+        "rule": "TH-02",
+        "actual": 11,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "line": 108,
+        "name": "validate_question",
+        "rule": "TH-02",
+        "actual": 17,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 50,
+        "name": "install_curriculum_routes",
+        "rule": "TH-01",
+        "actual": 42,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 57,
+        "name": "repeat",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 149,
+        "name": "new_test",
+        "rule": "TH-05",
+        "actual": 6,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 172,
+        "name": "tests",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_routes.py",
+        "line": 196,
+        "name": "submit",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_schemas.py",
+        "line": 46,
+        "name": "coherent",
+        "rule": "TH-02",
+        "actual": 12,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/db.py",
+        "line": 1,
+        "rule": "TH-06",
+        "actual": 404,
+        "limit": 400
+      },
+      {
+        "file": "code/backend/aristotle_backend/design_seed.py",
+        "line": 12,
+        "name": "seed_design_flow",
+        "rule": "TH-01",
+        "actual": 177,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 49,
+        "name": "create_test",
+        "rule": "TH-01",
+        "actual": 69,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 49,
+        "name": "create_test",
+        "rule": "TH-02",
+        "actual": 12,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 49,
+        "name": "create_test",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 157,
+        "name": "run_generation",
+        "rule": "TH-01",
+        "actual": 72,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 157,
+        "name": "run_generation",
+        "rule": "TH-02",
+        "actual": 15,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 157,
+        "name": "run_generation",
+        "rule": "TH-03",
+        "actual": 19,
+        "limit": 15
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 271,
+        "name": "submit_test",
+        "rule": "TH-01",
+        "actual": 82,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 271,
+        "name": "submit_test",
+        "rule": "TH-02",
+        "actual": 23,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 271,
+        "name": "submit_test",
+        "rule": "TH-03",
+        "actual": 17,
+        "limit": 15
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 271,
+        "name": "submit_test",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 271,
+        "name": "submit_test",
+        "rule": "TH-07",
+        "actual": 4,
+        "limit": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 399,
+        "name": "enrich_feedback",
+        "rule": "TH-01",
+        "actual": 69,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 399,
+        "name": "enrich_feedback",
+        "rule": "TH-02",
+        "actual": 12,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 471,
+        "name": "recover_feedback",
+        "rule": "TH-04",
+        "actual": 4,
+        "limit": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "line": 1,
+        "rule": "TH-06",
+        "actual": 529,
+        "limit": 400
+      },
+      {
+        "file": "code/backend/aristotle_backend/flow_routes.py",
+        "line": 15,
+        "name": "install_flow_routes",
+        "rule": "TH-05",
+        "actual": 6,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/import_jobs.py",
+        "line": 65,
+        "name": "prepare_import",
+        "rule": "TH-02",
+        "actual": 12,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 94,
+        "name": "context",
+        "rule": "TH-01",
+        "actual": 48,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 94,
+        "name": "context",
+        "rule": "TH-02",
+        "actual": 14,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 183,
+        "name": "recommendation",
+        "rule": "TH-01",
+        "actual": 43,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 228,
+        "name": "task_action",
+        "rule": "TH-01",
+        "actual": 51,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 228,
+        "name": "task_action",
+        "rule": "TH-02",
+        "actual": 18,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 228,
+        "name": "task_action",
+        "rule": "TH-03",
+        "actual": 21,
+        "limit": 15
+      },
+      {
+        "file": "code/backend/aristotle_backend/learning_routes.py",
+        "line": 228,
+        "name": "task_action",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_routes.py",
+        "line": 54,
+        "name": "import_pdf",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_routes.py",
+        "line": 111,
+        "name": "run_job",
+        "rule": "TH-01",
+        "actual": 81,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_routes.py",
+        "line": 111,
+        "name": "run_job",
+        "rule": "TH-02",
+        "actual": 12,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/material_routes.py",
+        "line": 225,
+        "name": "confirm_chunk",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py",
+        "line": 12,
+        "name": "upgrade",
+        "rule": "TH-01",
+        "actual": 298,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py",
+        "line": 21,
+        "name": "upgrade",
+        "rule": "TH-01",
+        "actual": 71,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/migration_scripts/versions/0003_curriculum_tests.py",
+        "line": 12,
+        "name": "upgrade",
+        "rule": "TH-01",
+        "actual": 129,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 37,
+        "name": "create_job",
+        "rule": "TH-07",
+        "actual": 4,
+        "limit": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 68,
+        "name": "_insert_job",
+        "rule": "TH-05",
+        "actual": 6,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 103,
+        "name": "_annotate",
+        "rule": "TH-01",
+        "actual": 55,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 167,
+        "name": "_explain",
+        "rule": "TH-01",
+        "actual": 42,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 167,
+        "name": "_explain",
+        "rule": "TH-02",
+        "actual": 15,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 222,
+        "name": "run_job",
+        "rule": "TH-01",
+        "actual": 71,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 222,
+        "name": "run_job",
+        "rule": "TH-02",
+        "actual": 21,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 222,
+        "name": "run_job",
+        "rule": "TH-03",
+        "actual": 24,
+        "limit": 15
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 222,
+        "name": "run_job",
+        "rule": "TH-04",
+        "actual": 4,
+        "limit": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/model_jobs.py",
+        "line": 222,
+        "name": "run_job",
+        "rule": "TH-07",
+        "actual": 5,
+        "limit": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 62,
+        "name": "provider_config",
+        "rule": "TH-02",
+        "actual": 17,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 62,
+        "name": "provider_config",
+        "rule": "TH-07",
+        "actual": 6,
+        "limit": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 99,
+        "name": "reserve_call",
+        "rule": "TH-01",
+        "actual": 49,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 99,
+        "name": "reserve_call",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 227,
+        "name": "request_attempts",
+        "rule": "TH-03",
+        "actual": 16,
+        "limit": 15
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 255,
+        "name": "request_model",
+        "rule": "TH-05",
+        "actual": 8,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 295,
+        "name": "embed",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "line": 313,
+        "name": "generate",
+        "rule": "TH-05",
+        "actual": 9,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/resource_seed.py",
+        "line": 26,
+        "name": "_load_bundle",
+        "rule": "TH-02",
+        "actual": 15,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/resource_seed.py",
+        "line": 26,
+        "name": "_load_bundle",
+        "rule": "TH-03",
+        "actual": 18,
+        "limit": 15
+      },
+      {
+        "file": "code/backend/aristotle_backend/resource_seed.py",
+        "line": 60,
+        "name": "import_resource_demo",
+        "rule": "TH-01",
+        "actual": 92,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/resource_seed.py",
+        "line": 60,
+        "name": "import_resource_demo",
+        "rule": "TH-02",
+        "actual": 26,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/resource_seed.py",
+        "line": 60,
+        "name": "import_resource_demo",
+        "rule": "TH-03",
+        "actual": 28,
+        "limit": 15
+      },
+      {
+        "file": "code/backend/aristotle_backend/resource_seed.py",
+        "line": 60,
+        "name": "import_resource_demo",
+        "rule": "TH-04",
+        "actual": 4,
+        "limit": 3
+      },
+      {
+        "file": "code/backend/aristotle_backend/resource_seed.py",
+        "line": 161,
+        "name": "publish_resource_catalog",
+        "rule": "TH-01",
+        "actual": 99,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/resource_seed.py",
+        "line": 161,
+        "name": "publish_resource_catalog",
+        "rule": "TH-02",
+        "actual": 19,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/resource_seed.py",
+        "line": 161,
+        "name": "publish_resource_catalog",
+        "rule": "TH-05",
+        "actual": 6,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/seed.py",
+        "line": 135,
+        "name": "seed_demo",
+        "rule": "TH-01",
+        "actual": 71,
+        "limit": 40
+      },
+      {
+        "file": "code/backend/aristotle_backend/system_routes.py",
+        "line": 69,
+        "name": "change_role",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 138,
+        "name": "persist_task",
+        "rule": "TH-05",
+        "actual": 10,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 241,
+        "name": "create_recommendation",
+        "rule": "TH-05",
+        "actual": 9,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 274,
+        "name": "create_diagnostic",
+        "rule": "TH-05",
+        "actual": 8,
+        "limit": 4
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 309,
+        "name": "finish_task",
+        "rule": "TH-02",
+        "actual": 15,
+        "limit": 10
+      },
+      {
+        "file": "code/backend/aristotle_backend/workflow.py",
+        "line": 309,
+        "name": "finish_task",
+        "rule": "TH-05",
+        "actual": 5,
+        "limit": 4
+      },
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "line": 144,
+        "name": "recommend",
+        "rule": "TH-05",
+        "actual": 6,
+        "limit": 4
+      }
+    ],
+    "passed": false
+  },
+  "security": {
+    "passed": true,
+    "blocking": [],
+    "total_findings": 5
+  },
+  "untracked_todos": [],
+  "secrets": {
+    "exit_code": 0,
+    "findings": 17,
+    "reviewed": [
+      {
+        "file": ".github/workflows/backend.yml",
+        "line": 17,
+        "type": "Secret Keyword",
+        "reason": "已核对为公开、合成的测试/临时CI夹具值，不是私人凭据；不用于正式部署。"
+      },
+      {
+        "file": ".github/workflows/backend.yml",
+        "line": 47,
+        "type": "Basic Auth Credentials",
+        "reason": "已核对为公开、合成的测试/临时CI夹具值，不是私人凭据；不用于正式部署。"
+      },
+      {
+        "file": "code/backend/aristotle_backend/config.py",
+        "line": 12,
+        "type": "Basic Auth Credentials",
+        "reason": "公开本地开发配置常量；生产模式拒绝缺失/默认数据库口令和SQLite，test_production_guards已验证。不是私人凭据。"
+      },
+      {
+        "file": "code/backend/aristotle_backend/seed.py",
+        "line": 135,
+        "type": "Secret Keyword",
+        "reason": "公开演示夹具默认值；生产模式禁止各演示导入入口，并拒绝仍启用默认口令账户的启动。test_production_guards已验证。"
+      },
+      {
+        "file": "quality/code-quality-guard/source.json",
+        "line": 4,
+        "type": "Hex High Entropy String",
+        "reason": "课程来源内容SHA256校验值，不是凭据。"
+      },
+      {
+        "file": "quality/code-quality-guard/source.json",
+        "line": 8,
+        "type": "Hex High Entropy String",
+        "reason": "课程来源内容SHA256校验值，不是凭据。"
+      },
+      {
+        "file": "quality/code-quality-guard/source.json",
+        "line": 12,
+        "type": "Hex High Entropy String",
+        "reason": "课程来源内容SHA256校验值，不是凭据。"
+      },
+      {
+        "file": "quality/code-quality-guard/source.json",
+        "line": 16,
+        "type": "Hex High Entropy String",
+        "reason": "课程来源内容SHA256校验值，不是凭据。"
+      },
+      {
+        "file": "tests/integration/test_database_migration.py",
+        "line": 122,
+        "type": "Basic Auth Credentials",
+        "reason": "已核对为公开、合成的测试/临时CI夹具值，不是私人凭据；不用于正式部署。"
+      },
+      {
+        "file": "tests/integration/test_database_migration.py",
+        "line": 132,
+        "type": "Basic Auth Credentials",
+        "reason": "已核对为公开、合成的测试/临时CI夹具值，不是私人凭据；不用于正式部署。"
+      },
+      {
+        "file": "tests/integration/test_database_migration.py",
+        "line": 140,
+        "type": "Basic Auth Credentials",
+        "reason": "已核对为公开、合成的测试/临时CI夹具值，不是私人凭据；不用于正式部署。"
+      },
+      {
+        "file": "tests/integration/test_design_flow.py",
+        "line": 314,
+        "type": "Secret Keyword",
+        "reason": "已核对为公开、合成的测试/临时CI夹具值，不是私人凭据；不用于正式部署。"
+      },
+      {
+        "file": "tests/integration/test_production_guards.py",
+        "line": 13,
+        "type": "Basic Auth Credentials",
+        "reason": "已核对为公开、合成的测试/临时CI夹具值，不是私人凭据；不用于正式部署。"
+      },
+      {
+        "file": "tests/integration/test_provider_boundaries.py",
+        "line": 33,
+        "type": "Basic Auth Credentials",
+        "reason": "已核对为公开、合成的测试/临时CI夹具值，不是私人凭据；不用于正式部署。"
+      },
+      {
+        "file": "tests/unit/test_guardrails.py",
+        "line": 86,
+        "type": "Secret Keyword",
+        "reason": "已核对为公开、合成的测试/临时CI夹具值，不是私人凭据；不用于正式部署。"
+      },
+      {
+        "file": "tests/unit/test_guardrails.py",
+        "line": 95,
+        "type": "Secret Keyword",
+        "reason": "已核对为公开、合成的测试/临时CI夹具值，不是私人凭据；不用于正式部署。"
+      },
+      {
+        "file": "tests/unit/test_runtime_logging.py",
+        "line": 14,
+        "type": "Basic Auth Credentials",
+        "reason": "已核对为公开、合成的测试/临时CI夹具值，不是私人凭据；不用于正式部署。"
+      }
+    ],
+    "unresolved": [],
+    "passed": true
+  },
+  "imports": {
+    "graph": {
+      "aristotle_backend": [],
+      "aristotle_backend.annotation_rules": [],
+      "aristotle_backend.app": [
+        "aristotle_backend.assistance_routes",
+        "aristotle_backend.config",
+        "aristotle_backend.curriculum",
+        "aristotle_backend.curriculum_routes",
+        "aristotle_backend.curriculum_schemas",
+        "aristotle_backend.db",
+        "aristotle_backend.deployment",
+        "aristotle_backend.final_tests",
+        "aristotle_backend.flow_routes",
+        "aristotle_backend.flow_support",
+        "aristotle_backend.migrations",
+        "aristotle_backend.model_jobs",
+        "aristotle_backend.providers",
+        "aristotle_backend.retrieval",
+        "aristotle_backend.runtime_logging",
+        "aristotle_backend.schemas",
+        "aristotle_backend.security",
+        "aristotle_backend.task_storage",
+        "aristotle_backend.workflow",
+        "aristotle_core.policy"
+      ],
+      "aristotle_backend.assistance_routes": [
+        "aristotle_backend.db",
+        "aristotle_backend.model_jobs",
+        "aristotle_backend.providers",
+        "aristotle_backend.retrieval",
+        "aristotle_backend.schemas",
+        "aristotle_core.policy"
+      ],
+      "aristotle_backend.config": [],
+      "aristotle_backend.content_routes": [
+        "aristotle_backend.db",
+        "aristotle_backend.flow_schemas",
+        "aristotle_backend.flow_support",
+        "aristotle_backend.workflow"
+      ],
+      "aristotle_backend.curriculum": [
+        "aristotle_backend.curriculum_publication",
+        "aristotle_backend.curriculum_schemas",
+        "aristotle_backend.db",
+        "aristotle_backend.task_storage"
+      ],
+      "aristotle_backend.curriculum_publication": [
+        "aristotle_backend.curriculum_schemas",
+        "aristotle_backend.db",
+        "aristotle_core.policy"
+      ],
+      "aristotle_backend.curriculum_routes": [
+        "aristotle_backend.curriculum",
+        "aristotle_backend.curriculum_schemas",
+        "aristotle_backend.db",
+        "aristotle_backend.final_tests"
+      ],
+      "aristotle_backend.curriculum_schemas": [
+        "aristotle_backend.schemas"
+      ],
+      "aristotle_backend.db": [
+        "aristotle_backend.schema_contract",
+        "aristotle_backend.vector_type"
+      ],
+      "aristotle_backend.deployment": [
+        "aristotle_backend.config",
+        "aristotle_backend.db",
+        "aristotle_backend.security"
+      ],
+      "aristotle_backend.design_seed": [
+        "aristotle_backend.config",
+        "aristotle_backend.db",
+        "aristotle_backend.security"
+      ],
+      "aristotle_backend.diagnostic": [
+        "aristotle_backend.db"
+      ],
+      "aristotle_backend.final_tests": [
+        "aristotle_backend.config",
+        "aristotle_backend.curriculum",
+        "aristotle_backend.curriculum_schemas",
+        "aristotle_backend.db",
+        "aristotle_backend.model_jobs",
+        "aristotle_backend.providers",
+        "aristotle_backend.runtime_logging",
+        "aristotle_backend.schemas"
+      ],
+      "aristotle_backend.flow_routes": [
+        "aristotle_backend",
+        "aristotle_backend.content_routes",
+        "aristotle_backend.flow_support",
+        "aristotle_backend.learning_routes",
+        "aristotle_backend.material_routes",
+        "aristotle_backend.system_routes",
+        "aristotle_backend.workflow"
+      ],
+      "aristotle_backend.flow_schemas": [
+        "aristotle_backend.schemas"
+      ],
+      "aristotle_backend.flow_support": [
+        "aristotle_backend.db",
+        "aristotle_backend.flow_schemas",
+        "aristotle_backend.retrieval"
+      ],
+      "aristotle_backend.import_jobs": [
+        "aristotle_backend.curriculum",
+        "aristotle_backend.db",
+        "aristotle_backend.material_imports",
+        "aristotle_backend.workflow"
+      ],
+      "aristotle_backend.import_sqlite": [
+        "aristotle_backend.config",
+        "aristotle_backend.db"
+      ],
+      "aristotle_backend.import_worker": [
+        "aristotle_backend.config",
+        "aristotle_backend.db",
+        "aristotle_backend.import_jobs",
+        "aristotle_backend.runtime_logging"
+      ],
+      "aristotle_backend.learning_routes": [
+        "aristotle_backend.curriculum",
+        "aristotle_backend.db",
+        "aristotle_backend.flow_schemas",
+        "aristotle_backend.providers",
+        "aristotle_backend.schemas",
+        "aristotle_backend.workflow"
+      ],
+      "aristotle_backend.material_imports": [
+        "aristotle_backend.db",
+        "aristotle_backend.pdf_process"
+      ],
+      "aristotle_backend.material_routes": [
+        "aristotle_backend.db",
+        "aristotle_backend.flow_schemas",
+        "aristotle_backend.flow_support",
+        "aristotle_backend.import_jobs",
+        "aristotle_backend.material_imports",
+        "aristotle_backend.retrieval",
+        "aristotle_backend.schemas",
+        "aristotle_backend.workflow"
+      ],
+      "aristotle_backend.migration_scripts.env": [
+        "aristotle_backend.db"
+      ],
+      "aristotle_backend.migration_scripts.versions.0001_learning_workflow": [],
+      "aristotle_backend.migration_scripts.versions.0002_semantic_learning": [],
+      "aristotle_backend.migration_scripts.versions.0003_curriculum_tests": [],
+      "aristotle_backend.migrations": [
+        "aristotle_backend.config",
+        "aristotle_backend.db",
+        "aristotle_backend.schema_contract"
+      ],
+      "aristotle_backend.model_jobs": [
+        "aristotle_backend.annotation_rules",
+        "aristotle_backend.config",
+        "aristotle_backend.db",
+        "aristotle_backend.providers",
+        "aristotle_backend.retrieval",
+        "aristotle_backend.runtime_logging",
+        "aristotle_backend.schemas",
+        "aristotle_backend.source_units"
+      ],
+      "aristotle_backend.pdf_extract_worker": [
+        "aristotle_backend.material_imports"
+      ],
+      "aristotle_backend.pdf_process": [],
+      "aristotle_backend.providers": [
+        "aristotle_backend.config",
+        "aristotle_backend.db",
+        "aristotle_backend.vector_type"
+      ],
+      "aristotle_backend.resource_seed": [
+        "aristotle_backend.config",
+        "aristotle_backend.curriculum",
+        "aristotle_backend.curriculum_schemas",
+        "aristotle_backend.db",
+        "aristotle_core.policy"
+      ],
+      "aristotle_backend.retrieval": [
+        "aristotle_backend.db",
+        "aristotle_backend.providers",
+        "aristotle_backend.source_units",
+        "aristotle_backend.vector_type"
+      ],
+      "aristotle_backend.runtime_logging": [
+        "aristotle_backend.config"
+      ],
+      "aristotle_backend.schema_contract": [],
+      "aristotle_backend.schemas": [],
+      "aristotle_backend.security": [],
+      "aristotle_backend.seed": [
+        "aristotle_backend.config",
+        "aristotle_backend.db",
+        "aristotle_backend.design_seed",
+        "aristotle_backend.resource_seed",
+        "aristotle_backend.security"
+      ],
+      "aristotle_backend.source_units": [
+        "aristotle_backend.db",
+        "aristotle_backend.providers"
+      ],
+      "aristotle_backend.system_routes": [
+        "aristotle_backend.db",
+        "aristotle_backend.flow_schemas",
+        "aristotle_backend.flow_support",
+        "aristotle_backend.providers",
+        "aristotle_backend.workflow"
+      ],
+      "aristotle_backend.task_sources": [
+        "aristotle_backend.db"
+      ],
+      "aristotle_backend.task_storage": [
+        "aristotle_backend.db"
+      ],
+      "aristotle_backend.vector_type": [],
+      "aristotle_backend.workflow": [
+        "aristotle_backend.curriculum",
+        "aristotle_backend.db",
+        "aristotle_backend.diagnostic",
+        "aristotle_backend.task_sources",
+        "aristotle_backend.task_storage",
+        "aristotle_core.policy"
+      ],
+      "aristotle_core": [],
+      "aristotle_core.policy": []
+    },
+    "cycles": [],
+    "dynamic_imports": []
+  },
+  "coverage": {
+    "status": "measured",
+    "changed": {
+      "files": [
+        {
+          "file": "code/backend/aristotle_backend/__init__.py",
+          "changed_executable": 0,
+          "covered": 0,
+          "percent": 100
+        },
+        {
+          "file": "code/backend/aristotle_backend/annotation_rules.py",
+          "changed_executable": 2,
+          "covered": 2,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/app.py",
+          "changed_executable": 67,
+          "covered": 56,
+          "percent": 83.58208955223881
+        },
+        {
+          "file": "code/backend/aristotle_backend/assistance_routes.py",
+          "changed_executable": 2,
+          "covered": 2,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/config.py",
+          "changed_executable": 18,
+          "covered": 17,
+          "percent": 94.44444444444444
+        },
+        {
+          "file": "code/backend/aristotle_backend/content_routes.py",
+          "changed_executable": 71,
+          "covered": 64,
+          "percent": 90.14084507042253
+        },
+        {
+          "file": "code/backend/aristotle_backend/curriculum.py",
+          "changed_executable": 154,
+          "covered": 150,
+          "percent": 97.40259740259741
+        },
+        {
+          "file": "code/backend/aristotle_backend/curriculum_publication.py",
+          "changed_executable": 162,
+          "covered": 150,
+          "percent": 92.5925925925926
+        },
+        {
+          "file": "code/backend/aristotle_backend/curriculum_routes.py",
+          "changed_executable": 83,
+          "covered": 77,
+          "percent": 92.7710843373494
+        },
+        {
+          "file": "code/backend/aristotle_backend/curriculum_schemas.py",
+          "changed_executable": 237,
+          "covered": 229,
+          "percent": 96.62447257383967
+        },
+        {
+          "file": "code/backend/aristotle_backend/db.py",
+          "changed_executable": 59,
+          "covered": 59,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/deployment.py",
+          "changed_executable": 11,
+          "covered": 11,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/design_seed.py",
+          "changed_executable": 2,
+          "covered": 2,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/diagnostic.py",
+          "changed_executable": 30,
+          "covered": 30,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/final_tests.py",
+          "changed_executable": 256,
+          "covered": 244,
+          "percent": 95.3125
+        },
+        {
+          "file": "code/backend/aristotle_backend/flow_routes.py",
+          "changed_executable": 13,
+          "covered": 13,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/flow_schemas.py",
+          "changed_executable": 1,
+          "covered": 1,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/flow_support.py",
+          "changed_executable": 22,
+          "covered": 22,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/import_jobs.py",
+          "changed_executable": 120,
+          "covered": 112,
+          "percent": 93.33333333333333
+        },
+        {
+          "file": "code/backend/aristotle_backend/import_sqlite.py",
+          "changed_executable": 63,
+          "covered": 51,
+          "percent": 80.95238095238095
+        },
+        {
+          "file": "code/backend/aristotle_backend/import_worker.py",
+          "changed_executable": 23,
+          "covered": 20,
+          "percent": 86.95652173913044
+        },
+        {
+          "file": "code/backend/aristotle_backend/learning_routes.py",
+          "changed_executable": 142,
+          "covered": 122,
+          "percent": 85.91549295774648
+        },
+        {
+          "file": "code/backend/aristotle_backend/material_imports.py",
+          "changed_executable": 60,
+          "covered": 53,
+          "percent": 88.33333333333333
+        },
+        {
+          "file": "code/backend/aristotle_backend/material_routes.py",
+          "changed_executable": 117,
+          "covered": 101,
+          "percent": 86.32478632478633
+        },
+        {
+          "file": "code/backend/aristotle_backend/migration_scripts/env.py",
+          "changed_executable": 0,
+          "covered": 0,
+          "percent": 100
+        },
+        {
+          "file": "code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py",
+          "changed_executable": 0,
+          "covered": 0,
+          "percent": 100
+        },
+        {
+          "file": "code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py",
+          "changed_executable": 0,
+          "covered": 0,
+          "percent": 100
+        },
+        {
+          "file": "code/backend/aristotle_backend/migration_scripts/versions/0003_curriculum_tests.py",
+          "changed_executable": 35,
+          "covered": 35,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/migrations.py",
+          "changed_executable": 2,
+          "covered": 2,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/model_jobs.py",
+          "changed_executable": 12,
+          "covered": 10,
+          "percent": 83.33333333333333
+        },
+        {
+          "file": "code/backend/aristotle_backend/pdf_extract_worker.py",
+          "changed_executable": 21,
+          "covered": 17,
+          "percent": 80.95238095238095
+        },
+        {
+          "file": "code/backend/aristotle_backend/pdf_process.py",
+          "changed_executable": 23,
+          "covered": 23,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/providers.py",
+          "changed_executable": 98,
+          "covered": 95,
+          "percent": 96.93877551020408
+        },
+        {
+          "file": "code/backend/aristotle_backend/resource_seed.py",
+          "changed_executable": 33,
+          "covered": 33,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/retrieval.py",
+          "changed_executable": 74,
+          "covered": 70,
+          "percent": 94.5945945945946
+        },
+        {
+          "file": "code/backend/aristotle_backend/runtime_logging.py",
+          "changed_executable": 47,
+          "covered": 47,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/schema_contract.py",
+          "changed_executable": 12,
+          "covered": 11,
+          "percent": 91.66666666666667
+        },
+        {
+          "file": "code/backend/aristotle_backend/schemas.py",
+          "changed_executable": 10,
+          "covered": 8,
+          "percent": 80.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/security.py",
+          "changed_executable": 0,
+          "covered": 0,
+          "percent": 100
+        },
+        {
+          "file": "code/backend/aristotle_backend/seed.py",
+          "changed_executable": 3,
+          "covered": 2,
+          "percent": 66.66666666666667
+        },
+        {
+          "file": "code/backend/aristotle_backend/source_units.py",
+          "changed_executable": 71,
+          "covered": 70,
+          "percent": 98.59154929577464
+        },
+        {
+          "file": "code/backend/aristotle_backend/system_routes.py",
+          "changed_executable": 47,
+          "covered": 42,
+          "percent": 89.36170212765957
+        },
+        {
+          "file": "code/backend/aristotle_backend/task_sources.py",
+          "changed_executable": 33,
+          "covered": 32,
+          "percent": 96.96969696969697
+        },
+        {
+          "file": "code/backend/aristotle_backend/task_storage.py",
+          "changed_executable": 6,
+          "covered": 6,
+          "percent": 100.0
+        },
+        {
+          "file": "code/backend/aristotle_backend/vector_type.py",
+          "changed_executable": 0,
+          "covered": 0,
+          "percent": 100
+        },
+        {
+          "file": "code/backend/aristotle_backend/workflow.py",
+          "changed_executable": 52,
+          "covered": 52,
+          "percent": 100.0
+        },
+        {
+          "file": "code/core_engine/aristotle_core/__init__.py",
+          "changed_executable": 0,
+          "covered": 0,
+          "percent": 100
+        },
+        {
+          "file": "code/core_engine/aristotle_core/policy.py",
+          "changed_executable": 68,
+          "covered": 68,
+          "percent": 100.0
+        }
+      ],
+      "changed_executable": 2362,
+      "covered": 2211,
+      "percent": 93.60711261642676
+    },
+    "core_branches": [
+      {
+        "file": "code/core_engine/aristotle_core/policy.py",
+        "percent": 97.05882352941177,
+        "branches": 34
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum.py",
+        "percent": 88.88888888888889,
+        "branches": 36
+      },
+      {
+        "file": "code/backend/aristotle_backend/curriculum_publication.py",
+        "percent": 86.66666666666667,
+        "branches": 90
+      },
+      {
+        "file": "code/backend/aristotle_backend/final_tests.py",
+        "percent": 80.95238095238095,
+        "branches": 84
+      },
+      {
+        "file": "code/backend/aristotle_backend/providers.py",
+        "percent": 88.88888888888889,
+        "branches": 54
+      }
+    ],
+    "passed": true
+  },
+  "commands": {
+    "compile": {
+      "command": [
+        ".venv/bin/python3",
+        "-m",
+        "compileall",
+        "-q",
+        "code/backend",
+        "code/core_engine"
+      ],
+      "exit_code": 0,
+      "passed": true
+    },
+    "ruff": {
+      "command": [
+        ".venv/bin/python3",
+        "-m",
+        "ruff",
+        "check",
+        "code/backend",
+        "code/core_engine",
+        "tests",
+        "scripts",
+        "tools/quality"
+      ],
+      "exit_code": 0,
+      "passed": true
+    },
+    "format": {
+      "command": [
+        ".venv/bin/python3",
+        "-m",
+        "ruff",
+        "format",
+        "--check",
+        "code/backend",
+        "code/core_engine",
+        "tests",
+        "scripts",
+        "tools/quality"
+      ],
+      "exit_code": 0,
+      "passed": true
+    },
+    "types": {
+      "command": [
+        ".venv/bin/python3",
+        "-m",
+        "mypy",
+        "--check-untyped-defs",
+        "code/backend/aristotle_backend",
+        "code/core_engine/aristotle_core"
+      ],
+      "exit_code": 0,
+      "passed": true
+    },
+    "scans": {
+      "command": [
+        ".venv/bin/python3",
+        "scripts/scan_quality.py",
+        "--output",
+        ".local/guardrails-source-final/scans"
+      ],
+      "exit_code": 0,
+      "passed": true
+    },
+    "tests": {
+      "command": [
+        ".venv/bin/python3",
+        "-m",
+        "pytest",
+        "-q",
+        "--cov=code/backend/aristotle_backend",
+        "--cov=code/core_engine/aristotle_core",
+        "--cov-branch",
+        "--cov-report=json:.local/guardrails-source-final/coverage.json",
+        "--cov-report=term"
+      ],
+      "exit_code": 0,
+      "passed": true
+    },
+    "dependencies": {
+      "command": [
+        ".venv/bin/python3",
+        "-m",
+        "pip_audit",
+        "--cache-dir",
+        ".local/pip-audit-cache",
+        "--local",
+        "--skip-editable",
+        "-f",
+        "json",
+        "-o",
+        ".local/guardrails-source-final/dependencies.json"
+      ],
+      "exit_code": 0,
+      "passed": true
+    }
+  },
+  "duplicate_blocks": 2,
+  "diff_lines": 6044,
+  "passed": false
+}

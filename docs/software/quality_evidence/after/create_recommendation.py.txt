@@ -1,0 +1,30 @@
+def create_recommendation(
+    db, user, graph, attempts, states, now, knowledge_id=None, level=None, exclude_keys=()
+):
+    scope = selected_scope(db, user, True)
+    require_completed_diagnostic(db, user, scope)
+    nodes = scoped_nodes(db, user, graph.nodes)
+    questions = available_questions(db, nodes)
+    candidates = [
+        {"key": q.key, "question_id": q.question_id, "knowledge_id": q.knowledge_id, "level": q.level}
+        for q in questions
+        if q.key not in exclude_keys
+    ]
+    try:
+        decision = recommend(nodes, states, candidates, attempts, knowledge_id, level)
+    except ValueError as exc:
+        reject(409, str(exc))
+    target = decision["knowledge_id"]
+    # The original FR-5.3: adequate understanding + weak application -> application.
+    state = next(s for s in states if s["knowledge_id"] == target)
+    dims = {c["level"]: c for c in state["cognitive"]}
+    if needs_application(dims, target, questions, level):
+        decision = recommend(nodes, states, candidates, attempts, target, "apply")
+        decision["reason"] = (
+            f"{state['name']}的理解题已有多题支持，应用证据仍需补足，下一步练习按规则执行操作。"
+        )
+    review = needs_material_review(db, user, target, attempts)
+    refs = source_refs(db, user, target)
+    activity, resume = recommendation_activity(decision, state, review, refs)
+    decision["policy_version"] = FLOW_VERSION
+    return persist_task(db, user, scope, graph, states, decision, now, activity, resume_level=resume)

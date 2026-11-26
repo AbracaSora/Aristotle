@@ -1,8 +1,8 @@
 # 408 后端交接：标准化科目、章节、知识点与题目对象
 
-日期：2026-11-23　版本：提案 v1.5（前端分工、上下文反馈与完成事件）
+日期：2026-11-23　版本：v1.5 对象契约，2026-11-26 更新先修策略 mastery-v2
 
-本文是待实现的数据契约，不代表接口已经上线。范围为知识结构、题库及必要的用户状态，不含 OCR。依据会议纪要和当前 `schemas.py` 设计；数据库表结构由后端决定。保留学习中心现有 UI，通过接口适配统一地图和学习中心的数据。
+本文保留交接时的数据契约；2026-11-23 已按本契约补齐后端核心接口。代码实现不代表业务库已经迁移或前端已经接入，具体边界与验证见 [实现对照](apifox_api_408_implementation_check.md)。范围为知识结构、题库及必要的用户状态，不含 OCR。依据会议纪要和当前 `schemas.py` 设计；数据库表结构由后端决定。保留学习中心现有 UI，通过接口适配统一地图和学习中心的数据。
 
 范围调整：课程结构按固定配置处理，保留后端现有 `graph_version` 字段用于标识当前课程图配置和问题追踪；不要求保存历史关系快照，也不考虑关系变化引起的解锁状态重算或迁移。解锁仅依据当前固定前驱关系与用户掌握状态计算。
 
@@ -102,7 +102,7 @@
 ```json
 {
   "knowledge_id": "ds-sequential-list",
-  "policy_version": "mastery-v1",
+  "policy_version": "mastery-v2",
   "preset_set_id": "preset-ds-sequential-list",
   "preset_set_version": 1,
   "mastery_status": "learning",
@@ -110,6 +110,9 @@
   "unmet_prerequisite_ids": ["ds-linear-basics"],
   "preset_total": 2,
   "preset_completed": 1,
+  "latest_correct_count": 0,
+  "required_correct_count": 2,
+  "prerequisite_qualified": false,
   "completion_rate": 0.5,
   "attempt_count": 1,
   "correct_attempt_count": 0,
@@ -128,6 +131,8 @@
 | `unlocked` | boolean | 是否允许进入该知识点，服务端计算 |
 | `unmet_prerequisite_ids` | string[] | 未达解锁门槛的直接前驱；解锁时为空 |
 | `preset_total` / `preset_completed` | integer | 预设题总数、已提交的不同题目版本数，0≤completed≤total |
+| `latest_correct_count` / `required_correct_count` | integer | 各题最近一次有效提交答对的题数，以及当前集合题数乘以 2/3 后向上取整所需题数 |
+| `prerequisite_qualified` | boolean | 当前非空集合已全部作答，且最近答对题数已达门槛，可作为满足条件的直接前驱 |
 | `completion_rate` | number或null | completed/total；total=0 时为 null |
 | `attempt_count` / `correct_attempt_count` | integer | 当前预设题集合中有效提交次数、正确次数；排除 AI 小测和幂等重放 |
 | `accuracy` | number或null | correct_attempt_count/attempt_count；无作答为 null |
@@ -140,9 +145,9 @@
 
 会议已经明确：未提交任何预设题为 `new`；提交部分为 `learning`；所有预设题完成为 `covered`；最终 AI 小测通过为 `mastered`。有效提交即计为完成，答错不等于未完成；正确率独立记录。重复提交同题不增加完成题数。零题节点保持 `new` 且不可开始小测。
 
-**已确认的解锁门槛：**所有直接前驱的预设题全部完成，即解锁当前知识点，无需通过 AI 小测；没有前驱的已发布节点直接解锁。有效提交即算完成，不要求全部答对。零题前驱不视为完成。当前实现使用的 `provisional` 只是旧证据状态，不可直接映射成 `covered`，需要依据预设题提交记录计算。
+**已确认的解锁门槛：**所有直接前驱分别完成当前非空预设集合，且每个前驱最近一次答对的不同题目数均达到本集合题数的三分之二（含等号），后继才解锁，无需通过 AI 小测；没有前驱的已发布节点直接解锁。有效提交即算完成，不要求全部答对。零题前驱不视为完成。当前实现使用的 `provisional` 只是旧证据状态，不可直接映射成 `covered`，需要依据预设题提交记录计算。
 
-锁定与掌握是两个维度：没有前驱的知识点即使未学习也可解锁，有未掌握前驱的知识点则锁定；不能仅凭自身 mastery_status 判断能否进入。前端优先将 `unlocked=false` 显示为灰色并禁止进入；否则按 mastery_status 着色。地图和学习中心必须读取同一结果。不设计关系变更导致的重新锁定或进度迁移流程。
+锁定与掌握是两个维度：没有前驱的知识点即使未学习也可解锁，有未达先修门槛的知识点则锁定；不能仅凭自身 mastery_status 判断能否进入。前端优先将 `unlocked=false` 显示为灰色并禁止进入；否则按 mastery_status 着色。地图和学习中心必须读取同一结果。不设计关系变更导致的重新锁定或进度迁移流程。
 
 AI 最终小测的通过分数、题数、重测间隔尚需产品确认，并随测试保存规则快照；日常 AI 变式练习不得直接赋予 `mastered`。首次最终小测仅在 `covered` 且已解锁时开放；已通过用户是否重测另行配置，失败重测不自动删除既有通过证据。
 
@@ -278,7 +283,7 @@ AI 最终小测的通过分数、题数、重测间隔尚需产品确认，并�
 
 ## 8. API 需求（ApiFox 格式）
 
-本节为目标契约，新增路由不代表已经实现。不包含 OCR。所有路径均含 `/api/v1`。认证为 `Authorization: Bearer <access_token>`，请求和响应为 JSON；当前用户由登录态确定。成功直接返回下列业务对象，不增加 success/data 包装。错误沿用现有结构：`{"error":{"message":"错误说明","fields":[]}}`，fields 可省略。时间为 UTC ISO 8601。现有知识图、学习状态和任务响应继续按现有契约返回当前 `graph_version`；`GET /api/v1/subjects` 直接返回 `SubjectWithChapters[]`，不包装 `graph_version`。该字段仅表示课程图配置标识。
+本节是本轮后端实现依据，路由已注册；部署与前端接入状态见实现对照。不包含 OCR。所有路径均含 `/api/v1`。认证为 `Authorization: Bearer <access_token>`，请求和响应为 JSON；当前用户由登录态确定。成功直接返回下列业务对象，不增加 success/data 包装。错误沿用现有结构：`{"error":{"message":"错误说明","fields":[]}}`，fields 可省略。时间为 UTC ISO 8601。现有知识图、学习状态和任务响应继续按现有契约返回当前 `graph_version`；`GET /api/v1/subjects` 直接返回 `SubjectWithChapters[]`，不包装 `graph_version`。该字段仅表示课程图配置标识。
 
 前端负责小测规则配置、统计展示、标签 ID 映射和完成动画；后端负责参数校验、用户状态读取、判分、状态计算及事件返回。题目本期统一使用 `plain_text`。前端上下文不得直接改变判分、完成度、掌握度或解锁结果。
 
@@ -479,7 +484,7 @@ AI 最终小测的通过分数、题数、重测间隔尚需产品确认，并�
 | status | enum | locked / available / completed / mastered |
 | unlocked | boolean | 是否满足所有前驱；必须与 status 一致 |
 | completed_count / total_count | integer | 已有效提交的不同预设题数/预设题总数；重复答题不增加分子 |
-| unmet_prerequisite_ids | string[] | 未完成预设题的前驱；已解锁时为空 |
+| unmet_prerequisite_ids | string[] | 未完成全部预设或最近答对比例不足三分之二的前驱；已解锁时为空 |
 | ai_test_eligible | boolean | 已解锁、有预设题且全部完成、未通过 AI 小测时为 true；是否有进行中试卷仍由创建接口校验 |
 | passed_test_id | string或null | 支撑 mastered 的通过记录，无记录为 null |
 
@@ -516,6 +521,12 @@ AI 最终小测的通过分数、题数、重测间隔尚需产品确认，并�
 
 有效提交后更新知识点及其后继解锁结果；答错也计完成，正确率单独统计。前端提交成功后刷新 8.7/8.8。现有历史诊断的预设题有效作答可按 question_key 去重计入完成数，非预设题和 AI 小测题不计入。
 
+### 预设题重练与先修达标
+
+已答完一轮的学生可调用 `POST /api/v1/tasks/{task_id}/retry-preset` 新建一轮，首次返回 201。重复请求同一原轮次会恢复同一新任务，返回 200。日常 `POST /tasks` 恢复当前轮。提交继续使用各自任务 ID 和 submission_id，保留每轮原判分。未答完、集合已替换或先修未达标返回 409。
+
+单点、批量及详情均提供 `latest_correct_count`、`required_correct_count` 和 `prerequisite_qualified`。最低正确题数为 `ceil(2*N/3)`；例如三题需两题、四题需三题、五题需四题。最新有效作答按本人、当前题目版本和服务端提交时间确定，同一时间按记录 ID 稳定排序；停用版本排除。详情中的 accuracy 仍是历次有效作答正确率。后继可随重练结果再次锁定，历史提交和已判成绩保留。课程掌握仍要求通过当前集合的最终小测。
+
 ### 8.10 公共错误码与验收
 
 | HTTP 状态码 | 含义 |
@@ -527,5 +538,39 @@ AI 最终小测的通过分数、题数、重测间隔尚需产品确认，并�
 | 422 | 请求参数或答案格式无效 |
 | 503 | AI 生成服务不可用 |
 
-核心验收：四科章节知识点结构完整；预设题与小测题隔离；所有前驱预设题完成即解锁；未完成禁止创建小测；试卷版本与内容持久化且查询不重新生成；账号隔离；重复请求不重复出卷或计分；小测通过变 mastered、失败保持 completed；单点和批量状态一致；学生提交前无法读取答案。
+核心验收：四科章节知识点结构完整；预设题与小测题隔离；所有直接前驱分别完成当前非空预设集合，且每个前驱最近一次答对的不同题目数均达到本集合题数的三分之二（含等号），后继才解锁；未完成禁止创建小测；试卷版本与内容持久化且查询不重新生成；账号隔离；重复请求不重复出卷或计分；小测通过变 mastered、失败保持 completed；单点和批量状态一致；学生提交前无法读取答案。
 
+
+## 9. 当前实现补充：小测规则、反馈与事件
+
+本节补齐 v1.5 中缺失的引用。下列数值边界用于本轮接口校验，不代表已经验证的教育测量标准；正式题量、通过门槛与重测间隔仍由产品确认。
+
+### 9.1 规则快照
+
+- `rules.question_count`：必填整数，1–20，不接受布尔值或额外规则字段。
+- `rules.pass_score`：必填数值，0–1。创建时冻结，等权判分 `score=correct/total`，`passed=score>=pass_score`；提交不接受规则修改。
+- 未通过可用新 request_id 创建新版本，当前不设置等待间隔；已有 generating/ready 试卷返回 409；已通过后不开放重测。
+- 生成失败不删除请求和版本；查询不发起模型请求，相同创建请求只返回原试卷。
+- 新预设集合重新计算完成度，不继承旧集合通过证据；相同 question_key 的历史有效提交仍可计入当前完成度。存在进行中小测时拒绝替换该知识点预设集合，避免跨集合的评分歧义。
+
+### 9.2 可选上下文与反馈
+
+`client_context` 允许 `elapsed_seconds`（0–86400）、`used_hint`（布尔）、`learning_goal`（最多 500 字符），均可省略或为 null。未记录的历史提示/耗时返回 null，不推断为 0 或 false。上下文只用于建议，不能影响分数、完成度、掌握度或解锁。
+
+后端读取本人最近默认 5 条、硬上限 20 条已提交题目记录（预设/诊断作答及此前已提交小测，不含本卷），仅提取 question_key、knowledge_id、correct、used_hint、elapsed_seconds、created_at；不包含答案、私人资料或其他用户记录。历史查询失败时使用空上下文；已保存判分不回滚。
+
+`learning_feedback` 字段：
+
+| 字段 | 类型 | 说明 |
+|---|---|---|
+| source | rule / ai | 规则文案或模型反馈 |
+| status | pending / complete / fallback | 判分已保存、模型反馈完成或规则降级；并发查询在反馈生成中可见 pending，但已有可展示规则文案 |
+| summary | string | 简短中文反馈 |
+| suggestions | string[] | 学习建议，无建议为空数组 |
+| history_count | integer | 实际使用的本人历史条数，0–20 |
+
+先保存判分，再生成反馈。模型异常返回已有规则文案。通过阈值来自冻结规则，模型不负责评分；动态题标记 ai_generated、pending_review，不伪称人工审核。
+
+### 9.3 完成事件
+
+`events` 为数组。每项：`event_id`（稳定字符串）、`type`（ai_test_submitted / knowledge_mastered）、`knowledge_id`、`occurred_at`（UTC ISO 8601）。整卷提交产生 ai_test_submitted；支撑当前集合掌握时额外产生 knowledge_mastered。无事件为空数组；幂等重试返回同一批 event_id，前端必须去重。预设题提交后仍按 8.9 刷新统一进度，不从动画推断解锁。

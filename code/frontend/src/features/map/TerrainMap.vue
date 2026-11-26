@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import MapLegend from './MapLegend.vue';
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
-const props = defineProps<{ subjectId: string; nodes: {id:string;title:string;type?:string;description?:string;locked?:boolean}[]; edges: string[][]; overview?:boolean; regions: {id:string;title:string;description?:string}[]; focusRegion?:string }>();
+const props = defineProps<{ subjectId: string; nodes: {id:string;title:string;type?:string;description?:string;locked?:boolean;color?:string}[]; edges: string[][]; overview?:boolean; regions: {id:string;title:string;description?:string}[]; focusRegion?:string }>();
 const emit = defineEmits<{select:[id:string]}>();
 const frame = ref<HTMLIFrameElement | null>(null);
 function sync() {
-  frame.value?.contentWindow?.postMessage({type:'aristotle-knowledge-map',seed:`408-${props.subjectId}`,overview:props.overview,focusRegion:props.focusRegion,regions:props.regions.map(n=>({id:n.id,label:n.title,type:'章节区域',description:n.description})),graph:{nodes:props.nodes.map(n=>({id:n.id,label:n.title,type:n.type || '知识点',description:n.description || n.title,locked:n.locked === true})),edges:props.edges}},window.location.origin);
+  frame.value?.contentWindow?.postMessage({type:'aristotle-knowledge-map',seed:`408-${props.subjectId}`,overview:props.overview,focusRegion:props.focusRegion,regions:props.regions.map(n=>({id:n.id,label:n.title,type:'章节区域',description:n.description})),graph:{nodes:props.nodes.map(n=>({id:n.id,label:n.title,type:n.type || '知识点',description:n.description || n.title,locked:n.locked === true,color:n.color})),edges:props.edges}},window.location.origin);
 }
 function receive(event:MessageEvent) {
   if(event.origin!==window.location.origin || event.source!==frame.value?.contentWindow)return;
   if(event.data?.type==='knowledge-map-node-selected' && props.nodes.some(n=>n.id===event.data.id && !n.locked))emit('select',event.data.id);
 }
-watch(()=>[props.subjectId,props.focusRegion,props.nodes],sync,{deep:true});
+watch(()=>[props.subjectId,props.focusRegion,props.nodes,props.edges,props.regions],sync,{deep:true});
 onMounted(()=>window.addEventListener('message',receive));
 onBeforeUnmount(()=>window.removeEventListener('message',receive));
 </script>

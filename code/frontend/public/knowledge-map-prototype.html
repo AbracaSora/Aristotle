@@ -764,7 +764,7 @@
           ctx.beginPath();ctx.arc(0,0,9,0,TAU);ctx.fillStyle='#f5e9c9';ctx.fill();ctx.strokeStyle='#66765d';ctx.lineWidth=2;ctx.stroke();
           ctx.lineCap = 'round'; ctx.strokeStyle = active ? '#7d4b15' : '#173f39'; ctx.lineWidth = active ? 3.5 : 3;
           ctx.beginPath(); ctx.moveTo(0, 4); ctx.lineTo(0, -27); ctx.stroke();
-          ctx.fillStyle = active ? '#f6c967' : near ? '#fff0bf' : '#f4faf6'; ctx.strokeStyle = active ? '#7d4b15' : '#215b51'; ctx.lineWidth = 2;
+          ctx.fillStyle = node.color || (active ? '#f6c967' : near ? '#fff0bf' : '#f4faf6'); ctx.strokeStyle = active ? '#7d4b15' : '#215b51'; ctx.lineWidth = 2;
           ctx.beginPath(); ctx.moveTo(1, -27); ctx.lineTo(20, -21); ctx.lineTo(1, -14); ctx.closePath(); ctx.fill(); ctx.stroke();
           const labelScale=Math.max(1,Math.min(1.7,.55/state.zoom));ctx.scale(labelScale,labelScale);
           ctx.font='600 16px system-ui, sans-serif';ctx.textAlign='center';ctx.textBaseline='top';
@@ -853,7 +853,12 @@
         }
         const chapter=subjectWorld.chapters.get(message.focusRegion);
         const incomingNodes=new Map(message.graph.nodes.map(n=>[n.id,n]));
-        chapter.graph.nodes.forEach(n=>{n.locked=incomingNodes.get(n.id)?.locked === true;});
+        chapter.graph.nodes.forEach(node => {
+          const current = incomingNodes.get(node.id);
+          node.locked = current?.locked === true;
+          node.color = /^#[0-9a-f]{6}$/i.test(current?.color) ? current.color : null;
+          if (current) node.description = current.description;
+        });
         state.overview=false;state.graph=chapter.graph;state.layout=chapter.layout;
         const points=chapter.cells.map(c=>c.site);
         const left=Math.min(...points.map(p=>p.x)),right=Math.max(...points.map(p=>p.x)),top=Math.min(...points.map(p=>p.y)),bottom=Math.max(...points.map(p=>p.y));

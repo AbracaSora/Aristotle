@@ -155,7 +155,7 @@ def test_mock_pdf_requires_confirmation_and_deleted_private_chunks_and_jobs_are_
         )
         stored = db.get(ServiceJob, job["id"])
         assert "私有" not in str(stored.params) and "私人" not in str(stored.result)
-    assert client.post("/api/v1/material-imports/pdf", headers=h).status_code == 501
+    assert client.post("/api/v1/material-imports/pdf", headers=h).status_code == 422
 
 
 @pytest.mark.parametrize("scenario", ["scanned", "encrypted", "oversize", "timeout"])
@@ -348,6 +348,87 @@ def test_understanding_supported_but_application_evidence_insufficient_recommend
     assert result["target_level"] == "apply" and result["activity"] == "practice"
     assert "理解题已有多题支持" in result["reason"]
     assert len(result["questions"]) == 3
+
+
+@pytest.mark.parametrize(
+    "source_case", ["own-confirmed", "own-pending", "other-user", "deleted", "other-point"]
+)
+@pytest.mark.parametrize(
+    "scenario",
+    [
+        "missing-prerequisite",
+        "missing-label",
+        "unseen-retest",
+        "two-errors",
+        "one-published",
+        "explicit-understand",
+    ],
+)
+def test_thirty_recommendations_respect_evidence_content_and_owner(
+    client, login, design, scenario, source_case
+):
+    h = login()
+    choose(client, h)
+    diagnostic = (
+        {"knowledge_id": "stack", "target_level": "understand"} if scenario == "missing-prerequisite" else {}
+    )
+    diagnose_all(client, h, design, weak_apply=scenario == "two-errors", body=diagnostic)
+    owner = login("student2") if source_case == "other-user" else h
+    point = "linear" if source_case == "other-point" else "stack"
+    note = client.post(
+        "/api/v1/materials",
+        headers=owner,
+        json={"title": "范围验证", "text": "自编来源", "knowledge_id": point},
+    )
+    note.raise_for_status()
+    key = note.json()["id"]
+    if source_case != "own-pending":
+        client.patch(
+            "/api/v1/materials/" + key, headers=owner, json={"knowledge_id": point, "confirmed": True}
+        ).raise_for_status()
+    if source_case == "deleted":
+        client.delete("/api/v1/materials/" + key, headers=owner).raise_for_status()
+
+    with design.state.sessions() as db:
+        stack_apply = db.scalars(
+            select(Question)
+            .where(
+                Question.knowledge_id == "stack", Question.level == "apply", Question.status == "published"
+            )
+            .order_by(Question.key)
+        ).all()
+        if scenario == "one-published":
+            for q in stack_apply[:-1]:
+                q.status = "retired"
+            db.commit()
+    level = {"explicit-understand": "understand", "missing-label": "analyze"}.get(scenario, "apply")
+    response = client.post(
+        "/api/v1/recommendations", headers=h, json={"knowledge_id": "stack", "target_level": level}
+    )
+    if scenario == "missing-prerequisite":
+        assert response.status_code == 409 and "先修" in response.text
+        return
+    assert response.status_code == 201, response.text
+    plan = response.json()
+    assert plan["knowledge_id"] == "stack" and plan["graph_version"] and plan["policy_version"]
+    assert plan["evidence_facts"] and plan["reason"]
+    assert any(r["id"] == key for r in plan["resources"]) == (source_case == "own-confirmed")
+    if scenario in {"two-errors", "missing-label"}:
+        assert plan["activity"] == "material_review" and not plan["question_keys"]
+        if scenario == "two-errors":
+            assert plan["target_level"] == "understand" and "两道不同" in plan["reason"]
+        return
+    assert plan["target_level"] == level and plan["activity"] == "practice"
+    assert len(set(plan["question_keys"])) == (1 if scenario == "one-published" else 3)
+    assert all(
+        q["status"] == "published" and q["level"] == level and q["knowledge_id"] == "stack"
+        for q in plan["questions"]
+    )
+    if scenario == "unseen-retest":
+        seen = {r["question_key"] for r in client.get("/api/v1/history?limit=100", headers=h).json()["items"]}
+        assert seen.isdisjoint(plan["question_keys"])
+    if scenario == "one-published":
+        assert plan["warnings"]
 
 
 def test_explicit_level_takes_precedence_after_understanding_diagnostic(client, login, design):

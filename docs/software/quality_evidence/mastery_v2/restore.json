@@ -1,0 +1,14 @@
+{
+  "storage": "PostgreSQL / pgvector, two isolated databases",
+  "tables_verified": {
+    "users": 3,
+    "questions": 12,
+    "reviews": 12,
+    "tasks": 1,
+    "attempts": 1
+  },
+  "matched_row_digests": true,
+  "replayed_material_deletions": 1,
+  "restore_and_verify_seconds": 0.263,
+  "archive_bytes": 63420
+}

@@ -1,0 +1,12 @@
+{
+  "upgrade": {
+    "bytes": 11658,
+    "before": "418f9c8a221a5c3e9816ecbc3474ea9f398ef8a417f446787fd2b0b268ff8e62",
+    "after": "418f9c8a221a5c3e9816ecbc3474ea9f398ef8a417f446787fd2b0b268ff8e62"
+  },
+  "downgrade": {
+    "bytes": 2072,
+    "before": "fffbf74f36b1ea69b0f16bcc9986be6bd529e0f9971c236f413551c36797db4a",
+    "after": "fffbf74f36b1ea69b0f16bcc9986be6bd529e0f9971c236f413551c36797db4a"
+  }
+}

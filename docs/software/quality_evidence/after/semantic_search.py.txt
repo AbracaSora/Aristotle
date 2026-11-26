@@ -1,0 +1,30 @@
+def semantic_search(db, user_id, query, knowledge_id, mode, allow_query, limit=6, transport=None):
+    units = source_units(db, user_id, knowledge_id)
+    if mode == "keyword":
+        return {"mode": "keyword", "items": keyword_search(units, query, limit), "missing_index": 0}
+    cfg = semantic_config(allow_query)
+    lookup = outbound_sources(units)
+    entries = valid_entries(db, user_id, cfg, lookup)
+    if not entries:
+        return {
+            "mode": mode,
+            "items": [],
+            "missing_index": len(lookup),
+            "notice": "没有当前模型的有效索引，请先建立资料索引。",
+        }
+    vectors, metadata = embed(db, user_id, [query], transport)
+    vector = vectors[0]
+    entries = [row for row in entries if row.dimensions == len(vector)]
+    scores = vector_scores(db, entries, vector, limit)
+    db.expire_all()
+    live = outbound_sources(source_units(db, user_id, knowledge_id))
+    lexical = {item["id"]: item["score"] for item in keyword_search(units, query, len(units))}
+    ranked = rank_results(scores, live, lookup, lexical, mode)
+    return {
+        "mode": mode,
+        "items": [{**u.view(), "score": round(score, 5)} for score, u in ranked[:limit]],
+        "missing_index": max(0, len(lookup) - len(entries)),
+        "model": cfg.model,
+        "call_id": metadata["call_id"],
+        "notice": "相似度用于检索排序，不表示资料正确性或学生掌握程度。",
+    }

@@ -1,0 +1,38 @@
+def request_model(db, user_id, purpose, cfg, payload, decode, transport=None):
+    cfg = effective_config(db, cfg)
+    deadline = db.info.get("model_deadline")
+    if deadline is not None:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise ProviderFailure("timeout", "任务处理预算已用尽，未开始新的外部调用。")
+        cfg = replace(cfg, total_budget=min(cfg.total_budget, remaining))
+    if not cfg.configured:
+        raise ProviderFailure("not_configured", "模型服务尚未配置，请管理员填写后端服务地址、模型名和密钥。")
+    row = reserve_call(db, user_id, purpose, cfg, payload)
+    started = time.monotonic()
+    try:
+        with httpx.Client(
+            timeout=cfg.timeout,
+            transport=transport,
+            proxy=cfg.proxy if transport is None else None,
+            trust_env=False,
+            follow_redirects=False,
+        ) as client:
+            value = request_attempts(client, cfg, payload, row, decode)
+        row.status = "succeeded"
+    except ProviderFailure as exc:
+        row.status, row.error_code = "failed", exc.code
+        raise
+    except httpx.HTTPError:
+        row.status, row.error_code = "failed", "network_error"
+        raise ProviderFailure("network_error", "模型网络连接失败，已保留失败状态。", True) from None
+    finally:
+        row.duration_seconds = time.monotonic() - started
+        db.commit()
+    return value, {
+        "call_id": row.id,
+        "model": cfg.model,
+        "namespace": cfg.namespace,
+        "usage": row.usage,
+        "external_calls": row.external_calls,
+    }

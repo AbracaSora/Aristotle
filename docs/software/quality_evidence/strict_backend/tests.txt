@@ -1,0 +1,70 @@
+........................................................................ [ 31%]
+........................................................................ [ 62%]
+..............................s......................................... [ 93%]
+...............                                                          [100%]
+================================ tests coverage ================================
+______________ coverage: platform darwin, python 3.12.13-final-0 _______________
+
+Name                                                                                  Stmts   Miss Branch BrPart  Cover
+-----------------------------------------------------------------------------------------------------------------------
+code/backend/aristotle_backend/__init__.py                                                0      0      0      0   100%
+code/backend/aristotle_backend/annotation_rules.py                                        2      0      0      0   100%
+code/backend/aristotle_backend/api_access.py                                             47      0     10      0   100%
+code/backend/aristotle_backend/api_views.py                                              51      1      6      1    96%
+code/backend/aristotle_backend/app.py                                                    54      3      0      0    94%
+code/backend/aristotle_backend/assistance_routes.py                                     153     29     32      6    77%
+code/backend/aristotle_backend/config.py                                                 31      2     14      2    91%
+code/backend/aristotle_backend/content_routes.py                                         72      7     14      6    85%
+code/backend/aristotle_backend/curriculum.py                                            154      4     36      4    96%
+code/backend/aristotle_backend/curriculum_publication.py                                168     12     90     12    91%
+code/backend/aristotle_backend/curriculum_routes.py                                      87      6     10      0    92%
+code/backend/aristotle_backend/curriculum_schemas.py                                    239      8     18      6    95%
+code/backend/aristotle_backend/database_connection.py                                    34      0      8      2    95%
+code/backend/aristotle_backend/db.py                                                    248      0      0      0   100%
+code/backend/aristotle_backend/deployment.py                                             11      0      4      1    93%
+code/backend/aristotle_backend/design_seed.py                                            40      2     16      5    88%
+code/backend/aristotle_backend/diagnostic.py                                             30      0     14      0   100%
+code/backend/aristotle_backend/final_generation.py                                       91      2     24      1    97%
+code/backend/aristotle_backend/final_papers.py                                          110      4     34      4    94%
+code/backend/aristotle_backend/final_tests.py                                           120      3     26      2    95%
+code/backend/aristotle_backend/flow_routes.py                                            19      0      2      0   100%
+code/backend/aristotle_backend/flow_schemas.py                                           38      0      0      0   100%
+code/backend/aristotle_backend/flow_support.py                                           22      0      6      1    96%
+code/backend/aristotle_backend/import_jobs.py                                           122      8     34      8    90%
+code/backend/aristotle_backend/import_sqlite.py                                         101     24     32      9    72%
+code/backend/aristotle_backend/import_worker.py                                          23      3      6      2    76%
+code/backend/aristotle_backend/learning_context.py                                       18      0      0      0   100%
+code/backend/aristotle_backend/learning_routes.py                                       155     20     44     11    84%
+code/backend/aristotle_backend/legacy_content_routes.py                                 136     18     40     15    81%
+code/backend/aristotle_backend/material_imports.py                                       60      7     22      5    85%
+code/backend/aristotle_backend/material_routes.py                                       130     16     38     11    84%
+code/backend/aristotle_backend/migration_scripts/env.py                                  10      0      2      0   100%
+code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py      80      0      0      0   100%
+code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py      39      0      2      0   100%
+code/backend/aristotle_backend/migration_scripts/versions/0003_curriculum_tests.py       47      0      2      0   100%
+code/backend/aristotle_backend/migrations.py                                             28     11      6      2    56%
+code/backend/aristotle_backend/model_jobs.py                                            195     38     70     15    76%
+code/backend/aristotle_backend/pdf_extract_worker.py                                     21      4      4      2    76%
+code/backend/aristotle_backend/pdf_process.py                                            23      0      6      0   100%
+code/backend/aristotle_backend/providers.py                                             221      6     54      6    96%
+code/backend/aristotle_backend/resource_seed.py                                         165     11     62     12    90%
+code/backend/aristotle_backend/retrieval.py                                             123      9     40      8    90%
+code/backend/aristotle_backend/runtime_logging.py                                        47      0     10      0   100%
+code/backend/aristotle_backend/schema_contract.py                                        12      1      2      1    86%
+code/backend/aristotle_backend/schemas.py                                               182      3     10      3    97%
+code/backend/aristotle_backend/security.py                                               14      0      0      0   100%
+code/backend/aristotle_backend/seed.py                                                   53     18     12      1    65%
+code/backend/aristotle_backend/session_routes.py                                         64      4      4      0    94%
+code/backend/aristotle_backend/source_units.py                                           71      1     20      3    96%
+code/backend/aristotle_backend/system_routes.py                                          48      5     10      4    84%
+code/backend/aristotle_backend/task_routes.py                                           147     27     42      6    78%
+code/backend/aristotle_backend/task_sources.py                                           33      1     10      2    93%
+code/backend/aristotle_backend/task_storage.py                                            6      0      2      0   100%
+code/backend/aristotle_backend/vector_type.py                                            21      4      6      1    81%
+code/backend/aristotle_backend/workflow.py                                              172      9     54     10    92%
+code/core_engine/aristotle_core/__init__.py                                               0      0      0      0   100%
+code/core_engine/aristotle_core/policy.py                                               110      1     34      1    99%
+-----------------------------------------------------------------------------------------------------------------------
+TOTAL                                                                                  4498    332   1044    191    90%
+Coverage JSON written to file .local/strict/full/coverage.json
+230 passed, 1 skipped in 180.13s (0:03:00)

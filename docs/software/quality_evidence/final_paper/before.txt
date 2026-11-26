@@ -1,0 +1,3 @@
+FAILED tests/integration/test_curriculum_contract.py::test_delayed_feedback_uses_history_at_submission
+FAILED tests/integration/test_curriculum_contract.py::test_feedback_recovery_ignores_active_claims_before_batch_limit
+2 failed, 49 deselected in 1.03s

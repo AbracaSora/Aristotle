@@ -1,0 +1,109 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+____________ test_administrator_retry_settings_control_real_adapter ____________
+
+app = <fastapi.applications.FastAPI object at 0x108f168a0>
+
+    def test_administrator_retry_settings_control_real_adapter(app):
+        calls = []
+        def reply(request):
+            calls.append(request)
+            return httpx.Response(503) if len(calls) == 1 else httpx.Response(200, json={'value': 7})
+        with app.state.sessions() as db:
+            user = db.scalar(select(User))
+            db.add(SystemSetting(key='provider', data={'mode': 'live', 'retries': 1, 'timeout_seconds': 2,
+                                                     'total_budget_seconds': 3, 'daily_annotation_limit': 200}))
+            db.commit()
+>           value, _ = request_model(db, user.id, 'annotation', config(), {}, lambda body: body['value'], httpx.MockTransport(reply))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_quality_regressions.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+db = <sqlalchemy.orm.session.Session object at 0x10913b110>
+user_id = 'student1', purpose = 'annotation'
+cfg = ProviderConfig(kind='generation', base_url='https://fixture.invalid/v1', model='fixture', api_key='fixture-key', dimensions=0, timeout=30, retries=0, daily_limit=200, proxy=None, local=False, token_field='max_tokens')
+payload = {}
+decode = <function test_administrator_retry_settings_control_real_adapter.<locals>.<lambda> at 0x10928c5e0>
+transport = <httpx.MockTransport object at 0x108f2f110>
+
+    def request_model(db, user_id, purpose, cfg, payload, decode, transport=None):
+        if not cfg.configured:
+            raise ProviderFailure("not_configured", "模型服务尚未配置，请管理员填写后端服务地址、模型名和密钥。")
+        row = reserve_call(db, user_id, purpose, cfg, payload)
+        started = time.monotonic()
+        endpoint = "/embeddings" if cfg.kind == "embedding" else "/chat/completions"
+        headers = {"Authorization": "Bearer " + cfg.api_key} if cfg.api_key else {}
+        try:
+            with httpx.Client(
+                timeout=cfg.timeout,
+                transport=transport,
+                proxy=cfg.proxy if transport is None else None,
+                trust_env=False,
+                follow_redirects=False,
+            ) as client:
+                for attempt in range(cfg.retries + 1):
+                    try:
+                        remaining = 65 - (time.monotonic() - started)
+                        if remaining <= 0:
+                            raise ProviderFailure("timeout", "模型处理超过时间预算，请稍后重试。", True)
+                        row.external_calls += 1
+                        response = client.post(
+                            cfg.base_url + endpoint,
+                            json={"model": cfg.model, **payload},
+                            headers=headers,
+                            timeout=min(cfg.timeout, remaining),
+                        )
+                        if response.status_code == 429 or response.status_code >= 500:
+>                           raise ProviderFailure(
+                                "rate_limited" if response.status_code == 429 else "unavailable",
+                                "模型服务暂时繁忙，请稍后重试。",
+                                True,
+                            )
+E                           aristotle_backend.providers.ProviderFailure: 模型服务暂时繁忙，请稍后重试。
+
+code/backend/aristotle_backend/providers.py:162: ProviderFailure
+___________ test_disabled_adapter_cannot_be_bypassed_by_direct_call ____________
+
+app = <fastapi.applications.FastAPI object at 0x1093e6600>
+
+    def test_disabled_adapter_cannot_be_bypassed_by_direct_call(app):
+        with app.state.sessions() as db:
+            user = db.scalar(select(User))
+            db.add(SystemSetting(key='provider', data={'mode': 'disabled'}))
+            db.commit()
+>           with pytest.raises(ProviderFailure, match='禁用'):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE ProviderFailure
+
+tests/integration/test_quality_regressions.py:37: Failed
+____________________ test_quota_day_uses_shanghai_midnight _____________________
+
+app = <fastapi.applications.FastAPI object at 0x109679cd0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1097730e0>
+
+    def test_quota_day_uses_shanghai_midnight(app, monkeypatch):
+        # UTC yesterday, but Shanghai today: this reservation MUST count toward today's cap.
+        now = datetime(2026, 11, 24, 1, tzinfo=ZoneInfo('Asia/Shanghai')).timestamp()
+        monkeypatch.setattr('aristotle_backend.providers.time.time', lambda: now)
+        with app.state.sessions() as db:
+            user = db.scalar(select(User))
+            cfg = replace(config(), daily_limit=1)
+            transport = httpx.MockTransport(lambda r: httpx.Response(200, json={}))
+            request_model(db, user.id, 'annotation', cfg, {}, lambda body: body, transport)
+>           with pytest.raises(ProviderFailure, match='配额'):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE ProviderFailure
+
+tests/integration/test_quality_regressions.py:51: Failed
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/chlorisblack/Documents/Codex/2026-10-27/https-github-com-abracasora-aristotle-https/Aristotle/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_quality_regressions.py::test_administrator_retry_settings_control_real_adapter
+FAILED tests/integration/test_quality_regressions.py::test_disabled_adapter_cannot_be_bypassed_by_direct_call
+FAILED tests/integration/test_quality_regressions.py::test_quota_day_uses_shanghai_midnight
+3 failed, 1 warning in 0.83s

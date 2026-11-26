@@ -1,0 +1,2 @@
+[32mJSON report saved to /Users/chlorisblack/Documents/Codex/2026-10-27/https-github-com-abracasora-aristotle-https/Aristotle/.local/guardrails-production/scans/jscpd-report.json[39m
+[90mtime: 23.029ms[39m

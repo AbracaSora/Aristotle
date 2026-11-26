@@ -1,0 +1,132 @@
+{
+  "recorded_at": "2026-11-26T05:38:23.724430+00:00",
+  "scope": [
+    "code/backend/aristotle_backend",
+    "code/core_engine/aristotle_core"
+  ],
+  "head": "c0d8539bfb23796b323b134261031904396821c1",
+  "versions": {
+    "pylint": "4.1.4",
+    "radon": "6.0.1",
+    "bandit": "1.9.4",
+    "coverage": "7.17.5"
+  },
+  "jscpd": "5.4.3",
+  "commands": {
+    "pylint": {
+      "command": [
+        ".venv/bin/python3",
+        "-m",
+        "pylint",
+        "code/backend/aristotle_backend",
+        "code/core_engine/aristotle_core",
+        "--output-format=json",
+        "--reports=y"
+      ],
+      "exit_code": 28
+    },
+    "complexity": {
+      "command": [
+        ".venv/bin/python3",
+        "-m",
+        "radon",
+        "cc",
+        "-j",
+        "code/backend/aristotle_backend",
+        "code/core_engine/aristotle_core"
+      ],
+      "exit_code": 0
+    },
+    "bandit": {
+      "command": [
+        ".venv/bin/python3",
+        "-m",
+        "bandit",
+        "--quiet",
+        "-r",
+        "code/backend/aristotle_backend",
+        "code/core_engine/aristotle_core",
+        "-f",
+        "json"
+      ],
+      "exit_code": 1
+    },
+    "duplication": {
+      "command": [
+        "tools/quality/node_modules/.bin/jscpd",
+        "code/backend/aristotle_backend",
+        "code/core_engine/aristotle_core",
+        "--format",
+        "python",
+        "--min-lines",
+        "6",
+        "--min-tokens",
+        "50",
+        "--reporters",
+        "json",
+        "--output",
+        ".local/strict/full/scans"
+      ],
+      "exit_code": 0
+    }
+  },
+  "sha256": {
+    "code/backend/aristotle_backend/__init__.py": "a7c21107629e0c965ff5ea418e978c376d37f2b0cc937b30fe1710225e2f90ed",
+    "code/backend/aristotle_backend/annotation_rules.py": "b0c54e013318609327dbe19cf51d993c696034973a093e3089cc8e3e088c4d0d",
+    "code/backend/aristotle_backend/api_access.py": "1efd64b8ca1a4f33dc683948926691833775ecd71357c5539f6b7370a86d1f4b",
+    "code/backend/aristotle_backend/api_views.py": "583669446baa2798c18126632189615918fe2e82ed87e263e9b9c1d7d9951db7",
+    "code/backend/aristotle_backend/app.py": "dc3300589b007c79c17c67335fdfde707037c89e8df17d05dedd546dd10d5304",
+    "code/backend/aristotle_backend/assistance_routes.py": "c2f0ec720be5885548927f0151030f1293f82188c7b6adff486e935e3ead4e4b",
+    "code/backend/aristotle_backend/config.py": "7a027f1406ef6f490a2b001c52f744aefa5b37e0ba9445de4b79d36673a67ea4",
+    "code/backend/aristotle_backend/content_routes.py": "d19c8a055df109b95ef1ff63f34e60fd14445ac36d179e46c2d2ac5dd27e577e",
+    "code/backend/aristotle_backend/curriculum.py": "8c6852ebf8daaaf89b6f75dee2acbaaa217801ca33af24d2b6c41e1ad28fa061",
+    "code/backend/aristotle_backend/curriculum_publication.py": "775372b05ba32047751210116b8798b9c24795b2c0445b813326811afcca5fba",
+    "code/backend/aristotle_backend/curriculum_routes.py": "884678e93c3307dc1a8e6c0d569dc11a30dbc0bbb8f340116aaa3bf08f26b834",
+    "code/backend/aristotle_backend/curriculum_schemas.py": "199623ae55aeaa553ba19b098cc2b7a2ca43e9cd22a49805a90fe65d452b500b",
+    "code/backend/aristotle_backend/database_connection.py": "7e52b4fb3553fb835fa075ef899a08870eb0ae86dea75fe77ab6d2077a11ff75",
+    "code/backend/aristotle_backend/db.py": "408d855b59442793df20bf31103c7dc83ea42eb18daff770e14d1dd690f31e35",
+    "code/backend/aristotle_backend/deployment.py": "cae31a3ba1bd17053879f933f9fc145a41aee92bf7bf4f274575a9ac1667b7fd",
+    "code/backend/aristotle_backend/design_seed.py": "c9fb36ac3ee5ff85137b0cfd52a5f838afeb3121b78bb614ba0d475c2c4f4a58",
+    "code/backend/aristotle_backend/diagnostic.py": "c5408a0904eb35eec8570c29fc2b970199c53a84e0b9b9053e0830b281f07f87",
+    "code/backend/aristotle_backend/final_generation.py": "9d7a6a8843878f79c0836a14a2c8c52593770a577673e16fb7a5d2a56fc578f5",
+    "code/backend/aristotle_backend/final_papers.py": "fb09d363d6d6916e792f54c1cc3898071717b1c1899ee00be53d1c52ec01fa0f",
+    "code/backend/aristotle_backend/final_tests.py": "3889094d207a257a2d8aeee0ed06692cc43df780a62ed4448144d26275f79cf6",
+    "code/backend/aristotle_backend/flow_routes.py": "868f97b8603f227af472df0cddbbe635df759e95ee7c42139023efd5e70769bf",
+    "code/backend/aristotle_backend/flow_schemas.py": "57bcd8463f779a5095fb20b3aa30087d51d80275060331e077172b2399fbba81",
+    "code/backend/aristotle_backend/flow_support.py": "aaf6bed4902a3f89c2e82212e906edd9c336fd3c8dc5fbcbded14cc47f912010",
+    "code/backend/aristotle_backend/import_jobs.py": "6f9c2c62756759ec77039dacc0f3b513327677d685a00d0a033ffbf85739d9ed",
+    "code/backend/aristotle_backend/import_sqlite.py": "95b1a66ad44f6f91771af0c228a67dc711c1d741b1a8b76db08e4737cf74a2a2",
+    "code/backend/aristotle_backend/import_worker.py": "35164e37327ab92fce8b78657adebe953af0ed8d7d5952b7ebca45db779b4a89",
+    "code/backend/aristotle_backend/learning_context.py": "218e528cc82d6b3c79296b0a98f18cb8e79e040b0db17016f35180b1070cb595",
+    "code/backend/aristotle_backend/learning_routes.py": "a95914a0e7ede4bc65c7a95c24070a77d133056567760079e83c6b9e05b54dfb",
+    "code/backend/aristotle_backend/legacy_content_routes.py": "0482053f524381a678263a5deb1fd7265b30d8dee090df774a297646902cb203",
+    "code/backend/aristotle_backend/material_imports.py": "958f89c6533702c77d1c1a6df31b9a816377722d5a083d619e8895810e52f4d6",
+    "code/backend/aristotle_backend/material_routes.py": "0e5da91e41a22a4c8725648f0595f327bc55dfad9117e53513221724f22bdfd6",
+    "code/backend/aristotle_backend/migration_scripts/env.py": "08b039665b3169c30a567985764a7546474464437d4d2e1826b3dcd3a013961b",
+    "code/backend/aristotle_backend/migration_scripts/versions/0001_learning_workflow.py": "07c3e20059f64a3ab28563ec440918f509523a18338c0eeb1b78b3dec11e9cdf",
+    "code/backend/aristotle_backend/migration_scripts/versions/0002_semantic_learning.py": "3b695e7b66e6a1c89bc28010fe23202a1971f44ff5fc43fece8d03861e02220c",
+    "code/backend/aristotle_backend/migration_scripts/versions/0003_curriculum_tests.py": "cf0920a2d0f1042b7aeb64a64e828a34cf3827c9f6a8551b17d31f60a9ed097f",
+    "code/backend/aristotle_backend/migrations.py": "aa8025b5425bc9f229844bd4ef1f9a3443d3be29064bdaa4ccb87cf7a9b5e0e2",
+    "code/backend/aristotle_backend/model_jobs.py": "40c2a216a8d73ae82173bbcb226760e020002d86f850454fab96e644b637e5c0",
+    "code/backend/aristotle_backend/pdf_extract_worker.py": "e8a8c2bee651af033400ae0af8c2914faab1e2dc87f888c6e18da6f90c96581d",
+    "code/backend/aristotle_backend/pdf_process.py": "6a73dbec43d93f1f9c9e2d9643da1722522a5142fe2ecb902c1fc4b55dbabde2",
+    "code/backend/aristotle_backend/providers.py": "b12400f06946a3d3a408d7ef7831c3dc96308a5dd53f9fc5e4f1bbcbb63443e5",
+    "code/backend/aristotle_backend/resource_seed.py": "9d94fcadea94a234052d7c04b190b1f1c8e062ca7c9dd2cb6b442e47608bfd09",
+    "code/backend/aristotle_backend/retrieval.py": "a50bb6a4e27ecba009fd09ead3738c6fc1ae1183ece3901e40115467f8bf081a",
+    "code/backend/aristotle_backend/runtime_logging.py": "7ce132ce0e3ae37bbac3d39477e2da3f3b0a2e8d1aad1074ea7a880e6f227bbf",
+    "code/backend/aristotle_backend/schema_contract.py": "f9799ed724f46db3c95bb045a539a1ff92ae75520eb661a515b3ec81827c4252",
+    "code/backend/aristotle_backend/schemas.py": "6cd2984e117d8bfc530ab86b6a39ccf1637147b477090e6588df1ef40bfb37ed",
+    "code/backend/aristotle_backend/security.py": "05d99a9ce53e2eaba2f90c782b1e53aff65c1f3df6d26b5ceaccdb78765a8348",
+    "code/backend/aristotle_backend/seed.py": "34bfd1278483e3af289f484f58c98721df5bf17269fe125e74e3d202f343d1e0",
+    "code/backend/aristotle_backend/session_routes.py": "ca1fa9e358f9e1e0a95ddc8180fec311290702f8ffd3b0d01a39307073241c33",
+    "code/backend/aristotle_backend/source_units.py": "9b20d5f4490178375109929bd05d84f471b21ab180fcef9c8ee260eb0c033050",
+    "code/backend/aristotle_backend/system_routes.py": "7fc1cba73bfb3573442077212b9c1c0b3083e8c2b20b4ac1eef4812cd17bf6ae",
+    "code/backend/aristotle_backend/task_routes.py": "7eb822852c66ecb59aae16d227b6c264046f1a6fbbc99bddac7b3ab0e35e4f95",
+    "code/backend/aristotle_backend/task_sources.py": "adbff0213c38f7d20800773e6c06620b8525765228996945f1dab02db3f58e50",
+    "code/backend/aristotle_backend/task_storage.py": "5defb8ef1b60c09bdb4e9a0aeb1725c7ff66138b376a328ccb25d1d3ab346f41",
+    "code/backend/aristotle_backend/vector_type.py": "585aa06aeeff12c4b9d8ef31bb8dbaac3414e195f5c5e303c45ed5644976b247",
+    "code/backend/aristotle_backend/workflow.py": "3c4035139f46f7aaa90d85142995e1bfad08eef127dd2ea213d7fddecbf087f9",
+    "code/core_engine/aristotle_core/__init__.py": "cd8ab974069dd1690f326720024f9a193233e9fcc7aeceeef0aadf85c83816da",
+    "code/core_engine/aristotle_core/policy.py": "75b8eedf6b26c921a691111db139da55610b7f7406229d5265e7d6d14d7d939a"
+  }
+}

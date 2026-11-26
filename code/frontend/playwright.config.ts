@@ -4,7 +4,8 @@ import path from "node:path";
 const repoRoot = path.resolve(process.cwd(), "../..");
 const uv = process.env.UV_BIN || path.join(process.env.HOME || ".", ".local/bin/uv");
 // A dedicated database: E2E must never seed or mutate the developer's business DB.
-const testDbEnv = "ARISTOTLE_DATABASE_URL=sqlite:///./.local/playwright.db";
+const apiPort = 18021;
+const uiPort = 15180;
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -13,23 +14,23 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: "list",
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:5180",
+    baseURL: `http://127.0.0.1:${uiPort}`,
     trace: "retain-on-failure",
     ...devices["Desktop Chrome"],
     ...(process.env.PLAYWRIGHT_CHANNEL ? { channel: process.env.PLAYWRIGHT_CHANNEL } : {}),
   },
   webServer: [
     {
-      command: `node code/frontend/tests/e2e/prepare-db.mjs && ${testDbEnv} ${uv} run python -m aristotle_backend.migrations && ${testDbEnv} ${uv} run python -m aristotle_backend.seed --demo --design-flow && ${testDbEnv} ${uv} run uvicorn aristotle_backend.app:create_app --factory --host 127.0.0.1 --port 8021`,
+      command: `${uv} run python code/frontend/tests/e2e/server.py ${apiPort}`,
       cwd: repoRoot,
-      url: "http://127.0.0.1:8021/health",
+      url: `http://127.0.0.1:${apiPort}/health`,
       reuseExistingServer: false,
       timeout: 60_000,
     },
     {
-      command: "ARISTOTLE_BACKEND_URL=http://127.0.0.1:8021 npm run dev -- --host 127.0.0.1 --port 5180 --strictPort",
+      command: `ARISTOTLE_BACKEND_URL=http://127.0.0.1:${apiPort} npm run dev -- --host 127.0.0.1 --port ${uiPort} --strictPort`,
       cwd: ".",
-      url: "http://127.0.0.1:5180",
+      url: `http://127.0.0.1:${uiPort}`,
       reuseExistingServer: false,
       timeout: 30_000,
     },

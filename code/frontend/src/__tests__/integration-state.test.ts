@@ -291,3 +291,17 @@ describe("API 错误契约", () => {
     ).resolves.toBeUndefined();
   });
 });
+
+it("保留上传 PDF 的表单及字节，由浏览器生成 multipart 边界", async () => {
+  const form = new FormData();
+  form.set("title", "自编测试讲义");
+  form.set("file", new Blob(["%PDF-test"], {type:"application/pdf"}), "chapter.pdf");
+  const fetch = vi.spyOn(globalThis, "fetch").mockResolvedValue(Response.json({id:"import"}));
+  try {
+    await createApiClient("session").request("/material-imports/pdf", "POST", form);
+    const request = fetch.mock.calls[0][1]!;
+    expect(request.body).toBe(form);
+    expect(new Headers(request.headers).has("Content-Type")).toBe(false);
+    expect(new Headers(request.headers).get("Authorization")).toBe("Bearer session");
+  } finally { fetch.mockRestore(); }
+});

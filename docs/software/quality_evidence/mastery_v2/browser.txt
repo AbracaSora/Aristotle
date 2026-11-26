@@ -1,0 +1,8 @@
+
+Running 3 tests using 1 worker
+
+  ✓  1 tests/course-progress.spec.ts:3:5 › 全部答错仍锁定，订正两题解锁，最终小测通过才显示掌握 (7.9s)
+  ✓  2 tests/learning-flow.spec.ts:3:5 › 学生可以从登录进入诊断并看到可追溯的学习安排 (5.2s)
+  ✓  3 tests/material-source.spec.ts:4:5 › PDF 经确认和授权后解释可追溯至原页，删除后停止检索 (8.2s)
+
+  3 passed (21.6s)
