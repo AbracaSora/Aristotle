@@ -132,3 +132,19 @@ def test_timed_out_tools_report_failure_and_keep_command_output(tmp_path, monkey
     assert "started" in log and "300" in log
     secrets = guard.secret_scan(tmp_path)
     assert not secrets["passed"] and secrets["exit_code"] == 124
+
+
+def test_review_base_resolves_commit_and_parent_using_git_input():
+    import subprocess
+
+    import pytest
+
+    spec = importlib.util.spec_from_file_location("guard_runner", ROOT / "scripts/check_guardrails.py")
+    runner = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(runner)
+    for ref in ("HEAD", "HEAD^"):
+        sha = subprocess.check_output(["git", "rev-parse", ref], cwd=ROOT, text=True).strip()
+        assert runner.resolve_commit(ref) == runner.resolve_commit(sha) == sha
+    for ref in ("", "HEAD\nHEAD", "refs/heads/missing-review-reference"):
+        with pytest.raises(ValueError):
+            runner.resolve_commit(ref)
