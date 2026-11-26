@@ -92,8 +92,17 @@ class TaskInput(Input):
 
 class AttemptInput(Input):
     question_key: Annotated[str, Field(pattern=r"^[a-zA-Z0-9_-]{1,64}:v[1-9][0-9]*$")]
-    selected: Annotated[Text, Field(max_length=500)]
-    submission_id: Annotated[str, Field(pattern=r"^[a-zA-Z0-9_-]{8,80}$")]
+    selected: Annotated[Text, Field(max_length=500)] | None = None
+    selected_option_id: Identifier | None = None
+    submission_id: Annotated[str, Field(pattern=r"^[a-zA-Z0-9_-]{1,80}$")]
+
+    @model_validator(mode="after")
+    def require_selection(self):
+        if self.selected_option_id is not None and len(self.submission_id) > 64:
+            raise ValueError("新选项 ID 提交的 submission_id 不得超过 64 字符")
+        if self.selected is None and self.selected_option_id is None:
+            raise ValueError("请提交选项 ID 或兼容答案文本")
+        return self
 
 
 class MaterialInput(Input):
