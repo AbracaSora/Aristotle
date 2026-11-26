@@ -11,6 +11,14 @@ from fastapi.responses import JSONResponse
 from pydantic import Field
 from sqlalchemy import select
 
+from .api_access import (
+    current_user,
+    current_user_session,
+    get_db,
+    maintainer_session,
+    student,
+    student_session,
+)
 from .db import Attempt, Audit, Material, ModelCall, Question, ServiceJob
 from .model_jobs import REAL_JOBS, _question_content, create_job, ensure_enabled, run_job
 from .providers import ProviderFailure, fingerprint, provider_config
@@ -43,7 +51,7 @@ class ExplainInput(Input):
     attempt_id: str | None = Field(default=None, max_length=80)
 
 
-def install_assistance_routes(app, get_db, current_user, student, maintainer, services):
+def install_assistance_routes(app, services):
     state_of, graph_of, _, owned, _ = services
 
     @app.exception_handler(ProviderFailure)
@@ -101,7 +109,7 @@ def install_assistance_routes(app, get_db, current_user, student, maintainer, se
 
     @app.get("/api/v1/model-status", tags=["模型服务"])
     def model_status(user=Depends(current_user), db=Depends(get_db)):
-        result = {}
+        result: dict[str, object] = {}
         for kind in ("generation", "embedding"):
             try:
                 cfg = provider_config(kind)
@@ -133,33 +141,22 @@ def install_assistance_routes(app, get_db, current_user, student, maintainer, se
             if not body.query.strip():
                 raise HTTPException(422, "请输入语义查询内容")
             ensure_enabled(db)
-        return semantic_search(
-            db,
-            user.id,
-            body.query,
-            body.knowledge_id,
-            body.mode,
-            body.allow_external_query,
-            body.limit,
-            getattr(request.app.state, "model_transport", None),
-        )
+        return semantic_search(db, user.id, body, getattr(request.app.state, "model_transport", None))
 
     @app.post("/api/v1/retrieval/index", status_code=202, tags=["资料检索"])
     def index(
         body: IndexInput,
-        request: Request,
         background: BackgroundTasks,
-        user=Depends(student),
-        db=Depends(get_db),
+        ctx=Depends(student_session),
     ):
-        check_knowledge(db, body.knowledge_id)
+        check_knowledge(ctx.db, body.knowledge_id)
         if not body.allow_external:
             raise ProviderFailure(
                 "consent_required", "建立向量索引需要发送公共资料及已明确授权的私人片段，请先确认。"
             )
-        job = create_job(db, user, "live_index", {"knowledge_id": body.knowledge_id})
+        job = create_job(ctx.db, ctx.user, "live_index", {"knowledge_id": body.knowledge_id})
         result = view(job)
-        dispatch(background, request, job)
+        dispatch(background, ctx.request, job)
         return result
 
     @app.patch("/api/v1/materials/{material_id}/external-consent", tags=["资料权限"])
@@ -189,24 +186,16 @@ def install_assistance_routes(app, get_db, current_user, student, maintainer, se
     @app.post("/api/v1/explanations", status_code=202, tags=["辅助解释"])
     def explanation(
         body: ExplainInput,
-        request: Request,
         background: BackgroundTasks,
-        user=Depends(student),
-        db=Depends(get_db),
+        ctx=Depends(student_session),
     ):
-        check_knowledge(db, body.knowledge_id)
+        check_knowledge(ctx.db, body.knowledge_id)
         if not body.allow_external:
             raise ProviderFailure("consent_required", "请明确允许将本次问题和选定来源发送给生成模型。")
-        units = {u.key: u for u in source_units(db, user.id, body.knowledge_id)}
-        if len(set(body.source_keys)) != len(body.source_keys) or any(
-            key not in units or not units[key].external_allowed for key in body.source_keys
-        ):
-            raise ProviderFailure(
-                "source_unavailable", "部分来源未确认、已删除或未授权模型处理，请重新选择。"
-            )
+        units = explanation_sources(ctx, body)
         if body.attempt_id:
-            attempt = owned(db, Attempt, body.attempt_id, user)
-            question = db.get(Question, attempt.question_key)
+            attempt = owned(ctx.db, Attempt, body.attempt_id, ctx.user)
+            question = ctx.db.get(Question, attempt.question_key)
             if not question or question.knowledge_id != body.knowledge_id:
                 raise HTTPException(409, "作答记录与知识点不匹配")
         params = {
@@ -215,46 +204,45 @@ def install_assistance_routes(app, get_db, current_user, student, maintainer, se
                 {units[key].material_id for key in body.source_keys if units[key].material_id}
             ),
         }
-        job = create_job(db, user, "live_explanation", params)
+        job = create_job(ctx.db, ctx.user, "live_explanation", params)
         result = view(job)
-        dispatch(background, request, job)
+        dispatch(background, ctx.request, job)
         return result
 
     @app.post("/api/v1/admin/questions/{question_key}/model-annotations", status_code=202, tags=["模型标注"])
     def annotate(
         question_key: str,
-        request: Request,
         background: BackgroundTasks,
-        user=Depends(maintainer),
-        db=Depends(get_db),
+        ctx=Depends(maintainer_session),
     ):
-        question = db.get(Question, question_key)
+        question = ctx.db.get(Question, question_key)
         if not question or question.status not in ("draft", "pending_review"):
             raise HTTPException(409, "只能对草稿或待审核版本提出模型候选")
         job = create_job(
-            db,
-            user,
+            ctx.db,
+            ctx.user,
             "live_annotation",
             {"question_key": question_key, "content_hash": fingerprint(_question_content(question))},
         )
         result = view(job)
-        dispatch(background, request, job)
+        dispatch(background, ctx.request, job)
         return result
 
     @app.post("/api/v1/model-jobs/{job_id}/dispatch", status_code=202, tags=["模型服务"])
     def dispatch_queued(
         job_id: str,
-        request: Request,
         background: BackgroundTasks,
-        user=Depends(current_user),
-        db=Depends(get_db),
+        ctx=Depends(current_user_session),
     ):
-        job = owned(db, ServiceJob, job_id, user)
+        job = owned(ctx.db, ServiceJob, job_id, ctx.user)
         if job.kind not in REAL_JOBS or job.status != "queued":
             raise HTTPException(409, "任务不是待处理的真实模型任务")
         result = view(job)
         background.add_task(
-            run_job, request.app.state.sessions, job.id, getattr(request.app.state, "model_transport", None)
+            run_job,
+            ctx.request.app.state.sessions,
+            job.id,
+            getattr(ctx.request.app.state, "model_transport", None),
         )
         return result
 
@@ -283,12 +271,10 @@ def install_assistance_routes(app, get_db, current_user, student, maintainer, se
     @app.post("/api/v1/model-jobs/{job_id}/retry", status_code=202, tags=["模型服务"])
     def retry(
         job_id: str,
-        request: Request,
         background: BackgroundTasks,
-        user=Depends(current_user),
-        db=Depends(get_db),
+        ctx=Depends(current_user_session),
     ):
-        previous = owned(db, ServiceJob, job_id, user)
+        previous = owned(ctx.db, ServiceJob, job_id, ctx.user)
         if (
             previous.kind not in REAL_JOBS
             or previous.status != "failed"
@@ -300,7 +286,16 @@ def install_assistance_routes(app, get_db, current_user, student, maintainer, se
             for key, value in previous.params.items()
             if key not in ("provider_namespace", "prompt_version", "request_fingerprint")
         }
-        job = create_job(db, user, previous.kind, params)
+        job = create_job(ctx.db, ctx.user, previous.kind, params)
         result = view(job)
-        dispatch(background, request, job)
+        dispatch(background, ctx.request, job)
         return result
+
+
+def explanation_sources(ctx, body):
+    units = {u.key: u for u in source_units(ctx.db, ctx.user.id, body.knowledge_id)}
+    if len(set(body.source_keys)) != len(body.source_keys) or any(
+        key not in units or not units[key].external_allowed for key in body.source_keys
+    ):
+        raise ProviderFailure("source_unavailable", "部分来源未确认、已删除或未授权模型处理，请重新选择。")
+    return units
