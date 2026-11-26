@@ -74,15 +74,12 @@ def refactor_diffs():
         (EVIDENCE / f"{name}.diff").write_text("".join(diff))
 
 
-def table(rows):
-    return (
-        "<table>"
-        + "".join(
-            "<tr>" + "".join("<td>" + html.escape(str(cell)) + "</td>" for cell in row) + "</tr>"
-            for row in rows
-        )
-        + "</table>"
+def table(headers, rows):
+    headings = "".join(f'<th scope="col">{html.escape(label)}</th>' for label in headers)
+    body = "".join(
+        "<tr>" + "".join("<td>" + html.escape(str(cell)) + "</td>" for cell in row) + "</tr>" for row in rows
     )
+    return f"<table><thead><tr>{headings}</tr></thead><tbody>{body}</tbody></table>"
 
 
 def main():
@@ -112,16 +109,14 @@ def main():
         rows = [[label, data[key]] for key, label in names.items()]
         parts.append(
             f'<section id="{phase}"><div class="eyebrow">ARISTOTLE · BACKEND QUALITY</div><h1>{title}</h1><p>{args.date} · master 工作区 · 基础提交 c0d8539</p>'
-            + table(rows)
+            + table(["指标", "测量结果"], rows)
             + '<p class="note">真实扫描结果汇总，非 SonarQube 页面。Error 诊断不等于确认的业务 Bug；剩余告警必须结合代码评审。工具输出见同目录 JSON。</p>'
             + f'<p class="footer">Pylint {versions["pylint"]} · Radon {versions["radon"]} · Bandit {versions["bandit"]} · jscpd 5.4.3</p></section>'
         )
-    rows = [["重点函数", "重构前 CC", "重构后 CC"]] + [
-        [name, before["targets"][name], after["targets"][name]] for name in TARGETS
-    ]
+    rows = [[name, before["targets"][name], after["targets"][name]] for name in TARGETS]
     parts.append(
         '<section id="comparison"><div class="eyebrow">TEST → REFACTOR → RESCAN</div><h1>五项重点重构</h1>'
-        + table(rows)
+        + table(["重点函数", "重构前 CC", "重构后 CC"], rows)
         + '<p class="note">新逻辑拆入具名辅助函数，完整后置扫描仍覆盖全部后端代码。入口 CC 下降不代表所有辅助函数均达标。</p>'
         + '<p class="note">配额、禁用开关、配置生效和 PDF 功能修复另列回归证据；并非把行为变化冒充纯重构。</p>'
         + '<p class="note">重复代码仍为 28 行：重复率下降主要来自分母增长。Pylint 仍有风格/结构告警，本次不宣称达到全部严格质量门槛。</p>'
